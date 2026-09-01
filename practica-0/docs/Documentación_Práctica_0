@@ -1,0 +1,114 @@
+_________________________________________________________________________________
+
+                                   Problema
+_________________________________________________________________________________
+
+Desarrolle en C un programa para capturar las calificaciones de un estudiante y
+mostrar su promedio y estado académico.
+
+El programa deberá:
+
+1. Solicitar el nombre del estudiante.
+2. Solicitar tres calificaciones.
+3. Calcular el promedio.
+4. Determinar si el estudiante está APROBADO o REPROBADO.
+5. Mostrar nombre, promedio y estado.
+
+La regla será:
+
+                           APROBADO si promedio ≥ 6.0
+
+
+---------------------------------------------------------------------------------
+                            Restricción estructurada
+---------------------------------------------------------------------------------
+
+La solución deberá incluir, como mínimo, las siguientes funciones:
+
+1. float calcular_promedio ( float calificaciones [] , int cantidad ) ;
+2. int esta_aprobado ( float promedio ) ;
+3. void mostrar_resultado ( char nombre [] , float promedio , int aprobado ) ;
+
+No coloque toda la lógica dentro de main. La función main deberá coordinar el
+flujo general y delegar responsabilidades.
+
+---------------------------------------------------------------------------------
+                                 Caso de prueba
+---------------------------------------------------------------------------------
+
+Utilice al menos el siguiente caso:
+
+Nombre: Ana
+Calificaciones: 8, 9, 7
+Promedio esperado: 8.00
+Estado esperado: APROBADO
+
+Después pruebe también un caso reprobatorio.
+
+_________________________________________________________________________________
+
+                          Establecimiento del Problema
+_________________________________________________________________________________
+
+-> Sistema para capturar las calificaciones de un estudiante, mostrar su
+   promedio y estado académico.
+   
+---------------------------------------------------------------------------------
+                                Datos Abstractos
+			   Procedimiento del programa
+---------------------------------------------------------------------------------
+
+-> Clase: Main
+
+   ++ Comportamiento ++
+   
+   >> [Instrucción] Mensaje bienvenida.
+   >> [Instrucción - Bucle] Solicita una acción de acuerdo al menú.
+      >> [Instrucción] Calcular el promedio de un estudiante.
+      	 >> Llama al Sistema Calificaciones.
+      >> [Instrucción] Salir del programa.
+   
+-> Clase: Sistema Calificaciones
+   
+   ++ Comportamiento ++
+   
+   >> [Instrucción - Bucle] Ingresa el nombre del estudiante.
+      >> Verifica:
+      	 - Campo no vacío.
+	 - "Nombres válidos" Sin caracteres especiales o números.
+   >> [Instrucción - Bucle] Ingresa las calificaciones de los estudiantes
+      en forma de lista separadas por comas.
+      >> Verifica:
+      	 - Que la lista no tenga campos vacíos.
+	 - Verifica que sean números.
+      	 - Verifica que no sean números menores a 0 o mayores a 10
+   >> [Instrucción] Calcular el promedio.
+      - Sumar calificaciones y dividir entre el número de calificaciones.
+   >> [Instrucción] Verificar si el alumn@ esta aprobado.
+   >> [Instrucción] Imprimir el nombre del estudiante con su promedio y estado
+      académico en pantalla.
+	 
+-> Clase: Verificador datos.
+
+   ++ Comportamiento ++
+   
+   >> Verificar nombre.
+      >> Verificar campo no vacío.
+      >> Verificar que no tenga números o caracteres especiales.
+   >> Verificar calif válida.
+      >> Verificar campo no vacío.
+      >> Verificar identidad de números.
+      >> Verificar calif del 0 - 10.
+
+-> Clase: Estudiante.
+
+   >> Base.
+      - Nombre: Nombre del estudiante.
+      - Calificaciones: Lista de calificaciones.
+      - Promedio: Número del 0 al 10
+      - Estado Académico: APROBADO / REPROBADO
+      
+   ++ Comportamiento ++
+   
+   >> Consultar y modificar atributos.
+   >> Representación String del objeto.
