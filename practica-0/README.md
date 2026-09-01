@@ -21,8 +21,7 @@ Separar el programa permitió que cada parte tuviera una responsabilidad especí
 
 **4. ¿Qué función tendría que modificarse si la calificación mínima aprobatoria cambiara?**  
       
-La función [`calcular_promedio(self, estudiante)`](practica-0/src/sistemaCalificaciones.py #L52)
-Pues es la encargada de hacer la división, aun que tambien podriamos fijarnos en (practica-0/src/verificadorDatos.py) pues aquí esta la lógica completa para recolectar las calificaciones; tanto validas como invalidas.
+La función (practica-0/src/sitemaCAlificaciones.py #L59) pues aquí esta la lógica para saber si aprobó, con la capacidad de modificar la calificaión minima aprobatoria.
       
 **5. ¿Qué diferencia conceptual observa entre una función y un método?**  
 
