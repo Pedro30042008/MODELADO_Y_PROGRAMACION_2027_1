@@ -12,5 +12,5 @@ Pineda Aguirre Enoc
 
 ### Equipo:
 1. Álvarez Hernández Alan Gael
-2. Miranda Sánchez Fernanda María
+2. Miranda Sánchez María Fernanda
 3. Ruiz Hernández Pedro Pablo
