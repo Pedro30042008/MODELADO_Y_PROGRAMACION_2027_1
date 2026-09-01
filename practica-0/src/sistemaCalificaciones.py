@@ -39,11 +39,18 @@ class SistemaCalificaciones:
                 break
 
         # Calculamos el promedio.
-        #alumno.promedio(SistemaCalificaciones.calcularPromedio(alumno))
+        alumno.promedio = self.calcular_promedio(alumno)
         
         # Verificamos si el alumno está aprobado.
-        #alumno.estado_academico(SistemaCalificaciones.definir_estado_academico(alumno))
+        # alumno.estado_academico = self.definir_estado_academico(alumno)
         
         # Imprime el estudiante en pantalla.
         print()
         print(alumno)
+
+    # Método para iniciar la calculadora.
+    def calcular_promedio(self, estudiante):
+        # Variable para guardar el calculo del promedio.
+        promedio = sum(estudiante.lista_calificaciones) / len(estudiante.lista_calificaciones)
+        # Devuelve el calculo del promedio.
+        return promedio

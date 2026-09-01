@@ -23,7 +23,7 @@ class Estudiante:
     @nombre.setter
     def nombre(self, nombre: str):
         # Llamamos al método para verificar nombre válido.
-        self.__nombre = VerificadorDatos.verificarNombre(nombre)
+        self.__nombre = VerificadorDatos.verificar_nombre(nombre)
 
     # Método: get_lista_calificaciones()
     @property
@@ -35,7 +35,7 @@ class Estudiante:
     @lista_calificaciones.setter
     def lista_calificaciones(self, calificaciones: str):
         # Llamamos al método para verificar calificaciones válidas.
-        self.__lista_calificaciones = VerificadorDatos.verificarCalificaciones(calificaciones)
+        self.__lista_calificaciones = VerificadorDatos.verificar_calificaciones(calificaciones)
 
     # Método: get_promedio()
     @property
@@ -69,7 +69,7 @@ class Estudiante:
         return (
             f"Nombre: {self.__nombre}\n"
             f"Lista de calificaciones: [{notas}]\n"
-            #f"Promedio: {self.__promedio:.2f}\n"
+            f"Promedio: {self.__promedio:.2f}\n"
             #f"Estado Académico: {self.__estado_academico}\n"
         )
     

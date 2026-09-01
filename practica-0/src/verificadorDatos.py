@@ -9,7 +9,7 @@ class VerificadorDatos:
     
     # Método: verificarNombre(nombre)
     @staticmethod
-    def verificarNombre(nombre) -> str | None:
+    def verificar_nombre(nombre) -> str | None:
         
         # Si es la cadena vacía.
         if nombre == "":
@@ -26,7 +26,7 @@ class VerificadorDatos:
         
     # Método: verificarCalificaciones(String[])
     @staticmethod
-    def verificarCalificaciones(calificaciones: str) -> list[float] | None:
+    def verificar_calificaciones(calificaciones: str) -> list[float] | None:
 
         # Si es la cadena vacía.
         if not calificaciones.strip():
