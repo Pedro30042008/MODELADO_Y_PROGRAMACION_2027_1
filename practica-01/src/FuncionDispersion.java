@@ -14,8 +14,8 @@ public class FuncionDispersion {
      * Método para modificar el tamaño de la TablaHash.
      * @param int tamaño de la TablaHash
      */
-    public static void setElementos(int elementos) {
-	this.elementos = elementos;
+    public static void setElementos(int m) {
+	    elementos = m;
     }
     
     /**
