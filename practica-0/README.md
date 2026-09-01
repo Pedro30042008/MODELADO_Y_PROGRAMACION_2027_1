@@ -16,17 +16,22 @@ flujo de ejecución lineal y entendible.
       **Iteración/Repetición =** Es la repetición de un bloque de código meintras se cumpla una codición booleana (Ej. while, for, do-while).
       
 **3. ¿Qué ventaja tuvo separar el programa en funciones?**  
+
 Separar el programa permitió que cada parte tuviera una responsabilidad específica de acuerdo al paradigma POO, por lo que fue más fácil entender qué hacía cada sección. Por ejemplo, en nuestro código la validación de datos, el cálculo del promedio y el manejo del estudiante están separados, en lugar de tener toda la lógica directamente en el main. Esto también facilita reutilizar partes del código y modificarlo sin tanto problema.
 
 **4. ¿Qué función tendría que modificarse si la calificación mínima aprobatoria cambiara?**  
-      La función [`calcular_promedio(self, estudiante)`](practica-0/src/sistemaCalificaciones.py #L52)
-      Pues es la encargada de hacer la división, aun que tambien podriamos fijarnos en (practica-0/src/verificadorDatos.py) pues aquí esta la lógica completa para recolectar las calificaciones; tanto validas como invalidas.
+      
+La función [`calcular_promedio(self, estudiante)`](practica-0/src/sistemaCalificaciones.py #L52)
+Pues es la encargada de hacer la división, aun que tambien podriamos fijarnos en (practica-0/src/verificadorDatos.py) pues aquí esta la lógica completa para recolectar las calificaciones; tanto validas como invalidas.
       
 **5. ¿Qué diferencia conceptual observa entre una función y un método?**  
+
 Una función es un bloque de código que realiza una tarea específica de manera independiente, mientras que un método está asociado a una clase u objeto. En nuestro programa, por ejemplo, calcular_promedio es un método porque pertenece a la clase SistemaCalificaciones. En cambio, una función podría existir fuera de cualquier clase.
 
 **6. ¿Qué representa un commit en Git?**  
+
 Un commit representa un registro de los cambios realizados en el proyecto en un momento determinado. Sirve como un punto en el historial al que podemos volver o consultar para saber qué se modificó.
 
 **7. ¿Por qué es preferible realizar varios commits pequeños en lugar de un solo commit al final?**  
+
 Porque varios commits pequeños permiten identificar mejor qué cambio se hizo en cada momento y hacen más fácil encontrar errores o regresar a una versión anterior.
