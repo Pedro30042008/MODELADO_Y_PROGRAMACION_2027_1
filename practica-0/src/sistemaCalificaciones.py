@@ -42,15 +42,26 @@ class SistemaCalificaciones:
         alumno.promedio = self.calcular_promedio(alumno)
         
         # Verificamos si el alumno está aprobado.
-        # alumno.estado_academico = self.definir_estado_academico(alumno)
+        alumno.estado_academico = self.determinar_estado_academico(alumno)
         
         # Imprime el estudiante en pantalla.
         print()
         print(alumno)
 
-    # Método para iniciar la calculadora.
-    def calcular_promedio(self, estudiante):
+    # Método para calcular el promedio de un estudiante.
+    def calcular_promedio(self, estudiante) -> float:
         # Variable para guardar el calculo del promedio.
         promedio = sum(estudiante.lista_calificaciones) / len(estudiante.lista_calificaciones)
         # Devuelve el calculo del promedio.
         return promedio
+
+    # Método para determinar el estado académico de un estudiante.
+    def determinar_estado_academico(self, estudiante) -> str:
+        # Si el estudiante tiene promedio mayor o igual a 6.
+        if estudiante.promedio >= 6:
+            # El estudiante aprobó.
+            return "APROBADO"
+        # En otro caso.
+        else:
+            # El estudiante reprobó.
+            return "REPROBADO"

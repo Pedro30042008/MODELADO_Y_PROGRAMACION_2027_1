@@ -70,6 +70,6 @@ class Estudiante:
             f"Nombre: {self.__nombre}\n"
             f"Lista de calificaciones: [{notas}]\n"
             f"Promedio: {self.__promedio:.2f}\n"
-            #f"Estado Académico: {self.__estado_academico}\n"
+            f"Estado Académico: {self.__estado_academico}\n"
         )
     
