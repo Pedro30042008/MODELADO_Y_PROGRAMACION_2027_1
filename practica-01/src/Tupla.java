@@ -58,6 +58,4 @@ public class Tupla {
     public String toString (){
         return "("+llave+", "+valor+")";
     }
-
-    //PRUEBA DE FER
 }
