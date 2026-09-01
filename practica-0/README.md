@@ -3,12 +3,14 @@
 ## Reflexión
 
 **1. ¿Qué significa programar de forma estructurada?**
+
 Programar de forma estructurada significa organizar el programa de manera clara, dividiendo el problema en partes más pequeñas y controlando el flujo mediante secuencias y condiciones. La idea es evitar tener toda la lógica en un solo lugar y hacer que el código sea más fácil de leer, modificar y mantener.
      
 Se enfoca principalmente en tres estructuras de control (Iteración, Selección y Secuencia), de esta manera logramos un 
 flujo de ejecución lineal y entendible.
 
 **2. ¿Cuáles son las tres estructuras fundamentales de control?** 
+
       **Secuencia =** Es la ejecución de instrucciones una después de la anterior en el orden escritas.
       **Selección/Condición =** Es la toma de decisiones que nos lleva a la ejecucion por distintos caminos segun la condicion booleana (Ej. if, else, switch).
       **Iteración/Repetición =** Es la repetición de un bloque de código meintras se cumpla una codición booleana (Ej. while, for, do-while).
