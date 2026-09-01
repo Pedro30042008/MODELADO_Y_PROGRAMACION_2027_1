@@ -3,9 +3,10 @@
 ## Reflexión
 
 **1. ¿Qué significa programar de forma estructurada?**
-      Es un paradigma de programación tal que se enfoca en una mejor comprensión, calidad y en el tiempo de desarrollo.
-      Se enfoca principalmente en tres estructuras de control (Iteración, Selección y Secuencia), de esta manera logramos un 
-      flujo de ejecución lineal y entendible.
+Programar de forma estructurada significa organizar el programa de manera clara, dividiendo el problema en partes más pequeñas y controlando el flujo mediante secuencias y condiciones. La idea es evitar tener toda la lógica en un solo lugar y hacer que el código sea más fácil de leer, modificar y mantener.
+     
+Se enfoca principalmente en tres estructuras de control (Iteración, Selección y Secuencia), de esta manera logramos un 
+flujo de ejecución lineal y entendible.
 
 **2. ¿Cuáles son las tres estructuras fundamentales de control?** 
       **Secuencia =** Es la ejecución de instrucciones una después de la anterior en el orden escritas.
@@ -13,10 +14,8 @@
       **Iteración/Repetición =** Es la repetición de un bloque de código meintras se cumpla una codición booleana (Ej. while, for, do-while).
       
 **3. ¿Qué ventaja tuvo separar el programa en funciones?**  
-      La ventaja más notoria es reutilizar código, pues permite invocar un mismo bloque de lógica previamente ya realizado con una responsabilidad definida, en múltiples partes del programa principal o como auxiliar. 
-      De igual forma como este código está aislado es mucho más fácil depurar o corregir errores ya que cada función. Por ultimo ayuda demasiado en 
-      un código legible pues podemos resumir procesos complejos llamando a la función.
-      
+Separar el programa permitió que cada parte tuviera una responsabilidad específica de acuerdo al paradigma POO, por lo que fue más fácil entender qué hacía cada sección. Por ejemplo, en nuestro código la validación de datos, el cálculo del promedio y el manejo del estudiante están separados, en lugar de tener toda la lógica directamente en el main. Esto también facilita reutilizar partes del código y modificarlo sin tanto problema.
+
 **4. ¿Qué función tendría que modificarse si la calificación mínima aprobatoria cambiara?**  
       La función [`calcular_promedio(self, estudiante)`](practica-0/src/sistemaCalificaciones.py #L52)
       Pues es la encargada de hacer la división, aun que tambien podriamos fijarnos en (practica-0/src/verificadorDatos.py) pues aquí esta la lógica completa para recolectar las calificaciones; tanto validas como invalidas.
