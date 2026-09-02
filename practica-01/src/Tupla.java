@@ -14,9 +14,9 @@ public class Tupla {
      * @param valor
      * @param llave
      */
-    public Tupla(String valor, int llave) {
-        this.valor = valor;
+    public Tupla(int llave, String valor) {
         this.llave = llave;
+        this.valor = valor;
     }
 
     /**
