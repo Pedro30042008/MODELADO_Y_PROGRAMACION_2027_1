@@ -1,18 +1,23 @@
-
 /**
- * Tupla
- * 
- * Clase destinada al mapeo de una llave a un valor
+ * Clase Tupla.
+ *
+ * Clase destinada a formar pares ordenados de (llave, valor).
  */
 public class Tupla {
-    //ATRIBUTOS
-    String valor;
+    
+    // ATRIBUTOS
+    
+    /* Llave de la Tupla */
     int llave;
+    /* Valor de la Tupla */
+    String valor;
 
+    // MÉTODOS
+    
     /**
-     * Constructor basico para la crear una Tupla
-     * @param valor
-     * @param llave
+     * Método constructor por parámetros (llave, valor).
+     * @param valor ; valor de la Tupla.
+     * @param llave ; llave de la Tupla.
      */
     public Tupla(int llave, String valor) {
         this.llave = llave;
@@ -20,42 +25,43 @@ public class Tupla {
     }
 
     /**
-     * Regresa el valor.
-     * @return valor
-     */
-    public String getValor() {
-        return valor;
-    }
-
-    /**
-     * Asiganamos un valor
-     * @param valor
-     */
-    public void setValor(String valor) {
-        this.valor = valor;
-    }
-
-    /**
-     * Regresa la llave asociada al valor
-     * @return
+     * Método getter para obtener la llave de la tupla.
+     * @return llave de la Tupla.
      */
     public int getLlave() {
         return llave;
     }
 
     /**
-     * Asignamos llave
-     * @param llave
+     * Método setter para asignar la llave de la tupla.
+     * @param llave ; llave de la Tupla.
      */
     public void setLlave(int llave) {
         this.llave = llave;
     }
 
     /**
-     * Representacion visula del objeto tupla
+     * Método getter para obtener el valor de la tupla.
+     * @return valor de la Tupla.
+     */
+    public String getValor() {
+        return valor;
+    }
+
+    /**
+     * Método setter para asignar el valor de la tupla.
+     * @param valor ; valor de la Tupla.
+     */
+    public void setValor(String valor) {
+        this.valor = valor;
+    }
+    
+    /**
+     * Método toString para representar a la Tupla.
+     * @return representación en cadena de texto de la Tupla.
      */
     @Override
     public String toString (){
-        return "("+llave+", "+valor+")";
+        return "(" + llave + ", " + valor + ")";
     }
 }
