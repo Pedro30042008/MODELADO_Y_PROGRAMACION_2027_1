@@ -1,3 +1,317 @@
-hola xd
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                            Práctica 01: Tabla Hash
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+---------------------------------------------------------------------------------
+                                    Objetivo
+---------------------------------------------------------------------------------
 
-¿Por qué tener una colisión no significa que la tabla hash esté implementada incorrectamente?
+    Implementar Tablas Hash desde cero para almacenar pares:
+
+    |-- (key, value)
+
+    y que soporten las operaciones:
+
+    |-- insertar(key, value)
+    |-- buscar(key)
+    |-- eliminar(key)
+
+    La implementación deberá resolver correctamente las colisiones y deberá
+    incluir pruebas básicas que demuestren el funcionamiento de la
+    estructura.
+
+    Las colisiones ocurren cuando dos llaves distintas producen la misma
+    posición en el arreglo de la Tabla Hash.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                         Implementación de Encadenamiento
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    La Tabla Hash con encadenamiento de caracteriza por resolver las
+    colisiones con cubetas que guardan elementos de pares (llave, valor). 
+
+    Además, para esta implementación, se manejará la función de dispersión:
+
+    |-- h(k) = k mod m
+
+    A continuación, se presentan las clases desarrolladas para llevar a cabo
+    la implementación de la Tabla Hash con encadenamiento.
+    
+---------------------------------------------------------------------------------
+                                  Clase: Tupla
+---------------------------------------------------------------------------------
+
+    Las Tablas Hash almacenan elementos con la forma:
+
+    |-- (llave, valor)
+
+    La clase Tupla se encargará de manejar los datos de estos elementos.
+
+    |-- Estructura:
+
+    	+--+ Atributos +----------------------------------------------------+
+
+	|-- Llave llave :
+	    Dato abstracto para identificar la Tupla.
+	
+    	|-- Valor valor :
+	    Dato abstracto a guardar en la Tupla.
+	
+	+--+ Comportamiento: Público +--------------------------------------+
+
+	|-- public Tupla() :
+	    Método para construir una Tupla.
+	    
+	|-- public Tupla(Llave llave, Valor valor) :
+	    Método para construir una Tupla dada una llave y un valor.
+	
+	|-- public Llave getLlave() :
+	    Método para obtener la llave de una Tupla.
+	    
+    	|-- public Valor getValor() :
+	    Método para obtener el valor de una Tupla.
+
+	|-- public void setLlave(Llave llave) :
+	    Método para modificar la llave de una Tupla dada una llave.
+	    
+    	|-- public void setValor(Valor valor) :
+	    Método para modificar el valor de una Tupla dado un valor.
+
+	|-- public String toString() :
+	    Método para obtener la representación en cadena de texto de una
+	    Tupla.
+			 
+---------------------------------------------------------------------------------
+                     Clase Interna: Funciones de Disperción
+---------------------------------------------------------------------------------
+
+    Las Tablas Hash usan funciones de dispersión para que dada la llave de un
+    elemento (llave, valor) se le asigne una posición en la Tabla Hash para
+    almacenarlo. No obstante, pueden ocurrir colisiones entre llaves, pero de
+    esto último, se encargará la Tabla Hash con Encadenamiento de resolverlo.
+
+    La función de dispersión a implementar en la práctica es:
+
+    |-- h(k) = k mod m
+
+    Donde:
+
+    |-- k = Llave de un elemento (llave, tupla).
+    |-- m = Tamaño/dimensión del arreglo en la Tabla Hash.
+
+    La clase interna FuncionDispersion contendrá las funciones de dispersión
+    que se utilizarán en la Tabla Hash.
+
+    |-- Estructura:
+	
+	+--+ Comportamiento: Público +--------------------------------------+
+
+	|-- public FuncionDispersion() :
+	    Método para construir una FuncionDispersion.
+	    
+	|-- public hash(Llave llave) :
+	    Método para aplicar la función h(k) = k mod m.
+	    
+---------------------------------------------------------------------------------
+                                 Encadenamiento
+---------------------------------------------------------------------------------
+
+    Las Tablas Hash con Encadenamiento resuelve las colisiones entre llaves
+    con un arreglo de cubetas que contiene elementos(llave, valor).
+
+    La clase Encadenamiento se encargará de manejar las operaciones de:
+
+    |-- insertar(key, value)
+    |-- buscar(key)
+    |-- eliminar(key)
+
+    que se invocarán afuera de la Tabla Hash.
+
+    |-- Estructura:
+
+    	+--+ Atributos +----------------------------------------------------+
+
+	|-- int elementos :
+	    Número de elementos(llave, valor) que contiene la Tabla Hash.
+	
+    	|-- LinkedList<Tupla> [] cubetas :
+	    Colección de Cubetas en la Tabla Hash.
+	    
+	+--+ Comportamiento: Público +--------------------------------------+
+
+	|-- public TablaHashEncadenamiento() :
+	    Método para construir una TablaHash con 7 cubetas.
+	    
+	|-- public TablaHashEncadenamiento(int m) :
+	    Método para construir una TablaHash con m cubetas posibles.
+
+	|-- public void insertar(Llave llave, Valor valor) :
+	    Método para insertar un elemento en la Tabla Hash dado un valor
+	    y una llave.
+
+	|-- public void eliminar(Llave llave) :
+	    Método para eliminar un elemento en la Tabla Hash dada una llave.
+
+	|-- public Valor buscar(Llave llave) :
+	    Método para obtener un elemento en la Tabla Hash dada una llave.
+	    
+	|-- public float factorCarga() :
+	    Método para calcular el factor de carga en la Tabla Hash.
+	    
+	|-- public String toString() :
+	    Método para obtener la representación en cadena de texto la
+	    Tabla Hash.
+
+	+--+ Comportamiento: Privado +--------------------------------------+
+    
+	|-- private void reHashing() :
+	    Método para incremetar el tamaño de la TablaHash.
+
+	|-- private void insertarPrivado() :
+	    Método para insertar una Tupla en la TablaHash.
+	    
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        Implementación de Sondeo Lineal
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    La Tabla Hash con encadenamiento de caracteriza por resolver las
+    colisiones con cubetas que guardan elementos de pares (llave, valor). 
+
+    Además, para esta implementación, se manejará la función de dispersión:
+
+    |-- h(k) = k mod m
+
+    A continuación, se presentan las clases desarrolladas para llevar a cabo
+    la implementación de la Tabla Hash con encadenamiento.
+    
+---------------------------------------------------------------------------------
+                                  Clase: Tupla
+---------------------------------------------------------------------------------
+
+    Las Tablas Hash almacenan elementos con la forma:
+
+    |-- (llave, valor)
+
+    La clase Tupla se encargará de manejar los datos de estos elementos.
+
+    |-- Estructura:
+
+    	+--+ Atributos +----------------------------------------------------+
+
+	|-- Llave llave :
+	    Dato abstracto para identificar la Tupla.
+	
+    	|-- Valor valor :
+	    Dato abstracto a guardar en la Tupla.
+	
+	+--+ Comportamiento: Público +--------------------------------------+
+
+	|-- public Tupla() :
+	    Método para construir una Tupla.
+	    
+	|-- public Tupla(Llave llave, Valor valor) :
+	    Método para construir una Tupla dada una llave y un valor.
+	
+	|-- public Llave getLlave() :
+	    Método para obtener la llave de una Tupla.
+	    
+    	|-- public Valor getValor() :
+	    Método para obtener el valor de una Tupla.
+
+	|-- public void setLlave(Llave llave) :
+	    Método para modificar la llave de una Tupla dada una llave.
+	    
+    	|-- public void setValor(Valor valor) :
+	    Método para modificar el valor de una Tupla dado un valor.
+
+	|-- public String toString() :
+	    Método para obtener la representación en cadena de texto de una
+	    Tupla.
+			 
+---------------------------------------------------------------------------------
+                     Clase Interna: Funciones de Disperción
+---------------------------------------------------------------------------------
+
+    Las Tablas Hash usan funciones de dispersión para que dada la llave de un
+    elemento (llave, valor) se le asigne una posición en la Tabla Hash para
+    almacenarlo. No obstante, pueden ocurrir colisiones entre llaves, pero de
+    esto último, se encargará la Tabla Hash con Encadenamiento de resolverlo.
+
+    La función de dispersión a implementar en la práctica es:
+
+    |-- h(k) = k mod m
+
+    Donde:
+
+    |-- k = Llave de un elemento (llave, tupla).
+    |-- m = Tamaño/dimensión del arreglo en la Tabla Hash.
+
+    La clase interna FuncionDispersion contendrá las funciones de dispersión
+    que se utilizarán en la Tabla Hash.
+
+    |-- Estructura:
+	
+	+--+ Comportamiento: Público +--------------------------------------+
+
+	|-- public FuncionDispersion() :
+	    Método para construir una FuncionDispersion.
+	    
+	|-- public hash(Llave llave) :
+	    Método para aplicar la función h(k) = k mod m.
+	    
+---------------------------------------------------------------------------------
+                                 Encadenamiento
+---------------------------------------------------------------------------------
+
+    Las Tablas Hash con Encadenamiento resuelve las colisiones entre llaves
+    con un arreglo de cubetas que contiene elementos(llave, valor).
+
+    La clase Encadenamiento se encargará de manejar las operaciones de:
+
+    |-- insertar(key, value)
+    |-- buscar(key)
+    |-- eliminar(key)
+
+    que se invocarán afuera de la Tabla Hash.
+
+    |-- Estructura:
+
+    	+--+ Atributos +----------------------------------------------------+
+
+	|-- int elementos :
+	    Número de elementos(llave, valor) que contiene la Tabla Hash.
+	
+    	|-- LinkedList<Tupla> [] cubetas :
+	    Colección de Cubetas en la Tabla Hash.
+	    
+	+--+ Comportamiento: Público +--------------------------------------+
+
+	|-- public TablaHashEncadenamiento() :
+	    Método para construir una TablaHash con 7 cubetas.
+	    
+	|-- public TablaHashEncadenamiento(int m) :
+	    Método para construir una TablaHash con m cubetas posibles.
+
+	|-- public void insertar(Llave llave, Valor valor) :
+	    Método para insertar un elemento en la Tabla Hash dado un valor
+	    y una llave.
+
+	|-- public void eliminar(Llave llave) :
+	    Método para eliminar un elemento en la Tabla Hash dada una llave.
+
+	|-- public Valor buscar(Llave llave) :
+	    Método para obtener un elemento en la Tabla Hash dada una llave.
+	    
+	|-- public float factorCarga() :
+	    Método para calcular el factor de carga en la Tabla Hash.
+	    
+	|-- public String toString() :
+	    Método para obtener la representación en cadena de texto la
+	    Tabla Hash.
+
+	+--+ Comportamiento: Privado +--------------------------------------+
+    
+	|-- private void reHashing() :
+	    Método para incremetar el tamaño de la TablaHash.
+
+	|-- private void insertarPrivado() :
+	    Método para insertar una Tupla en la TablaHash.

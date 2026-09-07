@@ -1,19 +1,19 @@
 /**
  * Tupla.
  *
- * Clase destinada al mapeo de una llave a un valor.
+ * Clase destinada a crear elementos(llave, valor).
  */
 public class Tupla {
 
-    public static final Tupla DELETED = new Tupla(-1, "-1"); 
+    /* Llave de la Tupla . */
     private final int llave;
+    /* Valor de la Tupla. */
     private String valor;
 
     /**
-     * Constructor básico para crear una Tupla.
-     *
-     * @param llave llave asociada al valor.
-     * @param valor valor asociado a la llave.
+     * Constructor por parámetros para crear una Tupla.
+     * @param llave asociada a la tupla.
+     * @param valor asociado a la tupla.
      */
     public Tupla(int llave, String valor) {
         this.llave = llave;
@@ -21,47 +21,35 @@ public class Tupla {
     }
 
     /**
-     * Regresa el valor.
-     *
-     * @return valor asociado a la llave.
+     * Regresa el valor asociado a la Tupla.
+     * @return valor de la Tupla.
      */
     public String getValor() {
         return valor;
     }
 
     /**
-     * Asigna un nuevo valor.
-     *
-     * @param valor nuevo valor.
+     * Asigna un nuevo valor a la Tupla.
+     * @param nuevo valor de la Tupla.
      */
     public void setValor(String valor) {
         this.valor = valor;
     }
 
     /**
-     * Regresa la llave asociada al valor.
-     *
-     * @return llave.
+     * Regresa la llave asociada a la Tupla.
+     * @return llave de la Tupla.
      */
     public int getLlave() {
         return llave;
     }
 
     /**
-     * Representación visual del objeto Tupla.
+     * Método toString de la clase Tupla.
+     * @return representación en cadena de texto de una Tupla.
      */
     @Override
     public String toString() {
         return "(" + llave + ", " + valor + ")";
-    }
-
-    /**
-     * Equals para determinar si una tupla es igual a otra.
-     * Comparando entrada a entrada la igualdad.
-     * @param a Tupla con la cual comparar
-     * @return true si ambas entradas son iguales, false en otro caso
-     */
-    public boolean equals (Tupla a){
-        return llave == a.llave && valor.equals(a.valor);
     }
 }
