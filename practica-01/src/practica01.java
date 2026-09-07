@@ -1,9 +1,135 @@
 /**
  * practica01
- * Clase main, donde se preguntara al usuario que desea hacer
+ * Clase main donde se ejecutan los casos de prueba
+ * de la tabla hash.
  */
 public class practica01 {
+
     public static void main(String[] cositasLindas) {
-        System.out.println("First prueba");
+
+        // Creamos una tabla hash con 7 cubetas.
+        HashTable tabla = new HashTable(7);
+
+
+        /*
+         * PRUEBA 1: TABLA VACÍA
+         */
+        System.out.println("===== PRUEBA 1: TABLA VACÍA =====");
+
+        System.out.println("Buscar llave 10:");
+        System.out.println("Esperado: NOT_FOUND");
+        System.out.println("Obtenido: " + tabla.buscar(10));
+
+        System.out.println();
+
+
+        /*
+         * PRUEBA 2: INSERCIÓN BÁSICA
+         */
+        System.out.println("===== PRUEBA 2: INSERCIÓN BÁSICA =====");
+
+        tabla.insertar(18, "Ana");
+        tabla.insertar(10, "Luis");
+        tabla.insertar(23, "Elena");
+
+        System.out.println("Buscar 18:");
+        System.out.println("Esperado: Ana");
+        System.out.println("Obtenido: " + tabla.buscar(18));
+
+        System.out.println("Buscar 10:");
+        System.out.println("Esperado: Luis");
+        System.out.println("Obtenido: " + tabla.buscar(10));
+
+        System.out.println("Buscar 23:");
+        System.out.println("Esperado: Elena");
+        System.out.println("Obtenido: " + tabla.buscar(23));
+
+        System.out.println();
+
+
+        /*
+         * PRUEBA 3: COLISIONES
+         */
+        System.out.println("===== PRUEBA 3: COLISIONES =====");
+
+        tabla.insertar(24, "Maria");
+        tabla.insertar(31, "Carlos");
+
+        System.out.println("Tabla después de provocar colisiones:");
+        tabla.imprimirTabla();
+
+        System.out.println();
+
+        System.out.println("Buscar 10:");
+        System.out.println("Esperado: Luis");
+        System.out.println("Obtenido: " + tabla.buscar(10));
+
+        System.out.println("Buscar 24:");
+        System.out.println("Esperado: Maria");
+        System.out.println("Obtenido: " + tabla.buscar(24));
+
+        System.out.println("Buscar 31:");
+        System.out.println("Esperado: Carlos");
+        System.out.println("Obtenido: " + tabla.buscar(31));
+
+        System.out.println();
+
+
+        /*
+         * PRUEBA 4: ELIMINACIÓN CON COLISIÓN
+         */
+        System.out.println("===== PRUEBA 4: ELIMINACIÓN =====");
+
+        tabla.eliminar(24);
+
+        System.out.println("Tabla después de eliminar 24:");
+        tabla.imprimirTabla();
+
+        System.out.println();
+
+        System.out.println("Buscar 24:");
+        System.out.println("Esperado: NOT_FOUND");
+        System.out.println("Obtenido: " + tabla.buscar(24));
+
+        System.out.println("Buscar 10:");
+        System.out.println("Esperado: Luis");
+        System.out.println("Obtenido: " + tabla.buscar(10));
+
+        System.out.println("Buscar 31:");
+        System.out.println("Esperado: Carlos");
+        System.out.println("Obtenido: " + tabla.buscar(31));
+
+        System.out.println();
+
+
+        /*
+         * PRUEBA 5: LLAVE INEXISTENTE
+         */
+        System.out.println("===== PRUEBA 5: LLAVE INEXISTENTE =====");
+
+        System.out.println("Intentando eliminar la llave 999...");
+
+        tabla.eliminar(999);
+
+        System.out.println("El programa continúa correctamente.");
+
+        System.out.println();
+
+
+        /*
+         * PRUEBA 6: ACTUALIZACIÓN DE LLAVE EXISTENTE
+         */
+        System.out.println("===== PRUEBA 6: ACTUALIZACIÓN =====");
+
+        tabla.insertar(18, "Ana Maria");
+
+        System.out.println("Buscar 18:");
+        System.out.println("Esperado: Ana Maria");
+        System.out.println("Obtenido: " + tabla.buscar(18));
+
+        System.out.println();
+
+        System.out.println("===== TABLA FINAL =====");
+        tabla.imprimirTabla();
     }
 }

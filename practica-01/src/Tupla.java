@@ -1,23 +1,18 @@
+
 /**
- * Clase Tupla.
- *
- * Clase destinada a formar pares ordenados de (llave, valor).
+ * Tupla
+ * 
+ * Clase destinada al mapeo de una llave a un valor
  */
 public class Tupla {
-    
-    // ATRIBUTOS
-    
-    /* Llave de la Tupla */
-    int llave;
-    /* Valor de la Tupla */
-    String valor;
+    //ATRIBUTOS
+    private final int llave;
+    private String valor;
 
-    // MÉTODOS
-    
     /**
-     * Método constructor por parámetros (llave, valor).
-     * @param valor ; valor de la Tupla.
-     * @param llave ; llave de la Tupla.
+     * Constructor basico para crear una Tupla
+     * @param llave llave asociada al valor.
+     * @param valor valor asociado a la llave.
      */
     public Tupla(int llave, String valor) {
         this.llave = llave;
@@ -25,43 +20,34 @@ public class Tupla {
     }
 
     /**
-     * Método getter para obtener la llave de la tupla.
-     * @return llave de la Tupla.
-     */
-    public int getLlave() {
-        return llave;
-    }
-
-    /**
-     * Método setter para asignar la llave de la tupla.
-     * @param llave ; llave de la Tupla.
-     */
-    public void setLlave(int llave) {
-        this.llave = llave;
-    }
-
-    /**
-     * Método getter para obtener el valor de la tupla.
-     * @return valor de la Tupla.
+     * Regresa el valor.
+     * @return valor
      */
     public String getValor() {
         return valor;
     }
 
     /**
-     * Método setter para asignar el valor de la tupla.
-     * @param valor ; valor de la Tupla.
+     * Asiganamos un valor
+     * @param valor
      */
     public void setValor(String valor) {
         this.valor = valor;
     }
-    
+
     /**
-     * Método toString para representar a la Tupla.
-     * @return representación en cadena de texto de la Tupla.
+     * Regresa la llave asociada al valor
+     * @return
+     */
+    public int getLlave() {
+        return llave;
+    }
+
+    /**
+     * Representacion visula del objeto tupla
      */
     @Override
     public String toString (){
-        return "(" + llave + ", " + valor + ")";
+        return "("+llave+", "+valor+")";
     }
 }
