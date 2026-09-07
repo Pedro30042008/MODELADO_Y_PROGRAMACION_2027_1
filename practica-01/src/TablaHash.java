@@ -1,123 +1,172 @@
+import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
- * HashTable.
- * 
- * Clase destinada a generar una HashTable.
+ * TablaHash.
+ *
+ * Clase destinada a generar una tabla hash mediante encadenamiento.
  */
 public class TablaHash {
 
     /**
-     * Clase Interna Privada Función Dispersión.
-     *
-     * Clase destinada a guardar funciones de dispersión.
+     * Clase interna privada destinada a calcular la función de dispersión.
      */
     private class FuncionDispersion {
-	
-	// MÉTODOS
 
-	/**
-	 * Método constructor vacío por completitud.
-	 */
-	public FuncionDispersion() {
-	}
-	
-	/**
-	 * Método que aplica la funcioó de dispersión h(k) = k mod m.
-	 * k = llave y m = dimensión/tamaño de la TablaHash.
-	 * @param llave ; llave de una Tupla.
-	 * @return índice de una cubeta en la TablaHash.
-	 */
-	public int hash(int llave) {
-	    // Regresamos el resultado de h(k).
-	    return llave % tablaHash.length;
-	}
+        /**
+         * Método que aplica la función de dispersión h(k) = k mod m.
+         *
+         * @param llave llave de una Tupla.
+         * @return índice de una cubeta en la TablaHash.
+         */
+        public int hash(int llave) {
+            return Math.floorMod(llave, tablaHash.length);
+        }
     }
-    
-    // ATRIBUTOS: TablaHash
 
-    /* Clase de Funcion de dispersión. */
-    private FuncionDispersion dispersor = new FuncionDispersion();
-    /* Número de elementos en la TablaHash. */
+    /* Función de dispersión utilizada por la tabla. */
+    private final FuncionDispersion dispersor = new FuncionDispersion();
+
+    /* Número de elementos almacenados en la TablaHash. */
     private int numElementos;
+
     /* Arreglo de cubetas. */
     private LinkedList<Tupla>[] tablaHash;
 
-    // METODOS: TablaHash
-
     /**
-     * Método constructor por default para crear una tabla hash.
+     * Constructor por default. Crea una tabla hash de tamaño 7.
      */
-    @SuppressWarnings("unchecked") // Advertencia genéricos
+    @SuppressWarnings("unchecked")
     public TablaHash() {
-	// Colocamos el valor por default de la dimension/tamaño de la tablaHash.
-	tablaHash = new LinkedList[7];
-        // Inicializamos las cubetas de la tablaHash.
-	for (int i = 0; i < tablaHash.length; i++) {
-	    tablaHash[i] = new LinkedList<>();
-	}
+        tablaHash = new LinkedList[7];
+
+        for (int i = 0; i < tablaHash.length; i++) {
+            tablaHash[i] = new LinkedList<>();
+        }
+
+        numElementos = 0;
     }
 
     /**
-     * Método constructor para crear una tabla hash dado una dimension/tamaño.
+     * Constructor para crear una tabla hash con una dimensión dada.
+     *
+     * @param dimension dimensión/tamaño de la TablaHash.
      */
-    @SuppressWarnings("unchecked") // Advertencia genéricos
+    @SuppressWarnings("unchecked")
     public TablaHash(int dimension) {
-	// Colocamos el valor por default de la dimension/tamaño de la tablaHash.
-	tablaHash = new LinkedList[dimension];
-        // Inicializamos las cubetas de la tablaHash.
-	for (int i = 0; i < tablaHash.length; i++) {
-	    tablaHash[i] = new LinkedList<>();
-	}
+
+        if (dimension <= 0) {
+            throw new IllegalArgumentException(
+                "La dimensión debe ser mayor que 0."
+            );
+        }
+
+        tablaHash = new LinkedList[dimension];
+
+        for (int i = 0; i < tablaHash.length; i++) {
+            tablaHash[i] = new LinkedList<>();
+        }
+
+        numElementos = 0;
     }
-    
+
     /**
-     * Método para insertar en la TablaHash una Tupla dada una llave y su valor.
-     * Si no existe la llave en la cubeta señalada, se añade la nueva Tupla.
-     * Si ya se encuentra la llave en la cubeta señalada, se cambia su valor
-     * por el nuevo.
-     * @param llave ; llave de la Tupla.
-     * @param valor ; valor de la Tupla.
+     * Inserta una Tupla dada una llave y su valor.
+     * Si la llave ya existe, actualiza el valor.
+     *
+     * @param llave llave de la Tupla.
+     * @param valor valor asociado a la llave.
      */
     public void insertar(int llave, String valor) {
-        // Calculamos el índice donde se dirige la llave dada.
-	int indiceTabla = dispersor.hash(llave);
-        // Cubetas de Tuplas (llave, valor).
-        LinkedList<Tupla> cubetas = tablaHash[indiceTabla];
-        // Variable para verificar si se encontro la llave.
-        boolean existeLlave = false;
-        // Verificamos si tenemos la llave en la cubeta.
-        for (Tupla tupla : cubetas) {
-            // Si encontramos la llave.
+
+        int indiceTabla = dispersor.hash(llave);
+        LinkedList<Tupla> cubeta = tablaHash[indiceTabla];
+
+        for (Tupla tupla : cubeta) {
             if (tupla.getLlave() == llave) {
-                // Asignamos el nuevo valor a la tupla.
                 tupla.setValor(valor);
-                // Avisamos que si encontramos la llave.
-                existeLlave = true;
+                return;
             }
         }
-        // Si no encontramos la llave.
-        if (!existeLlave) {
-	    // Añadimos una Tupla a la cubeta.
-            cubetas.add(new Tupla(llave, valor));
-        }
-    }
-    
-    /**
-     * Método para buscar un valor dada una llave.
-     * @param llave ; llave asociada a un posible valor.
-     * @return valor ; valor asociado a la llave.
-     */
-    public String buscar(int llave) {
-	return "Hola";
+
+        cubeta.add(new Tupla(llave, valor));
+        numElementos++;
     }
 
     /**
-     * Método para eliminar una tupla dada una llave.
-     * @param llave ; llave asociada a un posible valor.
+     * Busca el valor asociado a una llave.
+     *
+     * @param llave llave que se desea buscar.
+     * @return valor asociado a la llave, o NOT_FOUND si no existe.
+     */
+    public String buscar(int llave) {
+
+        int indiceTabla = dispersor.hash(llave);
+        LinkedList<Tupla> cubeta = tablaHash[indiceTabla];
+
+        for (Tupla tupla : cubeta) {
+            if (tupla.getLlave() == llave) {
+                return tupla.getValor();
+            }
+        }
+
+        return "NOT_FOUND";
+    }
+
+    /**
+     * Elimina la Tupla asociada a una llave.
+     *
+     * @param llave llave que se desea eliminar.
      */
     public void eliminar(int llave) {
-	
+
+        int indiceTabla = dispersor.hash(llave);
+        LinkedList<Tupla> cubeta = tablaHash[indiceTabla];
+
+        Iterator<Tupla> iterador = cubeta.iterator();
+
+        while (iterador.hasNext()) {
+            Tupla tupla = iterador.next();
+
+            if (tupla.getLlave() == llave) {
+                iterador.remove();
+                numElementos--;
+                return;
+            }
+        }
     }
-    
+
+    /**
+     * Calcula el factor de carga alpha = n / m.
+     *
+     * @return factor de carga de la TablaHash.
+     */
+    public double factorCarga() {
+        return (double) numElementos / tablaHash.length;
+    }
+
+    /**
+     * Imprime el contenido completo de la TablaHash.
+     */
+    public void imprimirTabla() {
+
+        for (int i = 0; i < tablaHash.length; i++) {
+
+            System.out.print(i + " ->");
+
+            boolean primera = true;
+
+            for (Tupla tupla : tablaHash[i]) {
+
+                if (!primera) {
+                    System.out.print(" ->");
+                }
+
+                System.out.print(" " + tupla);
+                primera = false;
+            }
+
+            System.out.println();
+        }
+    }
 }

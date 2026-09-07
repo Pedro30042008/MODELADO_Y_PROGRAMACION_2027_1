@@ -1,27 +1,21 @@
 /**
- * practica01
- * Clase main donde se ejecutan los casos de prueba
- * de la tabla hash.
+ * practica01.
+ *
+ * Clase main donde se ejecutan los casos de prueba de la tabla hash.
  */
 public class practica01 {
 
     public static void main(String[] cositasLindas) {
 
-        // Creamos una tabla hash con 7 cubetas.
-        HashTable tabla = new HashTable(7);
-
+        TablaHash tabla = new TablaHash(7);
 
         /*
          * PRUEBA 1: TABLA VACÍA
          */
         System.out.println("===== PRUEBA 1: TABLA VACÍA =====");
-
         System.out.println("Buscar llave 10:");
-        System.out.println("Esperado: NOT_FOUND");
-        System.out.println("Obtenido: " + tabla.buscar(10));
-
+        System.out.println("Resultado: " + tabla.buscar(10));
         System.out.println();
-
 
         /*
          * PRUEBA 2: INSERCIÓN BÁSICA
@@ -33,19 +27,14 @@ public class practica01 {
         tabla.insertar(23, "Elena");
 
         System.out.println("Buscar 18:");
-        System.out.println("Esperado: Ana");
-        System.out.println("Obtenido: " + tabla.buscar(18));
+        System.out.println("Resultado: " + tabla.buscar(18));
 
         System.out.println("Buscar 10:");
-        System.out.println("Esperado: Luis");
-        System.out.println("Obtenido: " + tabla.buscar(10));
+        System.out.println("Resultado: " + tabla.buscar(10));
 
         System.out.println("Buscar 23:");
-        System.out.println("Esperado: Elena");
-        System.out.println("Obtenido: " + tabla.buscar(23));
-
+        System.out.println("Resultado: " + tabla.buscar(23));
         System.out.println();
-
 
         /*
          * PRUEBA 3: COLISIONES
@@ -57,23 +46,17 @@ public class practica01 {
 
         System.out.println("Tabla después de provocar colisiones:");
         tabla.imprimirTabla();
-
         System.out.println();
 
         System.out.println("Buscar 10:");
-        System.out.println("Esperado: Luis");
-        System.out.println("Obtenido: " + tabla.buscar(10));
+        System.out.println("Resultado: " + tabla.buscar(10));
 
         System.out.println("Buscar 24:");
-        System.out.println("Esperado: Maria");
-        System.out.println("Obtenido: " + tabla.buscar(24));
+        System.out.println("Resultado: " + tabla.buscar(24));
 
         System.out.println("Buscar 31:");
-        System.out.println("Esperado: Carlos");
-        System.out.println("Obtenido: " + tabla.buscar(31));
-
+        System.out.println("Resultado: " + tabla.buscar(31));
         System.out.println();
-
 
         /*
          * PRUEBA 4: ELIMINACIÓN CON COLISIÓN
@@ -84,37 +67,26 @@ public class practica01 {
 
         System.out.println("Tabla después de eliminar 24:");
         tabla.imprimirTabla();
-
         System.out.println();
 
         System.out.println("Buscar 24:");
-        System.out.println("Esperado: NOT_FOUND");
-        System.out.println("Obtenido: " + tabla.buscar(24));
+        System.out.println("Resultado: " + tabla.buscar(24));
 
         System.out.println("Buscar 10:");
-        System.out.println("Esperado: Luis");
-        System.out.println("Obtenido: " + tabla.buscar(10));
+        System.out.println("Resultado: " + tabla.buscar(10));
 
         System.out.println("Buscar 31:");
-        System.out.println("Esperado: Carlos");
-        System.out.println("Obtenido: " + tabla.buscar(31));
-
+        System.out.println("Resultado: " + tabla.buscar(31));
         System.out.println();
-
 
         /*
          * PRUEBA 5: LLAVE INEXISTENTE
          */
         System.out.println("===== PRUEBA 5: LLAVE INEXISTENTE =====");
-
         System.out.println("Intentando eliminar la llave 999...");
-
         tabla.eliminar(999);
-
         System.out.println("El programa continúa correctamente.");
-
         System.out.println();
-
 
         /*
          * PRUEBA 6: ACTUALIZACIÓN DE LLAVE EXISTENTE
@@ -124,9 +96,14 @@ public class practica01 {
         tabla.insertar(18, "Ana Maria");
 
         System.out.println("Buscar 18:");
-        System.out.println("Esperado: Ana Maria");
-        System.out.println("Obtenido: " + tabla.buscar(18));
+        System.out.println("Resultado: " + tabla.buscar(18));
+        System.out.println();
 
+        /*
+         * FACTOR DE CARGA
+         */
+        System.out.println("===== FACTOR DE CARGA =====");
+        System.out.println("Factor de carga final: " + tabla.factorCarga());
         System.out.println();
 
         System.out.println("===== TABLA FINAL =====");

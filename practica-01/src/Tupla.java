@@ -1,16 +1,16 @@
-
 /**
- * Tupla
- * 
- * Clase destinada al mapeo de una llave a un valor
+ * Tupla.
+ *
+ * Clase destinada al mapeo de una llave a un valor.
  */
 public class Tupla {
-    //ATRIBUTOS
+
     private final int llave;
     private String valor;
 
     /**
-     * Constructor basico para crear una Tupla
+     * Constructor básico para crear una Tupla.
+     *
      * @param llave llave asociada al valor.
      * @param valor valor asociado a la llave.
      */
@@ -21,33 +21,36 @@ public class Tupla {
 
     /**
      * Regresa el valor.
-     * @return valor
+     *
+     * @return valor asociado a la llave.
      */
     public String getValor() {
         return valor;
     }
 
     /**
-     * Asiganamos un valor
-     * @param valor
+     * Asigna un nuevo valor.
+     *
+     * @param valor nuevo valor.
      */
     public void setValor(String valor) {
         this.valor = valor;
     }
 
     /**
-     * Regresa la llave asociada al valor
-     * @return
+     * Regresa la llave asociada al valor.
+     *
+     * @return llave.
      */
     public int getLlave() {
         return llave;
     }
 
     /**
-     * Representacion visula del objeto tupla
+     * Representación visual del objeto Tupla.
      */
     @Override
-    public String toString (){
-        return "("+llave+", "+valor+")";
+    public String toString() {
+        return "(" + llave + ", " + valor + ")";
     }
 }
