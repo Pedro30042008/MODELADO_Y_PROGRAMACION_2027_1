@@ -1,3 +1,4 @@
+
 /**
  * practica01.
  *
@@ -109,4 +110,10 @@ public class practica01 {
         System.out.println("===== TABLA FINAL =====");
         tabla.imprimirTabla();
     }
+
+
+
+    //IMPLEMENTACION CON SONDEO LINEAL
+    TablaSondeoLineal tabla = new TablaSondeoLineal();
+    Tupla a = Tupla.DELETED;
 }

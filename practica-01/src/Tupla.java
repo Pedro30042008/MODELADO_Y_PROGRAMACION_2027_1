@@ -5,6 +5,7 @@
  */
 public class Tupla {
 
+    public static final Tupla DELETED = new Tupla(-1, "-1"); 
     private final int llave;
     private String valor;
 
@@ -52,5 +53,15 @@ public class Tupla {
     @Override
     public String toString() {
         return "(" + llave + ", " + valor + ")";
+    }
+
+    /**
+     * Equals para determinar si una tupla es igual a otra.
+     * Comparando entrada a entrada la igualdad.
+     * @param a Tupla con la cual comparar
+     * @return true si ambas entradas son iguales, false en otro caso
+     */
+    public boolean equals (Tupla a){
+        return llave == a.llave && valor.equals(a.valor);
     }
 }
