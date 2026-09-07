@@ -1,6 +1,5 @@
+Modelado y Programación
 
-i Modelado y Programación hola como estas todo tranq
-be0243a (Pies de la practica 01)
 ## Prácticas de Laboratorio y Tareas
 
 ### Profesora:  
