@@ -201,7 +201,7 @@ public class practica01 {
         System.out.println("Buscar 18:");
         System.out.println("Resultado: " + tabla2.buscar(18));
         System.out.println();
-
+	
         /*
          * FACTOR DE CARGA
          */

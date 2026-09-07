@@ -81,8 +81,6 @@ public class TablaHashSondeoLineal {
 	}
 	// Insertamos la llave con su valor.
 	insertarPrivado(llave, valor);
-	// Aumentamos el número de elementos contenidos en la TablaHash.
-        this.elementos++;
     }
 
     /**
@@ -91,6 +89,8 @@ public class TablaHashSondeoLineal {
      */
     @SuppressWarnings("unchecked") // Advertencia genéricos LinkedList<>[]
     private void reHashing() {
+	// Actualizamos el numero de elementos.
+	elementos = 0;
 	// Calculamos el nuevo tamaño de la tabla.
 	int nuevoTamanio = celdas.length * 2;
 	// Referenciamos las viejas celdas.
@@ -139,10 +139,14 @@ public class TablaHashSondeoLineal {
 		if (candidato != -1) {
 		    // Asignamos la nueva tupla en el candidato.
 		    this.celdas[candidato] = new Celda(null, new Tupla(llave, valor));
+		    // Incrementamos el número de elementos.
+		    elementos++;
 		    return;
 		} else {
 		    // En caso contrario, creamos una nueva celda con la nueva tupla.
 		    this.celdas[indiceArreglo] = new Celda(null, new Tupla(llave, valor));
+		    // Incrementamos el número de elementos.
+		    elementos++;
 		    return;
 		}
 	    }
@@ -236,6 +240,8 @@ public class TablaHashSondeoLineal {
 		// En ese caso, etiquetamos DELETED.
 		this.celdas[indiceArreglo].setEtiqueta(Etiqueta.DELETED);
 		this.celdas[indiceArreglo].setTupla(null);
+		// Decrementamos el número de elementos.
+		elementos--;
 	        return;
 	    }
 	    // Aumentamos el contador en uno.

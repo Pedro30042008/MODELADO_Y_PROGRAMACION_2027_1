@@ -26,7 +26,7 @@
                          Implementación de Encadenamiento
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    La Tabla Hash con encadenamiento de caracteriza por resolver las
+    La Tabla Hash con encadenamiento se caracteriza por resolver las
     colisiones con cubetas que guardan elementos de pares (llave, valor). 
 
     Además, para esta implementación, se manejará la función de dispersión:
@@ -112,13 +112,14 @@
 	    Método para aplicar la función h(k) = k mod m.
 	    
 ---------------------------------------------------------------------------------
-                                 Encadenamiento
+                             TablaHashEncadenamiento
 ---------------------------------------------------------------------------------
 
     Las Tablas Hash con Encadenamiento resuelve las colisiones entre llaves
     con un arreglo de cubetas que contiene elementos(llave, valor).
 
-    La clase Encadenamiento se encargará de manejar las operaciones de:
+    La clase TablaHashEncadenamiento se encargará de manejar las operaciones
+    de:
 
     |-- insertar(key, value)
     |-- buscar(key)
@@ -130,6 +131,10 @@
 
     	+--+ Atributos +----------------------------------------------------+
 
+	|-- FuncionDispersion dispersor :
+	    Referencia a la función de dispersión que se actualiza cuando
+	    cambia el tamaño de la Tabla.
+	    
 	|-- int elementos :
 	    Número de elementos(llave, valor) que contiene la Tabla Hash.
 	
@@ -173,15 +178,17 @@
                         Implementación de Sondeo Lineal
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    La Tabla Hash con encadenamiento de caracteriza por resolver las
-    colisiones con cubetas que guardan elementos de pares (llave, valor). 
+    La Tabla Hash con sondeo lineal se caracteriza por resolver las
+    colisiones con etiquetas DELETED y la inserción de elementos(llave, valor)
+    en una sola posición del arreglo de la TablaHash, es decir, cada posición
+    de la TablaHash contiene a lo más un elemento(llave, valor).
 
-    Además, para esta implementación, se manejará la función de dispersión:
+    Para esta implementación, se manejará la función de dispersión:
 
-    |-- h(k) = k mod m
+    |-- h(k, i) = (h(k) + i) mod m
 
     A continuación, se presentan las clases desarrolladas para llevar a cabo
-    la implementación de la Tabla Hash con encadenamiento.
+    la implementación de la Tabla Hash con sondeo lineal.
     
 ---------------------------------------------------------------------------------
                                   Clase: Tupla
@@ -234,9 +241,20 @@
     Las Tablas Hash usan funciones de dispersión para que dada la llave de un
     elemento (llave, valor) se le asigne una posición en la Tabla Hash para
     almacenarlo. No obstante, pueden ocurrir colisiones entre llaves, pero de
-    esto último, se encargará la Tabla Hash con Encadenamiento de resolverlo.
+    esto último, se encargará la Tabla Hash con SondeoLineal de resolverlo.
 
     La función de dispersión a implementar en la práctica es:
+
+    |-- h(k) = (h(k) + i) mod m
+
+    Donde:
+
+    |-- k = Llave de un elemento (llave, tupla).
+    |-- m = Tamaño/dimensión del arreglo en la Tabla Hash.
+    |-- h(k) = Otra función de disperión.
+    |-- i = Índice que va de 0 a m-1.
+
+    Además, se apoyará de la función de dispersión:
 
     |-- h(k) = k mod m
 
@@ -257,15 +275,19 @@
 	    
 	|-- public hash(Llave llave) :
 	    Método para aplicar la función h(k) = k mod m.
+
+	|-- public hash(Llave llave, int indice) :
+	    Método para aplicar la función h(k) = (h(k) + i) mod m.
 	    
 ---------------------------------------------------------------------------------
-                                 Encadenamiento
+                              TablaHashSondeoLineal
 ---------------------------------------------------------------------------------
 
-    Las Tablas Hash con Encadenamiento resuelve las colisiones entre llaves
-    con un arreglo de cubetas que contiene elementos(llave, valor).
+    Las Tablas Hash con Sondeo Lineal resuelve las colisiones entre llaves
+    buscando el espacio adecuado para guardar sólo un elemento(llave, valor)
+    en cada posición de la Tabla.
 
-    La clase Encadenamiento se encargará de manejar las operaciones de:
+    La clase TablaHashSondeoLineal se encargará de manejar las operaciones de:
 
     |-- insertar(key, value)
     |-- buscar(key)
@@ -277,18 +299,22 @@
 
     	+--+ Atributos +----------------------------------------------------+
 
+	|-- FuncionDispersion dispersor :
+	    Referencia a la función de dispersión que se actualiza cuando
+	    cambia el tamaño de la Tabla.
+	    
 	|-- int elementos :
 	    Número de elementos(llave, valor) que contiene la Tabla Hash.
 	
-    	|-- LinkedList<Tupla> [] cubetas :
-	    Colección de Cubetas en la Tabla Hash.
+    	|-- Celda [] cubetas :
+	    Colección de Celdas en la Tabla Hash.
 	    
 	+--+ Comportamiento: Público +--------------------------------------+
 
-	|-- public TablaHashEncadenamiento() :
+	|-- public TablaHashSondeoLineal() :
 	    Método para construir una TablaHash con 7 cubetas.
 	    
-	|-- public TablaHashEncadenamiento(int m) :
+	|-- public TablaHashSondeoLineal(int m) :
 	    Método para construir una TablaHash con m cubetas posibles.
 
 	|-- public void insertar(Llave llave, Valor valor) :

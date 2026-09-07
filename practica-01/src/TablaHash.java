@@ -74,8 +74,6 @@ public class TablaHash {
 	}
 	// Insertamos la llave con su valor.
 	insertarPrivado(llave, valor);
-	// Aumentamos el número de elementos contenidos en la TablaHash.
-        this.elementos++;
     }
 
     /**
@@ -84,6 +82,8 @@ public class TablaHash {
      */
     @SuppressWarnings("unchecked") // Advertencia genéricos LinkedList<>[]
     private void reHashing() {
+	// Actualizamos el número de elementos.
+	elementos = 0;
 	// Calculamos el nuevo tamaño de la tabla.
 	int nuevoTamanio = cubetas.length * 2;
 	// Referenciamos las viejas cubetas.
@@ -141,6 +141,8 @@ public class TablaHash {
         }
         // Si no encontramos la llave, añadimos una Tupla a la cubeta.
 	cubetaTuplas.add(new Tupla(llave, valor));
+	// Aumentamos el número de elementos contenidos en la TablaHash.
+        this.elementos++;
     }
     
     /**
