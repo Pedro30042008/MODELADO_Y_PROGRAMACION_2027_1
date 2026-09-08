@@ -69,9 +69,6 @@
 	    
     	|-- public Valor getValor() :
 	    Método para obtener el valor de una Tupla.
-
-	|-- public void setLlave(Llave llave) :
-	    Método para modificar la llave de una Tupla dada una llave.
 	    
     	|-- public void setValor(Valor valor) :
 	    Método para modificar el valor de una Tupla dado un valor.
@@ -223,9 +220,6 @@
 	    
     	|-- public Valor getValor() :
 	    Método para obtener el valor de una Tupla.
-
-	|-- public void setLlave(Llave llave) :
-	    Método para modificar la llave de una Tupla dada una llave.
 	    
     	|-- public void setValor(Valor valor) :
 	    Método para modificar el valor de una Tupla dado un valor.
@@ -233,7 +227,59 @@
 	|-- public String toString() :
 	    Método para obtener la representación en cadena de texto de una
 	    Tupla.
-			 
+
+---------------------------------------------------------------------------------
+                                  Clase: Celda
+---------------------------------------------------------------------------------
+
+    Las Tablas Hash con Direccionamiento Abierto y Sondeo Lineal requieren de
+    posiciones que sean capaces de determinar si una celda en vacía, tiene una
+    tupla o fue eliminada posteriormente.
+    
+
+    La clase Celda se encargará de manejar las tuplas y las etiquetas que
+    caracterizan a las celdas en la Tabla.
+
+    |-- Estructura:
+
+    	+--+ Atributos +----------------------------------------------------+
+
+	|-- Etiqueta etiqueta:
+	    Etiqueta con la cual se identifica si una tupla fue eliminada de
+	    la Tabla.
+	
+    	|-- Tupla tupla :
+	    Contiene un elemento(llave, valor) que se guardará en la Tabla.
+	
+	+--+ Comportamiento: Público +--------------------------------------+
+
+	|-- public Celda(Etiqueta etiqueta, Tupla tupla) :
+	    Método para construir una Celda dada una etiqueta y una Tupla.
+	
+	|-- public Llave getEtiqueta() :
+	    Método para obtener la etiqueta de una Celda.
+	    
+    	|-- public Valor getTupla() :
+	    Método para obtener la tupla de una Celda.
+
+	|-- public void setEtiqueta(Etiqueta etiqueta) :
+	    Método para modificar una la Etiqueta de la celda dada una
+	    etiqueta.
+	    
+    	|-- public void setTupla(Valor valor) :
+	    Método para modificar la Tupla de una celda dada una tupla.
+
+---------------------------------------------------------------------------------
+                                  enum: Etiqueta
+---------------------------------------------------------------------------------
+
+    Las Tablas Hash con Direccionamiento Abierto y Sondeo Lineal requieren
+    de etiquetas para determinar si una posición de la Tabla fue eliminado
+    un elemento.
+    
+    |-- DELETED :
+    	Representa la eliminación de una celda no null presente en la Tabla.
+	
 ---------------------------------------------------------------------------------
                      Clase Interna: Funciones de Disperción
 ---------------------------------------------------------------------------------
@@ -245,7 +291,7 @@
 
     La función de dispersión a implementar en la práctica es:
 
-    |-- h(k) = (h(k) + i) mod m
+    |-- h(k, i) = (h(k) + i) mod m
 
     Donde:
 
@@ -341,3 +387,155 @@
 
 	|-- private void insertarPrivado() :
 	    Método para insertar una Tupla en la TablaHash.
+
+---------------------------------------------------------------------------------
+            Notas Importantes para Inserción en TablaHashSondeoLineal
+---------------------------------------------------------------------------------
+
+    En clase vimos los algoritmos que debe seguir la TablaHash con
+    Direccionamiento Abierto y Sondeo Lineal; sin embargo, al hacer unas
+    pruebas a papel, nos dimos cuenta que había un caso especial donde
+    fallaba la insercción y se perdían las propiedades de la las llaves en
+    las Tuplas. A continuación, se presenta el caso:
+
+    Sea B una Tabla Hash con Direccionamiento Abierto y Sondeo Lineal de
+    tamaño 5, la cual aplica la función de dispersión:
+    
+    	      	      	   h(k, i) = (h(k) + i) mod m.
+			     
+    Tabla B inicial.
+
+    |------ Índice -------| |------  Etiqueta  -------| |-----  Tuplas  -------|
+    |------    0   -------| |------    null    -------| |-----   null   -------|
+    |------    1   -------| |------    null    -------| |-----   null   -------|
+    |------    2   -------| |------    null    -------| |-----   null   -------|
+    |------    3   -------| |------    null    -------| |-----   null   -------|
+    |------    4   -------| |------    null    -------| |-----   null   -------|
+
+    Ingresamos k = 0 y v = "Cero";
+
+    |-- h(0, 0) = (h(0) + 0) mod 5 = 0.
+
+    |------ Índice -------| |------  Etiqueta  -------| |-----  Tuplas  -------|
+    |------    0   -------| |------    null    -------| |---  (0, "Cero")   ---|
+    |------    1   -------| |------    null    -------| |-----   null   -------|
+    |------    2   -------| |------    null    -------| |-----   null   -------|
+    |------    3   -------| |------    null    -------| |-----   null   -------|
+    |------    4   -------| |------    null    -------| |-----   null   -------|
+
+    Ingresamos k = 1 y v = "Uno";
+
+    |-- h(1, 0) = (h(1) + 0) mod 5 = 1.
+
+    |------ Índice -------| |------  Etiqueta  -------| |-----  Tuplas  -------|
+    |------    0   -------| |------    null    -------| |---  (0, "Cero")   ---|
+    |------    1   -------| |------    null    -------| |---  (1, "Uno")    ---|
+    |------    2   -------| |------    null    -------| |-----   null   -------|
+    |------    3   -------| |------    null    -------| |-----   null   -------|
+    |------    4   -------| |------    null    -------| |-----   null   -------|
+
+    Ingresamos k = 2 y v = "Dos";
+
+    |-- h(2, 0) = (h(2) + 0) mod 5 = 2.
+
+    |------ Índice -------| |------  Etiqueta  -------| |-----  Tuplas  -------|
+    |------    0   -------| |------    null    -------| |---  (0, "Cero")   ---|
+    |------    1   -------| |------    null    -------| |---  (1, "Uno")    ---|
+    |------    2   -------| |------    null    -------| |---  (2, "Dos")    ---|
+    |------    3   -------| |------    null    -------| |-----   null   -------|
+    |------    4   -------| |------    null    -------| |-----   null   -------|
+
+    Ingresamos k = 6 y v = "Seis";
+
+    |-- h(6, 0) = (h(6) + 0) mod 5 = 1
+    	     	= (h(6) + 1) mod 5 = 2
+		= (h(6) + 2) mod 5 = 3
+
+    |------ Índice -------| |------  Etiqueta  -------| |-----  Tuplas  -------|
+    |------    0   -------| |------    null    -------| |---  (0, "Cero")   ---|
+    |------    1   -------| |------    null    -------| |---  (1, "Uno")    ---|
+    |------    2   -------| |------    null    -------| |---  (2, "Dos")    ---|
+    |------    3   -------| |------    null    -------| |---  (6, "Seis")   ---|
+    |------    4   -------| |------    null    -------| |-----   null   -------|
+
+    Eliminamos a k = 1;
+
+    |-- h(1, 0) = (h(1) + 0) mod 5 = 1
+
+    |------ Índice -------| |------  Etiqueta  -------| |-----  Tuplas  -------|
+    |------    0   -------| |------    null    -------| |---  (0, "Cero")   ---|
+    |------    1   -------| |------   DELETED  -------| |---     null       ---|
+    |------    2   -------| |------    null    -------| |---  (2, "Dos")    ---|
+    |------    3   -------| |------    null    -------| |---  (6, "Seis")   ---|
+    |------    4   -------| |------    null    -------| |-----   null   -------|
+
+    Ingresamos k = 6 y v = "6";
+
+    |-- h(1, 0) = (h(6) + 0) mod 5 = 1
+
+    |------ Índice -------| |------  Etiqueta  -------| |-----  Tuplas  -------|
+    |------    0   -------| |------    null    -------| |---  (0, "Cero")   ---|
+    |------    1   -------| |------    null    -------| |---  (6, "6")      ---|
+    |------    2   -------| |------    null    -------| |---  (2, "Dos")    ---|
+    |------    3   -------| |------    null    -------| |---  (6, "Seis")   ---|
+    |------    4   -------| |------    null    -------| |-----   null   -------|
+
+    Como se puede apreciar, si seguimos el algoritmo visto en el archivo:
+    "Notas 27 agosto.pdf"
+
+    Llegamos a un resultado indeseable en las Tablas Hash, es decir, llaves
+    repetidas en distintas posiciones, pues con ello no sabremos a que tupla
+    dirigirnos si nos la piden.
+
+    Analizando la situación y el procedimiento que seguimos para llegar ahí,
+    formamos una hipótesis, en la cual, pensamos que si se encontraba la
+    etiqueta DELETED, no necesariamente debía ir allí mismo la tupla a
+    insertar, pues habría que buscar si ya existe la llave en la Tabla Hash,
+    ya que de ser así, simplemente se cambiaría el valor de la llave,
+    parecido a la operación de inserción con Encadenamiento.
+
+    Por ende, decidimos evaluar todos los casos posibles en la inserción.
+
+    Buscamos insertar un elemento(llave, valor) en una celda dada su llave;
+
+    |-- Encontramos la espacio con celda null.
+        |-- Insertamos el elemento(llave, valor) en la celda y terminamos.
+
+    |-- Preguntamos si tiene etiqueta DELETED la celda.
+        |-- De ser así, guardamos sólo este índice como posible candidato
+	    para guardar un nuevo elemento(llave, valor).
+
+    |-- Preguntamos si las llaves coinciden de tuplas.
+    	|-- De ser así, modificamos el valor de la tupla que está en la celda
+	    y terminamos.
+
+    |-- Si no entró en alguno de los casos anteriores y tenemos que revisar
+    	una segunda iteracion.
+
+    |-- Si la celda está null y ya encontramos a un candidato. Quiere decir
+    	que termino la búsqueda y creamos un nuevo elemento(llave, valor) en
+	la posición del candidato y terminamos.
+	Si no tenemos al candidato, quiere decir que ya paso por la
+	primera iteración y termino.
+
+    |-- Si la celda tiene etiqueta DELETED y no hemos encontrado a un
+    	candidato, referenciamos la posicón actual. En caso contrario, ya
+	habíamos encontrado al candidato en una iteración anterior.
+
+    |-- Nuevamente, si encontramos coincidencias con las llaves, reemplazamos
+        el valor de la Tupla y terminamos.
+	
+    Estos pasos seguirán iterandose hasta que entre en algún caso de cierre.
+    Por lo tanto, hemos terminado de definir nuestro pseudoalgoritmo para
+    insertar una tupla en este tipo de Tabla Hash.
+
+    Debido a lo anterior, para asegurar que no caigamos en un caso erroneo,
+    decidimos implementar reHashing() para conservar las propiedades de las
+    TablasHash y garanticemos que podamos añadir elementos(llave, valor) en
+    cualquier circunstancia.
+
+    De los demás métodos, se entiende la idea general de como llevarlos a
+    cabo, pues, por ejemplo, notamos que al hacer los métodos de inserción,
+    facilitaba la implementación de los demás, al tener una lógica similar
+    de buscar un elemento señalado y arrojar un resultado o hacer una acción
+    dado el caso correspondiente.
