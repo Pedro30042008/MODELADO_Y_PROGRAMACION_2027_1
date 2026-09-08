@@ -52,4 +52,5 @@ public class Celda {
     public void setTupla(Tupla tupla) {
 	this.tupla = tupla;
     }
+    //Pedro Ruiz, Miranda Sánchez, Alan Alvarez
 }

@@ -52,4 +52,5 @@ public class Tupla {
     public String toString() {
         return "(" + llave + ", " + valor + ")";
     }
+    //Pedro Ruiz, Miranda Sánchez, Alan Alvarez
 }

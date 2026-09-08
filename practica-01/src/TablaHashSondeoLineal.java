@@ -153,15 +153,15 @@ public class TablaHashSondeoLineal {
 	    // Si la celda ha sido eliminada y marcada como DELETED.
 	    if (this.celdas[indiceArreglo].getEtiqueta() == Etiqueta.DELETED) {
 		// Si el candidato no ha sido elegido.
-		if (candidato == -1) {
+			if (candidato == -1) {
 		    // Asignamos el primer candidato posible.
-		    candidato = indiceArreglo;
-		}
+		    	candidato = indiceArreglo;
+			}
 	    }
 	    // Si hay una Tupla, verificamos si tiene la misma llave.
 	    if (this.celdas[indiceArreglo].getTupla().getLlave() == llave) {
-		// En ese caso, sólo modificamos el valor de la Tupla.
-		this.celdas[indiceArreglo].getTupla().setValor(valor);
+			// En ese caso, sólo modificamos el valor de la Tupla.
+			this.celdas[indiceArreglo].getTupla().setValor(valor);
 	        return;
 	    }
 	    // Aumentamos el contador en uno.
@@ -293,4 +293,5 @@ public class TablaHashSondeoLineal {
 	// Retornamos la cadena final.
 	return tablaHash.toString();
     }
+	//Pedro Ruiz, Miranda Sánchez, Alan Alvarez
 }

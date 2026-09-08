@@ -5,4 +5,5 @@
 public enum Etiqueta {
     // Marca que una tupla fue eliminada en la TablaHashSondeoLineal.
     DELETED;
+    //Pedro Ruiz, Miranda Sánchez, Alan Alvarez
 }

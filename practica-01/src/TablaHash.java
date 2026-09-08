@@ -255,4 +255,5 @@ public class TablaHash {
 	// Retornamos la cadena final.
 	return tablaHash.toString();
     }
+    //Pedro Ruiz, Miranda Sánchez, Alan Alvarez
 }
