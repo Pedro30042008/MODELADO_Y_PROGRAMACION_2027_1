@@ -62,6 +62,15 @@ public class ArbolB {
 	    this.llave = null;
 	    this.intervaloMenor = null;
 	}
+
+	/**
+	 * Método Constructor de una Celda dado un número.
+	 * @param llave.
+	 */
+	public Celda(Integer llave) {
+	    this.llave = llave;
+	    this.intervaloMenor = null;
+	}
     }
 
     // Atributos: ArbolB.
@@ -80,6 +89,22 @@ public class ArbolB {
      */
     public ArbolB() {
         this.raiz = null;
+	/*
+	  Probar el toString con Arbol Ficticio
+	this.raiz = new NodoArbolB();
+	int j = 0;
+	for (int i = 0; i < m; i++) {
+	    j =  j + 10;
+	    this.raiz.celdas.add(new Celda(j));
+	}
+	for (Celda celda : this.raiz.celdas) {
+	    celda.intervaloMenor = new NodoArbolB();
+	    for (int i = 0; i < m; i++) {
+		j =  j + 10;
+	        celda.intervaloMenor.celdas.add(new Celda(j));
+	    }
+	}
+	*/
     }
     
     /**
@@ -115,8 +140,40 @@ public class ArbolB {
      */
     @Override
     public String toString() {
+	StringBuilder arbolB = new StringBuilder();
+	// ArbolB vacío.
 	if (this.raiz == null)
-	    return "";
-	return "";
+	    return arbolB.toString();
+	if (this.raiz.celdas.size() == 0)
+	    return arbolB.toString();
+	// ArbolB con al menos una llave.
+	// Listas para guardas los nodos de un mismo nivel y sus hijos.
+	LinkedList<NodoArbolB> nodosActuales = new LinkedList<>();
+	LinkedList<NodoArbolB> nodosHijos = new LinkedList<>();
+	// Empezamos por la raiz.
+	nodosActuales.add(this.raiz);
+	int nivel = 0;
+	while (nodosActuales.size() != 0) {
+	    arbolB.append("Nivel ").append(String.format("%02d", nivel)).append(" : ");
+	    for (NodoArbolB nodo : nodosActuales) {
+		arbolB.append("[");
+		for (Celda celda : nodo.celdas) {
+		    arbolB.append(celda.llave + " | ");
+		    if (celda.intervaloMenor != null)
+			nodosHijos.add(celda.intervaloMenor);
+		}
+		arbolB.delete(arbolB.length() - 3, arbolB.length());
+		arbolB.append("] ");
+		if (nodo.intervaloMayor != null)
+		    nodosHijos.add(nodo.intervaloMayor);
+	    }
+	    arbolB.setLength(arbolB.length() - 1);
+	    arbolB.append("\n");
+	    nodosActuales = nodosHijos;
+	    nodosHijos = new LinkedList<>();
+	    nivel++;
+	}
+	arbolB.setLength(arbolB.length() - 1);
+	return arbolB.toString();
     }
 }

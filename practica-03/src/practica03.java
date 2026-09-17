@@ -8,5 +8,7 @@ public class practica03 {
     /* Método Main */
     public static void main(String[] args) {
 	ArbolB arbolB = new ArbolB();
+	// Probar el método toString
+	System.out.println(arbolB);
     }
 }
