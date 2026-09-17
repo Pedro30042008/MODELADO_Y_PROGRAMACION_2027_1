@@ -89,22 +89,6 @@ public class ArbolB {
      */
     public ArbolB() {
         this.raiz = null;
-	/*
-	  Probar el toString con Arbol Ficticio
-	this.raiz = new NodoArbolB();
-	int j = 0;
-	for (int i = 0; i < m; i++) {
-	    j =  j + 10;
-	    this.raiz.celdas.add(new Celda(j));
-	}
-	for (Celda celda : this.raiz.celdas) {
-	    celda.intervaloMenor = new NodoArbolB();
-	    for (int i = 0; i < m; i++) {
-		j =  j + 10;
-	        celda.intervaloMenor.celdas.add(new Celda(j));
-	    }
-	}
-	*/
     }
     
     /**
@@ -122,9 +106,68 @@ public class ArbolB {
      * @param llave a insertar.
      */
     public void insertar(Integer llave) {
-	
+	// No se permiten llaves null.
+	if (llave == null)
+	    throw new IllegalArgumentException("La llave debe ser un número entero.");
+	// Si el arbol esta vacío creamos un nuevo nodo.
+	if (this.raiz == null)
+	    this.raiz = new NodoArbolB();
+	// Empezamos a buscar el nodo donde insertaremos la llave.
+	insertar(this.raiz, llave);
     }
 
+    /**
+     * Recursión para buscar la hoja donde se inserta la nueva llave.
+     * @param nodo donde buscaremos si es hoja para insetar la llave.
+     * @param llave a insertar.
+     */
+    private void insertar(NodoArbolB nodo, Integer llave) {
+	// Caso base, encontramos una hoja.
+	if (nodo.numHijos == 0){
+	    ordenar(nodo, new Celda(llave));
+	    // split(nodo);
+	    return;
+	}
+	// Caso recursivo, buscamos una hoja.
+	for (Celda celda : nodo.celdas) {
+	    // Si encontramos la llave, terminamos.
+	    if (celda.llave == llave)
+		return;
+	    // Buscamos en el nodo correspondiente.
+	    if (celda.llave > llave) {
+		insertar(celda.intervaloMenor, llave);
+		return;
+	    }
+	}
+	// Buscamos en el ultimo intervalo dissponible.
+	insertar(nodo.intervaloMayor, llave);
+    }
+
+    /**
+     * Método para ordenar una celda en un nodo dado.
+     * @param nodo donde se inserta una celda para ordenar la llave dada.
+     * @param celda a insertar que contiene la llave.
+     */
+    private void ordenar(NodoArbolB nodo, Celda celda) {
+	ListIterator<Celda> iterator = nodo.celdas.listIterator();
+	while (iterator.hasNext()) {
+	    // Celda tmp recorrida por la lista.
+	    Celda tmp = iterator.next();
+	    // Si encontramos la llave, terminamos.
+	    if (tmp.llave == celda.llave) {
+		return;
+	    }
+	    // Si encontramos en medio de la lista la posición, insertamos la celda.
+	    if (tmp.llave > celda.llave) {
+		iterator.previous();
+		break;
+	    }
+	}
+	// La posición final es donde va la celda.
+        iterator.add(celda);
+	nodo.numLlaves++;
+    }
+    
     /**
      * Eliminación de una llave dentro del ArbolB, en caso de no encontrarla,
      * no se lleva a cabo la operación y se ignora.
@@ -140,23 +183,26 @@ public class ArbolB {
      */
     @Override
     public String toString() {
+	int nivel = 0;
 	StringBuilder arbolB = new StringBuilder();
 	// ArbolB vacío.
 	if (this.raiz == null)
-	    return arbolB.toString();
+	    return arbolB.append("Nivel ").append(String.format("%02d", nivel)).append(" : []").toString();
 	if (this.raiz.celdas.size() == 0)
-	    return arbolB.toString();
+	    return arbolB.append("Nivel ").append(String.format("%02d", nivel)).append(" : []").toString();
 	// ArbolB con al menos una llave.
 	// Listas para guardas los nodos de un mismo nivel y sus hijos.
 	LinkedList<NodoArbolB> nodosActuales = new LinkedList<>();
 	LinkedList<NodoArbolB> nodosHijos = new LinkedList<>();
 	// Empezamos por la raiz.
 	nodosActuales.add(this.raiz);
-	int nivel = 0;
 	while (nodosActuales.size() != 0) {
+	    // Impresión por nivel.
 	    arbolB.append("Nivel ").append(String.format("%02d", nivel)).append(" : ");
+	    // Impresión de los nodos en un nivel.
 	    for (NodoArbolB nodo : nodosActuales) {
 		arbolB.append("[");
+		// Impresion de las llaves de cada nodo.
 		for (Celda celda : nodo.celdas) {
 		    arbolB.append(celda.llave + " | ");
 		    if (celda.intervaloMenor != null)
