@@ -26,5 +26,8 @@ public class practica03 {
 	arbolB.insertar(850);
 	arbolB.insertar(50);
 	System.out.println(arbolB);
+	System.out.println(arbolB.buscar(800));
+	System.out.println(arbolB.buscar(100));
+	System.out.println(arbolB.buscar(1));
     }
 }

@@ -77,8 +77,8 @@ public class ArbolB {
     
     /* Orden */
     private final static int m = 4;
-    /* Número mínimo de hijos por Nodo. */
-    private final static int p = (int) Math.ceil(m/2) - 1;
+    /* Número mínimo de llaves por Nodo. */
+    private final static int p = (int) Math.ceil(m/2.0) - 1;
     /* Raiz. */
     private NodoArbolB raiz;
 
@@ -98,7 +98,31 @@ public class ArbolB {
      *         <code>null</code> en otro caso.
      */
     public Integer buscar(Integer llave) {
-	return null;
+	// No se permiten llaves null.
+	if (llave == null)
+	    throw new IllegalArgumentException("La llave debe ser un número entero.");
+        return buscar(this.raiz, llave);
+    }
+
+    /**
+     * Método recursivo para buscar una llave a partir del nodo raiz.
+     * @param nodo en el cual buscamos.
+     * @param llave a buscar.
+     * @return llave encontrada,
+     *         <code>null</code> en otro caso.
+     */
+    private Integer buscar(NodoArbolB nodo, Integer llave) {
+	// Si llegamos a un nodo null, no encontramos la llave.
+	if (nodo == null)
+	    return null;
+	// Buscamos en los intervalos.
+	for (Celda celda : nodo.celdas) {
+	    if (celda.llave.equals(llave))
+		return llave;
+	    if (celda.llave > llave)
+		return buscar(celda.intervaloMenor, llave);
+	}
+        return buscar(nodo.intervaloMayor, llave);
     }
 
     /**
@@ -131,7 +155,7 @@ public class ArbolB {
 	// Caso recursivo, buscamos una hoja.
 	for (Celda celda : nodo.celdas) {
 	    // Si encontramos la llave, terminamos.
-	    if (celda.llave == llave)
+	    if (celda.llave.equals(llave))
 		return;
 	    // Buscamos en el nodo correspondiente.
 	    if (celda.llave > llave) {
@@ -154,7 +178,7 @@ public class ArbolB {
 	    // Celda tmp recorrida por la lista.
 	    Celda tmp = iterator.next();
 	    // Si encontramos la llave, terminamos.
-	    if (tmp.llave == celda.llave) {
+	    if (tmp.llave.equals(celda.llave)) {
 		return;
 	    }
 	    // Si encontramos en medio de la lista la posición, insertamos la celda.
@@ -179,14 +203,20 @@ public class ArbolB {
 	// Preparamos un nuevo nodo para agregar.
 	NodoArbolB nodoDos = new NodoArbolB();
 	// Actualizamos el intervalo final del nodoDos.
-	nodoDos.intervaloMayor = nodo.intervaloMayor;
+	nodoDos.intervaloMayor = nodo.intervaloMayor;	
 	// Actualizamos el padre.
 	nodoDos.padre = nodo.padre;
 	// Mitad del nodo.
 	int j = (nodo.numLlaves / 2) + 1;
 	// Iteramos hasta llegar a la mitad del nodo.
 	while (nodo.numLlaves > j) {
-	    nodoDos.celdas.addFirst(nodo.celdas.removeLast());
+	    // Eliminamos el ultimo de la lista
+	    Celda tmp1 = nodo.celdas.removeLast();
+	    if (tmp1.intervaloMenor != null)
+		// Actualizamos el padre del nodo intervalo.
+		tmp1.intervaloMenor.padre = nodoDos;
+	    // Añadimos la celda al nodo.
+	    nodoDos.celdas.addFirst(tmp1);
 	    nodoDos.numLlaves++;
 	    nodo.numLlaves--;
 	}
@@ -209,6 +239,9 @@ public class ArbolB {
 	    nodoDos.padre = this.raiz;
 	    this.raiz.numHijos++;
 	}
+	if (nodoDos.intervaloMayor != null) 
+	    // Actualizamos el padre del instervalo Mayor.
+	    nodoDos.intervaloMayor.padre = nodoDos;
 	// Ordenamos la mitad en el nodo padre.
 	actualizarPadre(nodo.padre, tmp, nodoDos);
 	// Caso recursivo al padre.
@@ -238,7 +271,6 @@ public class ArbolB {
 	if (iterator.hasNext()) {
 	    Celda nueva = iterator.next();
 	    nueva.intervaloMenor = nodoDos;
-	    iterator.set(nueva);
 	} else {
 	    nodo.intervaloMayor = nodoDos;
 	}
