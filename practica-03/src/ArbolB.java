@@ -125,7 +125,7 @@ public class ArbolB {
 	// Caso base, encontramos una hoja.
 	if (nodo.numHijos == 0){
 	    ordenar(nodo, new Celda(llave));
-	    // split(nodo);
+	    split(nodo);
 	    return;
 	}
 	// Caso recursivo, buscamos una hoja.
@@ -166,6 +166,84 @@ public class ArbolB {
 	// La posición final es donde va la celda.
         iterator.add(celda);
 	nodo.numLlaves++;
+    }
+
+    /**
+     * Método para arreglar el desbordamiento de un nodo.
+     * @param nodo donde se encuentra el desbordamiento.
+     */
+    private void split(NodoArbolB nodo) {
+	// Si arreglamos el problema, terminamos.
+	if (nodo.numLlaves <= 3)
+	    return;
+	// Preparamos un nuevo nodo para agregar.
+	NodoArbolB nodoDos = new NodoArbolB();
+	// Actualizamos el intervalo final del nodoDos.
+	nodoDos.intervaloMayor = nodo.intervaloMayor;
+	// Actualizamos el padre.
+	nodoDos.padre = nodo.padre;
+	// Mitad del nodo.
+	int j = (nodo.numLlaves / 2) + 1;
+	// Iteramos hasta llegar a la mitad del nodo.
+	while (nodo.numLlaves > j) {
+	    nodoDos.celdas.addFirst(nodo.celdas.removeLast());
+	    nodoDos.numLlaves++;
+	    nodo.numLlaves--;
+	}
+	// Celda que contiene la mitad del nodo.
+	Celda tmp = nodo.celdas.removeLast();
+	nodo.numLlaves--;
+	// Actualizamos el intevaloMayor del nodo.
+	nodo.intervaloMayor = tmp.intervaloMenor;
+	tmp.intervaloMenor = nodo;
+	// Actualizamos el número de Hijos.
+	if (nodo.numHijos > 0) {
+	    nodoDos.numHijos = nodoDos.numLlaves + 1;
+	    nodo.numHijos = nodo.numLlaves + 1;
+	}
+	// Si el nodo es la raíz.
+	if (nodo.padre == null) {
+	    NodoArbolB nuevaRaiz = new NodoArbolB();
+	    this.raiz = nuevaRaiz;
+	    nodo.padre = this.raiz;
+	    nodoDos.padre = this.raiz;
+	    this.raiz.numHijos++;
+	}
+	// Ordenamos la mitad en el nodo padre.
+	actualizarPadre(nodo.padre, tmp, nodoDos);
+	// Caso recursivo al padre.
+	split(nodo.padre);
+    }
+
+    /**
+     * Método para ordenar una celda en el nodo padre y actualizar el intervalo derecho.
+     * @param nodo donde se inserta una celda para ordenar la llave dada.
+     * @param celda a insertar que contiene la llave.
+     */
+    private void actualizarPadre(NodoArbolB nodo, Celda celda, NodoArbolB nodoDos) {
+	ListIterator<Celda> iterator = nodo.celdas.listIterator();
+	while (iterator.hasNext()) {
+	    // Celda tmp recorrida por la lista.
+	    Celda tmp = iterator.next();
+	    // Si encontramos en medio de la lista la posición, insertamos la celda.
+	    if (tmp.llave > celda.llave) {
+		iterator.previous();
+		break;
+	    }
+	}
+	// La posición final es donde va la celda.
+        iterator.add(celda);
+	nodo.numLlaves++;
+	// Actualizamos el siguiente intervalo.
+	if (iterator.hasNext()) {
+	    Celda nueva = iterator.next();
+	    nueva.intervaloMenor = nodoDos;
+	    iterator.set(nueva);
+	} else {
+	    nodo.intervaloMayor = nodoDos;
+	}
+	// Actualizamos el numero de hijos del padre.
+	nodo.numHijos++;
     }
     
     /**
