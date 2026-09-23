@@ -1,0 +1,68 @@
+Eliminar Arboles B
+
+public void eliminar(Integer llave) {
+    //checamos si la llave es valida
+	if(llave == null){
+        throw new IllegalArgumentException ("Llave invalida")
+    }
+    NodoArbolB nodoConLlave = new NodoArbolB();
+    buscaNodo(llave) = nodoConLlave;
+    Celda celdaConLLave = new Celda();
+
+    for(Celda : nodoConLlave.celdas){
+        //encontramos en que celda esta
+        if(Celda.llave == llave ){
+            celdaConLLave = Celda;
+        }
+    }
+    //Caso que no encontremos la llave
+    if(celdaConLLave == null)
+        throw new IllegalArgumentException ("La llave no esta en el arbol");
+
+    /*
+    Ahora como ya tenemos la celda que tiene la llave, tenemos referencia al intervalo menor y por el nodo al mayor
+     */
+    if(celdaConLLave.intervaloMenor == null && nodoConLlave.intervaloMayor == null){
+        eliminarHoja(nodoConLlave, llave);
+    }
+    /*
+    Caso feo, interno
+    Si llegamos aca entonces estamos 100% de que es un nodo interno.
+     */
+    elimnarNodoInterno(nodoConLlave, celdaConLLave, llave);
+
+    //si llegamos aca algo salio mal xd 
+    
+
+}
+
+/*Metodo que se concentra en eliminar una hoja, cuando ya previamente se considero llegar aqui
+
+ */
+private void eliminarHoja(NodoArbolB nodoConLlave, Celda celdaConLLave Integer llave){
+    //checando que nada sea null y todo valido aun que como se invoca con otro metodo que ya lo checa se podria omitir
+    ListIterator<Celda> it = nodoConLlave.celdas.listIterator();
+    while(it.hasNext()){
+        Celda tmp = it.next();
+        if(tmp.equals(celdaConLLave)){
+            it.remove();
+        }
+    }
+    //elimnamos de forma segura la celda con la llave
+    //Ahora revisamos si el nodo quedo con minimo 1 llave
+    if(nodoConLlave.numLlaves < ArbolB.p){
+        solucionarLlavesMinimas(nodoConLlave)    
+    }else{
+        return;
+    }
+}
+
+private void solucionarLlavesMinimas(NodoArbolB nodoConLlave){
+    //Tenemos que ver si algun hermano nos puede prestar una llave.
+    //creo que podemos llegar a los hermanos por el padre
+    
+}
+
+private void elimnarNodoInterno(NodoArbolB nodoConLlave , Celda celdaConLLave, Integer llave){
+    //
+}
