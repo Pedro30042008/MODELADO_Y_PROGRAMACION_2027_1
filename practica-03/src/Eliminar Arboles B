@@ -25,6 +25,7 @@ public void eliminar(Integer llave) {
     if(celdaConLLave.intervaloMenor == null && nodoConLlave.intervaloMayor == null){
         eliminarHoja(nodoConLlave, llave);
     }
+
     /*
     Caso feo, interno
     Si llegamos aca entonces estamos 100% de que es un nodo interno.
@@ -39,28 +40,71 @@ public void eliminar(Integer llave) {
 /*Metodo que se concentra en eliminar una hoja, cuando ya previamente se considero llegar aqui
 
  */
-private void eliminarHoja(NodoArbolB nodoConLlave, Celda celdaConLLave Integer llave){
+private void eliminarHoja(NodoArbolB nodoConLlave, Celda celdaConLLave, Integer llave){
     //checando que nada sea null y todo valido aun que como se invoca con otro metodo que ya lo checa se podria omitir
     ListIterator<Celda> it = nodoConLlave.celdas.listIterator();
+
     while(it.hasNext()){
         Celda tmp = it.next();
         if(tmp.equals(celdaConLLave)){
-            it.remove();
+            //para no perder la celda antes de elimnarla resolvemos lo de quede con minimo 1 llave
+            if(nodoConLlave.numLlaves < ArbolB.p){
+                solucionarLlavesMinimas(nodoConLlave)    
+            }else{
+                it.remove();
+            }
         }
     }
     //elimnamos de forma segura la celda con la llave
-    //Ahora revisamos si el nodo quedo con minimo 1 llave
-    if(nodoConLlave.numLlaves < ArbolB.p){
-        solucionarLlavesMinimas(nodoConLlave)    
-    }else{
-        return;
-    }
+    
 }
 
 private void solucionarLlavesMinimas(NodoArbolB nodoConLlave){
     //Tenemos que ver si algun hermano nos puede prestar una llave.
     //creo que podemos llegar a los hermanos por el padre
-    
+    NodoArbolB padre = nodoConLlave.padre;
+    NodoArbolB hermanoDer = null, hermanoIzq = null;
+    ListIterator<Celda> it = padre.celdas.listIterator();
+
+    /*
+    vamos a recorrer las celdas del padre para saber que celda del padre apunta al nodoConLlave y asi encontrar a sus hermanos
+    Y vamos a tener un indice i, que nos ayudara con el metodo .get de listas.
+    Para evitar el tema de usar equals con un null vamos a solo intentarlo con referencias ==
+     */
+
+    int i = -1;
+    while(it.hasNext()){
+        Celda tmp = it.next();
+        i++;
+        if(tmp.intervaloMenor == nodoConLlave){
+            //aca sacamos el hermano izq, considerando no ser el primer hijo y por tanto no tener hermano izq
+            if(i> 0 && padre.celdas.get(i-1)!=null){
+                Celda izq = padre.celdas.get(i-1)
+                hermanoIzq = izq.intervaloMenor;
+            }
+            //recordemos que i = 0,..size-1 por que el indice tambien cuenta
+            if(i < padre.celdas.size()-1){
+                Celda der = padre.celdas.get(i+1)
+                hermanoDer = der.intervaloMenor;
+            }
+            if (i == padre.celdas.size()-1) {
+                hermanoDer = padre.intervaloMayor;
+            }
+            //salimos si caemos en los casos feos
+            break;
+        }
+
+    }
+    //tenemos que considerar si somos el ultimo hijo, en el anterior if no nos ibamos a encontrar por que estamos comparando los menores y
+        //si somos el ultimo nuestro padre nos referencia como intervalo mayor
+
+        if(padre.intervaloMayor == nodoConLlave){
+            //no tenemos hermano derecho
+            hermanoDer = null;
+            int size = padre.celdas.size();
+            Celda referencia = padre.celdas.get(size-1);
+            hermanoIzq = referencia.intervaloMenor;
+        }
 }
 
 private void elimnarNodoInterno(NodoArbolB nodoConLlave , Celda celdaConLLave, Integer llave){
