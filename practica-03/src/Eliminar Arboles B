@@ -1,112 +1,640 @@
-Eliminar Arboles B
 
-public void eliminar(Integer llave) {
-    //checamos si la llave es valida
-	if(llave == null){
-        throw new IllegalArgumentException ("Llave invalida")
-    }
-    NodoArbolB nodoConLlave = new NodoArbolB();
-    buscaNodo(llave) = nodoConLlave;
-    Celda celdaConLLave = new Celda();
-
-    for(Celda : nodoConLlave.celdas){
-        //encontramos en que celda esta
-        if(Celda.llave == llave ){
-            celdaConLLave = Celda;
-        }
-    }
-    //Caso que no encontremos la llave
-    if(celdaConLLave == null)
-        throw new IllegalArgumentException ("La llave no esta en el arbol");
-
-    /*
-    Ahora como ya tenemos la celda que tiene la llave, tenemos referencia al intervalo menor y por el nodo al mayor
-     */
-    if(celdaConLLave.intervaloMenor == null && nodoConLlave.intervaloMayor == null){
-        eliminarHoja(nodoConLlave, llave);
-    }
-
-    /*
-    Caso feo, interno
-    Si llegamos aca entonces estamos 100% de que es un nodo interno.
-     */
-    elimnarNodoInterno(nodoConLlave, celdaConLLave, llave);
-
-    //si llegamos aca algo salio mal xd 
     
-
-}
-
-/*Metodo que se concentra en eliminar una hoja, cuando ya previamente se considero llegar aqui
-
- */
-private void eliminarHoja(NodoArbolB nodoConLlave, Celda celdaConLLave, Integer llave){
-    //checando que nada sea null y todo valido aun que como se invoca con otro metodo que ya lo checa se podria omitir
-    ListIterator<Celda> it = nodoConLlave.celdas.listIterator();
-
-    while(it.hasNext()){
-        Celda tmp = it.next();
-        if(tmp.equals(celdaConLLave)){
-            //para no perder la celda antes de elimnarla resolvemos lo de quede con minimo 1 llave
-            if(nodoConLlave.numLlaves < ArbolB.p){
-                solucionarLlavesMinimas(nodoConLlave)    
-            }else{
-                it.remove();
-            }
-        }
-    }
-    //elimnamos de forma segura la celda con la llave
-    
-}
-
-private void solucionarLlavesMinimas(NodoArbolB nodoConLlave){
-    //Tenemos que ver si algun hermano nos puede prestar una llave.
-    //creo que podemos llegar a los hermanos por el padre
-    NodoArbolB padre = nodoConLlave.padre;
-    NodoArbolB hermanoDer = null, hermanoIzq = null;
-    ListIterator<Celda> it = padre.celdas.listIterator();
-
-    /*
-    vamos a recorrer las celdas del padre para saber que celda del padre apunta al nodoConLlave y asi encontrar a sus hermanos
-    Y vamos a tener un indice i, que nos ayudara con el metodo .get de listas.
-    Para evitar el tema de usar equals con un null vamos a solo intentarlo con referencias ==
+    /**
+     * Eliminación de una llave dentro del ArbolB, en caso de no encontrarla,
+     * no se lleva a cabo la operación y se ignora.
+     * @param llave a eliminar.
      */
+    public void eliminar(Integer llave) {
+        // No se permiten llaves null.
+	if (llave == null)
+	    throw new IllegalArgumentException("La llave debe ser un número entero.");
+	// Si la raiz es null, terminamos.
+	if (this.raiz == null)
+	    return;
+	// En otro caso, eliminar la llave si existe.
 
-    int i = -1;
-    while(it.hasNext()){
-        Celda tmp = it.next();
-        i++;
-        if(tmp.intervaloMenor == nodoConLlave){
-            //aca sacamos el hermano izq, considerando no ser el primer hijo y por tanto no tener hermano izq
-            if(i> 0 && padre.celdas.get(i-1)!=null){
-                Celda izq = padre.celdas.get(i-1)
-                hermanoIzq = izq.intervaloMenor;
-            }
-            //recordemos que i = 0,..size-1 por que el indice tambien cuenta
-            if(i < padre.celdas.size()-1){
-                Celda der = padre.celdas.get(i+1)
-                hermanoDer = der.intervaloMenor;
-            }
-            if (i == padre.celdas.size()-1) {
-                hermanoDer = padre.intervaloMayor;
-            }
-            //salimos si caemos en los casos feos
+	eliminar(this.raiz, llave);
+    }
+
+    /**
+     * Método privado para eliminar una llave dado un nodo.
+     * @param nodo donde se encuentra la llave a eliminar.
+     * @param llave a eliminar.
+     */
+    private void eliminar(NodoArbolB nodo, Integer llave) {
+	// Buscamos a partir del nodo dado la llave a eliminar.
+	while (nodo != null) {
+	    // Indica si debemos buscar en el intervaloMayor.
+	    boolean bajarIntervaloMayor = true;
+	    ListIterator<Celda> iteradorNodo = nodo.celdas.listIterator();
+	    // Buscamos en las celdas del nodo.
+	    while (iteradorNodo.hasNext()) {
+		// Referenciamos al nodo actual de la lista.
+		Celda celda = iteradorNodo.next();
+		// Verificamos si encontramos la llave.
+		if (celda.llave.equals(llave)) {
+		    // Verificamos si está en una hoja la llave.
+		    if (nodo.numHijos == 0) {
+			eliminarLlaveNodoHoja(nodo, llave, iteradorNodo);
+			return;
+		    }
+		    // Esta en un nodo interno.
+		    eliminarLlaveNodoInterno(nodo, llave, iteradorNodo);
+		    return;
+		}
+		// Verificamos si tenemos que buscar en otro nodo.
+		if (celda.llave.compareTo(llave) > 0) {
+		    // Actualizamos el nodo de la búsqueda.
+		    nodo = celda.intervaloMenor;
+			//Como encontramos el intervalo menor
+            bajarIntervaloMayor = false;
             break;
+			}
+	    }
+			//Entramos si no encontramos intervalo menor
+		if (bajarIntervaloMayor) {
+			// Actualizamos el nodo de la búsqueda.
+            nodo = nodo.intervaloMayor;
         }
-
+	    
+		}
     }
-    //tenemos que considerar si somos el ultimo hijo, en el anterior if no nos ibamos a encontrar por que estamos comparando los menores y
-        //si somos el ultimo nuestro padre nos referencia como intervalo mayor
 
-        if(padre.intervaloMayor == nodoConLlave){
-            //no tenemos hermano derecho
-            hermanoDer = null;
-            int size = padre.celdas.size();
-            Celda referencia = padre.celdas.get(size-1);
-            hermanoIzq = referencia.intervaloMenor;
-        }
-}
+    /**
+     * Método privado para eliminar una llave de un nodo hoja.
+     * @param nodo donde se encuentra la llave a eliminar.
+     * @param llave a eliminar.
+     * @param iterador de celdas del nodo dado, apuntando a la celda posterior
+     *        que contiene la llave a eliminar.
+     */
+    private void eliminarLlaveNodoHoja(NodoArbolB nodo, Integer llave, ListIterator<Celda> iteradorNodo) {
+	// Eliminamos la llave de la hoja.
+	iteradorNodo.remove();
+	// Disminuimos el num de llaves del nodo.
+	nodo.numLlaves--;
+	// Si es el nodo raíz, puede tener menos llaves.
+	if (nodo == this.raiz) {
+	    /*
+	    // Analizamos si la raíz  y tiene un único hijo el nodo.
+	    if (nodo.numLlaves == 0 && nodo.numHijos == 1) {
+		// El nodo hijo se convierte en la nueva raíz.
+		// this.raiz = nodo.celdas.getLast().intervaloMenor;
+		this.raiz = nodo.intervaloMayor;
+		this.raiz.padre = null;
+		return;
+	    }
+	    */
+	    // Si la raíz tiene 0 llaves y no tiene hijos, el arbolB está vacío.
+	    if (nodo.numLlaves == 0 && nodo.numHijos == 0) {
+		this.raiz = null;
+	    }
+	    return;
+	}
+	// Evaluamos una posible subocupación.
+	subOcupacion(nodo, llave);
+    }
 
-private void elimnarNodoInterno(NodoArbolB nodoConLlave , Celda celdaConLLave, Integer llave){
-    //
-}
+    /**
+     * Método privado para eliminar una llave de un nodo hoja.
+     * @param nodo donde se encuentra la llave a eliminar.
+     * @param llave a eliminar.
+     * @param iterador de celdas del nodo dado, apuntando a la celda posterior
+     *        que contiene la llave a eliminar.
+     */
+    private void eliminarLlaveNodoInterno(NodoArbolB nodo, Integer llave, ListIterator<Celda> iteradorNodo) {
+	// Recuperamos la celda.
+	Celda tmp = iteradorNodo.previous();
+	// Avanzamos al actual.
+	iteradorNodo.next();
+	// Nodo Hijo Izq.
+	NodoArbolB hijoIzq;
+	// Nodo Hijo Der.
+	NodoArbolB hijoDer;
+	// Nodo que contiene a la llave predecesora.
+	NodoArbolB predecesor;
+	// Nodo que contiene a la llave sucesora.
+	NodoArbolB sucesor;
+	// Celda auxiliar para renombrar llaves.
+	Celda aux = new Celda();
+	// Verificamos si el Hijo Izquierdo de x contiene más de P claves.
+	hijoIzq = tmp.intervaloMenor;
+	if (hijoIzq.numLlaves > ArbolB.P) {
+	    // Buscamos al predecesor inmediato.
+	    predecesor = obtenerPredecesor(hijoIzq);
+	    // Obtenemos la celda que contiene la llave del nodo predecesor.
+	    aux = predecesor.celdas.getLast();
+	    // Reemplazamos la llave.
+	    tmp.llave = aux.llave;
+	    // Eliminamos del nodo predecesor la llave.
+	    eliminar(predecesor, aux.llave);
+	    return;
+	}
+	// Vemos si tenemos el Hijo Derecho en una celda.
+	if (iteradorNodo.hasNext()) {
+    	Celda celdaSiguiente = iteradorNodo.next();
+    	hijoDer = celdaSiguiente.intervaloMenor;
+    	iteradorNodo.previous(); // Regresar el iterador a donde estaba
+	    // Verificamos si el Hijo Derecho de x contiene más de P claves.
+	    if (hijoDer.numLlaves > ArbolB.P) {
+		// Buscamos al sucesor inmediato.
+		sucesor = obtenerSucesor(hijoDer);
+		// Obtenemos la celda que contiene la llave del nodo predecesor.
+		aux = sucesor.celdas.getFirst();
+		// Reemplazamos la llave.
+		tmp.llave = aux.llave;
+		// Eliminamos del nodo predecesor la llave.
+		eliminar(sucesor, aux.llave);
+		return;
+	    }
+	// El Hijo Derecho esta en el Intervalo Mayor del nodo.
+	} else {
+	    hijoDer = nodo.intervaloMayor;
+	    // Verificamos si el Hijo Derecho de x contiene más de P claves.
+	    if (hijoDer.numLlaves > ArbolB.P) {
+		// Buscamos al sucesor inmediato.
+		sucesor = obtenerSucesor(hijoDer);
+		// Obtenemos la celda que contiene la llave del nodo predecesor.
+		aux = sucesor.celdas.getFirst();
+		// Reemplazamos la llave.
+		tmp.llave = aux.llave;
+		// Eliminamos del nodo predecesor la llave.
+		eliminar(sucesor, aux.llave);
+		return;
+	    }
+	}
+	
+	// No se encontró ni sucesor ni predecesor.
+	// Fusionamos ambos hijos con x.
+	NodoArbolB nodoFusionado = new NodoArbolB();
+	// Recorremos las celdas del hijoIzq.
+	for (Celda celda : hijoIzq.celdas) {
+	    // Agregamos al nodo fusionado las celdas del hijoIzq.
+	    nodoFusionado.celdas.add(celda);
+	    nodoFusionado.numLlaves++;
+	}
+	// Hacemos la celda con x y el intervalo Mayor del nodoIzq.
+	aux.llave = llave;
+	aux.intervaloMenor = hijoIzq.intervaloMayor;
+	// Agregamos aux al nodo Fusionado.
+	nodoFusionado.celdas.add(aux);
+	nodoFusionado.numLlaves++;
+	// Agregamos las celdas del hijoDer.
+	for (Celda celda : hijoDer.celdas) {
+	    nodoFusionado.celdas.add(celda);
+	    nodoFusionado.numLlaves++;
+	}
+	// Agregamos el intervaloMayor al nodo Fusionado.
+	nodoFusionado.intervaloMayor = hijoDer.intervaloMayor;
+	// Eliminamos del padre la llave x.
+	iteradorNodo.remove();
+	nodo.numLlaves--;
+	nodo.numHijos--;
+	// Verificamos si tenemos siguiente celda.
+	if (iteradorNodo.hasNext()) {
+	    aux = iteradorNodo.next();
+	    aux.intervaloMenor = nodoFusionado;
+	// En otro caso.
+	} else {
+	    // Asignamos el intervaloMayor.
+	    nodo.intervaloMayor = nodoFusionado;
+	}
+	// Asignamos el padre del fusionado.
+	nodoFusionado.padre = nodo;
+
+	if (hijoIzq.numHijos == 0) {
+	    nodoFusionado.numHijos = 0;
+	} else {
+	    nodoFusionado.numHijos = nodoFusionado.numLlaves + 1;
+		for (Celda celda : nodoFusionado.celdas) {
+    	    if (celda.intervaloMenor != null) {
+    	        celda.intervaloMenor.padre = nodoFusionado;
+    	    }
+    	}
+
+    	if (nodoFusionado.intervaloMayor != null) {
+    	    nodoFusionado.intervaloMayor.padre = nodoFusionado;
+    	}
+	}
+        // Eliminamos en el nodo resultante la llave x.
+	eliminar(nodoFusionado, llave);
+    }
+
+    /**
+     * Método privado para obtener el nodo que contiene a la llave predecesora.
+     * @param nodo hijo Izq donde se empieza la búsqueda.
+     */
+    private NodoArbolB obtenerPredecesor(NodoArbolB nodo) {
+	if (nodo.numHijos == 0) {
+	    return nodo;
+	}
+	return obtenerPredecesor(nodo.intervaloMayor);
+    }
+
+    /**
+     * Método privado para obtener el nodo que contiene a la llave sucesora.
+     * @param nodo hijo Der donde se empieza la búsqueda.
+     */
+    private NodoArbolB obtenerSucesor(NodoArbolB nodo) {
+	if (nodo.numHijos == 0) {
+	    return nodo;
+	}
+	return obtenerSucesor(nodo.celdas.getFirst().intervaloMenor);
+    }
+    
+    /**
+     * Método privado para arreglar la subocupación de un nodo.
+     * @param nodo donde se encuentra la subocupación.
+     * @param llave eliminada del nodo para identificar la posición del
+     *        nodo en el padre.
+     */
+    private void subOcupacion(NodoArbolB nodo, Integer llave) {
+	// Si no tiene subocupación, terminamos, en otro caso, procedemos con la subocupación.
+	if (nodo.numLlaves >= ArbolB.P) {
+	    return;
+	}
+	// Una vez asegurado que el nodo tiene padre, proseguimos.
+	// Hacemos el caso de posible redistribución.
+	NodoArbolB nodoPadre = nodo.padre;
+	NodoArbolB nodoHIzq;
+	NodoArbolB nodoHDer;
+	Celda nueva;
+	Celda hIzq;
+	Celda hDer;
+	Celda tmp;
+	// En caso de hacer fusión.
+	// Creamos un nuevo nodo.
+	NodoArbolB nodoFusionado = new NodoArbolB();
+	Celda nuevaCelda = new Celda();
+	Celda ref;
+	// Iteramos al nodo padre.
+	ListIterator<Celda> iteradorNodoPadre = nodo.padre.celdas.listIterator();
+	// Verificamos si encontraron el intervalo.
+	boolean busqueda = true;
+	while (iteradorNodoPadre.hasNext()) {
+	    tmp = iteradorNodoPadre.next();
+	    // Verificamos si encontramos el intervalo correcto.
+	    if (tmp.llave.compareTo(llave) > 0) {
+		// Retrocedemos antes del intervalo correcto.
+		iteradorNodoPadre.previous();
+		// Verificamos si tiene hermano izquierdo.
+		if (iteradorNodoPadre.hasPrevious()) {
+		    // Obtenemos al nodoHIzq.
+		    nodoHIzq = iteradorNodoPadre.previous().intervaloMenor;
+		    // Regresamos a la "celda padre".
+		    iteradorNodoPadre.next();
+		    iteradorNodoPadre.next();
+		    // Verificamos si puede prestar una llave.
+		    if (nodoHIzq.numLlaves > ArbolB.P) {
+			// Creamos una celda para agregar en el nodo subocupado.
+		    nueva = new Celda(tmp.llave);
+			nueva.intervaloMenor = nodoHIzq.intervaloMayor;
+			nodo.celdas.addFirst(nueva);
+			nodo.numLlaves++;
+			// Celda del hermano Izquierdo.
+			hIzq = nodoHIzq.celdas.removeLast();
+			nodoHIzq.numLlaves--;
+			// La "celda padre" cambia su llave.
+			tmp.llave = hIzq.llave;
+			// El nodo izquierdo actualiza su intervalo Mayor.
+			nodoHIzq.intervaloMayor = hIzq.intervaloMenor;
+			// Terminamos.
+			return;
+		    }
+		    
+		} else {
+		    // Avanzamos al intrevalo correcto si no hubo hIzq.
+		    iteradorNodoPadre.next();
+		    nodoHIzq = null;
+		}
+		// Verificamos si el hermano derecho esta en las celdas.
+		if (iteradorNodoPadre.hasNext()) {
+		    // Obtenemos al nodoHIzq.
+		    nodoHDer = iteradorNodoPadre.next().intervaloMenor;
+		    // Regresamos a la "celda padre".
+		    iteradorNodoPadre.previous();
+		    iteradorNodoPadre.previous();
+		    iteradorNodoPadre.next();
+		    // Verificamos si puede prestar una llave.
+		    if (nodoHDer.numLlaves > ArbolB.P) {
+			// Celda del hermano Derecho.
+			hDer = nodoHDer.celdas.removeFirst();
+			// Creamos una celda para agregar en el nodo subocupado.
+		    nueva = new Celda(tmp.llave);
+			nueva.intervaloMenor = nodo.intervaloMayor;
+			// AActualizamos el nodo subocupado.
+			nodo.celdas.addLast(nueva);
+			nodoHDer.numLlaves--;
+			nodo.numLlaves++;
+			nodo.intervaloMayor = hDer.intervaloMenor;
+			// La "celda padre" cambia su llave.
+			tmp.llave = hDer.llave;
+			// Terminamos.
+			return;
+		    }
+		    // El hermano derecho está en el intervaloMayor del padre.
+		} else {
+		    nodoHDer = nodoPadre.intervaloMayor;
+		    // Verificamos si puede prestar una llave.
+		    if (nodoHDer.numLlaves > ArbolB.P) {
+			// Celda del hermano Derecho.
+		        hDer = nodoHDer.celdas.removeFirst();
+			// Creamos una celda para agregar en el nodo subocupado.
+		        nueva = new Celda(tmp.llave);
+			nueva.intervaloMenor = nodo.intervaloMayor;
+			// Actualizamos el nodo subocupado.
+			nodo.celdas.addLast(nueva);
+			nodoHDer.numLlaves--;
+			nodo.numLlaves++;
+			nodo.intervaloMayor = hDer.intervaloMenor;
+			// La "celda padre" cambia su llave.
+			tmp.llave = hDer.llave;
+			// Terminamos.
+			return;
+		    }
+		}
+		// Marcamos que encontramos el intervalo con la "celda padre".
+		busqueda = false;
+		// Intentamos redistribución y no se pudo.
+		// Hacemos fusión.
+		// Vemos el hermano Izquierdo para fusionar.
+		// Verificamos si tenemos nodoHIzq.
+		if (nodoHIzq != null) {
+		    // Retrocedemos a al anterior.
+		    iteradorNodoPadre.previous();
+		    nuevaCelda.llave = iteradorNodoPadre.previous().llave;
+		    // Recorremos los elementos del nodo izquierdo y los agregamos al nuevo nodo.
+		    for (Celda celda : nodoHIzq.celdas) {
+			nodoFusionado.celdas.add(celda);
+			nodoFusionado.numLlaves++;
+		    }
+		    // Completamos la nueva celda y la agregamos al nodo.
+		    nuevaCelda.intervaloMenor = nodoHIzq.intervaloMayor;
+		    nodoFusionado.celdas.add(nuevaCelda);
+		    nodoFusionado.numLlaves++;
+		    // Agregamos los elementos del nodo subocupado.
+		    for (Celda celda : nodo.celdas) {
+			nodoFusionado.celdas.add(celda);
+			nodoFusionado.numLlaves++;
+		    }
+		    // Actualizamos el intervaloMayor del nodo Fusionado.
+		    nodoFusionado.intervaloMayor = nodo.intervaloMayor;
+		    // Eliminamos la llave que se fusiono y se encontraba en el nodo padre.
+		    iteradorNodoPadre.remove();
+		    // Actualizamos el intervaloMenor
+		    tmp.intervaloMenor = nodoFusionado;
+		    // Actualizamos el padre del nodoFusionado.
+		    nodoFusionado.padre = nodo.padre;
+		    if (nodo.numHijos == 0) {
+			    nodoFusionado.numHijos = 0;
+			} else {
+			    nodoFusionado.numHijos = nodoFusionado.numLlaves + 1;
+				for (Celda celda : nodoFusionado.celdas) {
+    		    	if (celda.intervaloMenor != null) {
+    		    	    celda.intervaloMenor.padre = nodoFusionado;
+    		    	}
+    			}
+		
+    		if (nodoFusionado.intervaloMayor != null) {
+    		    nodoFusionado.intervaloMayor.padre = nodoFusionado;
+    			}
+			}
+		    // Actualizamos los valores del padre.
+		    nodoFusionado.padre.numLlaves--;
+		    nodoFusionado.padre.numHijos--;
+		    // Si es el nodo padre es raiz y se queda vacio con un hijo.
+		    if (nodo.padre == this.raiz) {
+			// Analizamos si la raíz  y tiene un único hijo el nodo.
+			if (nodo.padre.numLlaves == 0 && nodo.padre.numHijos == 1) {
+			    // El nodo hijo se convierte en la nueva raíz.
+			    // this.raiz = nodo.celdas.getLast().intervaloMenor;
+			    this.raiz = nodo.padre.intervaloMayor;
+			    this.raiz.padre = null;
+			    return;
+			}
+		    }
+		    // Vemos si hay que hacer subocupación en el padre.
+		    if (nodo.padre.numLlaves > 0) {
+			    subOcupacion(nodo.padre, nodo.padre.celdas.getFirst().llave);
+			}
+		    return;
+		// Hacemos fusión con el nodo derecho.
+		} else {
+		    // Verificamos si llemgamos al límite de las celdas.
+		    if (!iteradorNodoPadre.hasNext()) {
+			// Caso donde tenemos a un hermano derecho pero esta en el intervaloMayor del nodo.
+			// Obtenemos la llave a fusionar.
+			nuevaCelda.llave = tmp.llave;
+			// Agregamos los elementos del nodo subocupado al nuevo Fusionado.
+			for (Celda celda : nodo.celdas) {
+			    nodoFusionado.celdas.add(celda);
+			    nodoFusionado.numLlaves++;
+			}
+			// Completamos la nueva celda y la agregamos al nodo.
+			nuevaCelda.intervaloMenor = nodo.intervaloMayor;
+			nodoFusionado.celdas.add(nuevaCelda);
+			nodoFusionado.numLlaves++;
+			// Actualizamos el nodoHDer.
+			nodoHDer = nodoPadre.intervaloMayor;
+			// Recorremos los elementos del nodo derecho y los agregamos al nuevo nodo.
+			for (Celda celda : nodoHDer.celdas) {
+			    nodoFusionado.celdas.add(celda);
+			    nodoFusionado.numLlaves++;
+			}
+			// Actualizamos el intervaloMayor del nodo Fusionado.
+			nodoFusionado.intervaloMayor = nodoHDer.intervaloMayor;
+			// Eliminamos la llave que se fusiono y se encontraba en el nodo padre.
+			iteradorNodoPadre.remove();
+			/*
+			// Actualizamos tmp.
+			tmp = iteradorNodoPadre.next();
+			// Actualizamos el intervaloMenor.
+			tmp.intervaloMenor = nodoFusionado;
+			*/
+			// Actualizamos el padre del nodoFusionado.
+			nodoFusionado.padre = nodo.padre;
+			if (nodo.numHijos == 0) {
+			    nodoFusionado.numHijos = 0;
+			} else {
+			    nodoFusionado.numHijos = nodoFusionado.numLlaves + 1;
+				for (Celda celda : nodoFusionado.celdas) {
+    			    if (celda.intervaloMenor != null) {
+    			        celda.intervaloMenor.padre = nodoFusionado;
+    			    }
+    			}
+			
+    			if (nodoFusionado.intervaloMayor != null) {
+    			    nodoFusionado.intervaloMayor.padre = nodoFusionado;
+    			}
+			}
+			// Actualizamos los valores del padre.
+			nodoFusionado.padre.numLlaves--;
+			nodoFusionado.padre.numHijos--;
+			// Si es el nodo padre es raiz y se queda vacio con un hijo.
+			if (nodo.padre == this.raiz) {
+			    // Analizamos si la raíz  y tiene un único hijo el nodo.
+			    if (nodo.padre.numLlaves == 0 && nodo.padre.numHijos == 1) {
+				// El nodo hijo se convierte en la nueva raíz.
+				// this.raiz = nodo.celdas.getLast().intervaloMenor;
+				this.raiz = nodo.padre.intervaloMayor;
+				this.raiz.padre = null;
+				return;
+			    }
+			}
+			// Vemos si hay que hacer subocupación en el padre.
+			if (nodo.padre.numLlaves > 0) {
+			    subOcupacion(nodo.padre, nodo.padre.celdas.getFirst().llave);
+			}
+			return;
+		    }
+		    // Caso donde tenemos a un hermano derecho en una celda.
+		    // Avanzamos a la siguiente celda.
+		    // nuevaCelda.llave = iteradorNodoPadre.next().llave;
+		    // Obtenemos la llave a fusionar.
+		    nuevaCelda.llave = tmp.llave;
+		    // Agregamos los elementos del nodo subocupado al nuevo Fusionado.
+		    for (Celda celda : nodo.celdas) {
+			nodoFusionado.celdas.add(celda);
+			nodoFusionado.numLlaves++;
+		    }
+		    // Completamos la nueva celda y la agregamos al nodo.
+		    nuevaCelda.intervaloMenor = nodo.intervaloMayor;
+		    nodoFusionado.celdas.add(nuevaCelda);
+		    nodoFusionado.numLlaves++;
+		    // Recorremos los elementos del nodo derecho y los agregamos al nuevo nodo.
+		    for (Celda celda : nodoHDer.celdas) {
+			nodoFusionado.celdas.add(celda);
+			nodoFusionado.numLlaves++;
+		    }
+		    // Actualizamos el intervaloMayor del nodo Fusionado.
+		    nodoFusionado.intervaloMayor = nodoHDer.intervaloMayor;
+		    // Eliminamos la llave que se fusiono y se encontraba en el nodo padre.
+		    iteradorNodoPadre.remove();
+		    // Actualizamos tmp.
+		    tmp = iteradorNodoPadre.next();
+		    // Actualizamos el intervaloMenor.
+		    tmp.intervaloMenor = nodoFusionado;
+		    // Actualizamos el padre del nodoFusionado.
+		    nodoFusionado.padre = nodo.padre;
+		    if (nodo.numHijos == 0) {
+			    nodoFusionado.numHijos = 0;
+			} else {
+			    nodoFusionado.numHijos = nodoFusionado.numLlaves + 1;
+				for (Celda celda : nodoFusionado.celdas) {
+    		    if (celda.intervaloMenor != null) {
+    		        celda.intervaloMenor.padre = nodoFusionado;
+    		    }
+    		}
+		
+    		if (nodoFusionado.intervaloMayor != null) {
+    		    nodoFusionado.intervaloMayor.padre = nodoFusionado;
+    		}
+			}
+		    // Actualizamos los valores del padre.
+		    nodoFusionado.padre.numLlaves--;
+		    nodoFusionado.padre.numHijos--;
+		    // Si es el nodo padre es raiz y se queda vacio con un hijo.
+		    if (nodo.padre == this.raiz) {
+			// Analizamos si la raíz  y tiene un único hijo el nodo.
+			if (nodo.padre.numLlaves == 0 && nodo.padre.numHijos == 1) {
+			    // El nodo hijo se convierte en la nueva raíz.
+			    // this.raiz = nodo.celdas.getLast().intervaloMenor;
+			    this.raiz = nodo.padre.intervaloMayor;
+			    this.raiz.padre = null;
+			    return;
+			}
+		    }
+		    // Vemos si hay que hacer subocupación en el padre.
+		    if (nodo.padre.numLlaves > 0) {
+			    subOcupacion(nodo.padre, nodo.padre.celdas.getFirst().llave);
+			}
+		    return;
+		}
+	    }
+	}
+	// Si no está en los intervalos de las celdas, vemos el intervaloMayor.
+	// Este por default no tiene hermano derecho asi que vemos al intervalo
+	// izquierdo.
+	if (busqueda) {
+	    tmp = iteradorNodoPadre.previous();
+	    iteradorNodoPadre.next();
+	    nodoHIzq = tmp.intervaloMenor;
+	    nodoHDer = null;
+	    // Verificamos si puede prestar una llave.
+	    if (nodoHIzq.numLlaves > ArbolB.P) {
+		// Creamos una celda para agregar en el nodo subocupado.
+		nueva = new Celda(tmp.llave);
+		nueva.intervaloMenor = nodoHIzq.intervaloMayor;
+		nodo.celdas.addFirst(nueva);
+		nodo.numLlaves++;
+		nodoHIzq.numLlaves--;
+		// Celda del hermano Izquierdo.
+		hIzq = nodoHIzq.celdas.removeLast();
+		// La "celda padre" cambia su llave.
+		tmp.llave = hIzq.llave;
+		// El nodo izquierdo actualiza su intervalo Mayor.
+		nodoHIzq.intervaloMayor = hIzq.intervaloMenor;
+		// Terminamos.
+		return;
+	    }
+	    // Intentamos redistribución y no se pudo.
+	    // Hacemos fusión.
+	    // Vemos el hermano Izquierdo para fusionar.
+	    // La llave a fusionar se encuentra en el último elemento del iterador.
+	    nuevaCelda.llave = tmp.llave;
+	    // Recorremos los elementos del nodo izquierdo y los agregamos al nuevo nodo.
+	    for (Celda celda : nodoHIzq.celdas) {
+		nodoFusionado.celdas.add(celda);
+		nodoFusionado.numLlaves++;
+	    }
+	    // Completamos la nueva celda y la agregamos al nodo.
+	    nuevaCelda.intervaloMenor = nodoHIzq.intervaloMayor;
+	    nodoFusionado.celdas.add(nuevaCelda);
+	    nodoFusionado.numLlaves++;
+	    // Agregamos los elementos del nodo subocupado.
+	    for (Celda celda : nodo.celdas) {
+		nodoFusionado.celdas.add(celda);
+		nodoFusionado.numLlaves++;
+	    }
+	    // Actualizamos el intervaloMayor del nodo Fusionado.
+	    nodoFusionado.intervaloMayor = nodo.intervaloMayor;
+	    // Eliminamos la llave que se fusiono y se encontraba en el nodo padre.
+	    iteradorNodoPadre.remove();
+	    // Actualizamos el intervaloMayor del nodo del padre.
+	    nodo.padre.intervaloMayor = nodoFusionado;
+	    // Actualizamos el padre del nodoFusionado.
+	    nodoFusionado.padre = nodo.padre;
+	    if (nodo.numHijos == 0) {
+		    nodoFusionado.numHijos = 0;
+		} else {
+		    nodoFusionado.numHijos = nodoFusionado.numLlaves + 1;
+			for (Celda celda : nodoFusionado.celdas) {
+    	    if (celda.intervaloMenor != null) {
+    	        celda.intervaloMenor.padre = nodoFusionado;
+    	    }
+    	}
+	
+    	if (nodoFusionado.intervaloMayor != null) {
+    	    nodoFusionado.intervaloMayor.padre = nodoFusionado;
+    	}
+		}
+	    // Actualizamos los valors del padre.
+	    nodoFusionado.padre.numLlaves--;
+	    nodoFusionado.padre.numHijos--;
+	}
+	// Si es el nodo padre es raiz y se queda vacio con un hijo.
+	if (nodo.padre == this.raiz) {
+	    // Analizamos si la raíz  y tiene un único hijo el nodo.
+	    if (nodo.padre.numLlaves == 0 && nodo.padre.numHijos == 1) {
+		// El nodo hijo se convierte en la nueva raíz.
+		// this.raiz = nodo.celdas.getLast().intervaloMenor;
+		this.raiz = nodo.padre.intervaloMayor;
+		this.raiz.padre = null;
+		return;
+	    }
+	}
+	// Vemos si hay que hacer subocupación en el padre.
+	if (nodo.padre.numLlaves > 0) {
+	    subOcupacion(nodo.padre, nodo.padre.celdas.getFirst().llave);
+	}
+    }
