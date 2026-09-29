@@ -471,5 +471,59 @@
 	   nivel que las demás hojas.
 	4. Si pasas todas las pruebas, es válido.
 
+   /* Nota: El secreto es la programación defensiva. */
+   -> Por ejemplo, el árbolB no puede tener llaves null, celdas null, numLlaves
+      desbordado o subOcupado en caso correspondiente, las hojas en distintos
+      niveles, etc.
+
+   /* Nota: Aquí sólo consideramos lo que indicaba la práctica, es decir: */
+      |-- Llaves ordenadas en cada nodo;
+      |-- máximo tres llaves por nodo;
+      |-- cantidad correcta de hijos en nodos internos;
+      |-- Mínimo de una llave en nodos distintos de la raíz;
+      |-- todas las hojas en el mismo nivel.
+   
     Método:
 
+    public boolean validarArbol();
+        |-- Primero hay que validar la raíz.
+	    |-- Si la raíz es null o es vacía, por default es correcto.
+	    |-- Verificamos que la raiz vacía tenga los parámetro correctos.
+	    |-- Si la raíz cumple las invariantes y es hoja, es correcto.
+	|-- Con lo anterior, tenemos el caso donde hay por lo menos un nivel
+	    más, entonces hay que revisar los hijos de la raíz recusrivamente
+	    hasta llegar a las hojas. De esta manera, revisaremos todos los
+	    nodos y validaremos gran parte de la estructura.
+	|-- Si cada cumple con las invariantes, el árbol es correcto.
+	    
+    Métodos Auxiliares:
+
+    /* Dado un nodo distinto de null, verificamos que cumpla las invariantes
+       y este bien definido en el ArbolB. */
+    private boolean validarNodo(NodoArbolB nodo);
+        |-- Si el nodo tiene desbordamiento, esta incorrecto el ArbolB.
+	|-- Sacamos una celda para verificar el orden respecto a su intervalo
+	    menor, posteriormente, hacemos lo mismo para cada celda del nodo.
+	|-- Para el inteervaloMayor del nodo, verificamos que sus llaves sean
+	    mayores a la última celda.
+	|-- Finalmente, si tiene hijos, verificampos que tenga la cantidad
+	    correcta de hijos.
+	|-- Si es hoja, verificamos que no tenga hijos.
+
+    /* Método que utilizara verificarNodo para revisar las celdas. */
+    private boolean verificarNodoIntermedio(NodoArbolB nodo, Celda celda);
+        |-- Si el nodo tiene subocupacion, esta incorrecto el ArbolB.
+	|-- Verificamos que la llave de la celda sea mayor a la ultima llave
+	    del nodo intervaloMenor.
+
+    /* Método que utilizara verificarNodo para revisar el intervaloMayor. */
+    private boolean verificarNodoFinal(NodoArbolB nodo, Celda celda);
+        |-- Si el nodo tiene subocupacion, esta incorrecto el ArbolB.
+	|-- Verificamos que la llave de la celda sea menor a la primera llave
+	    del nodo intervaloMayor.
+
+    /* Método para verificar que una celda este bien definida dentro de un
+       nodo. */
+    private boolean verificarNodoFinal(Celda celda);
+        |-- Si la celda tiene llave null o la celda es null, eso no puede
+	    ocurrir dentro de un nodo del ArbolB.
