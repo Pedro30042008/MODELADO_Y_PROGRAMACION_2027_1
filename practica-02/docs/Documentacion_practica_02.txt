@@ -77,23 +77,23 @@
     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
     * 	      	      	      	      	      	      	      	      	  *
     *                           [30 | 60]    	      	      	      	  *
-    *                 	      /     |     \				  *
-    *                 	     /      |	   \				  *
-    *                [10 | 20]  [40 | 50]   [70 | 80| 90]		  *
-    *		     	   	      	    	      			  *
+    *                 	      /     |     \				                  *
+    *                 	     /      |	   \				              *
+    *                [10 | 20]  [40 | 50]   [70 | 80| 90]		          *
+    *		     	   	      	    	      			                  *
     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
             |--  Fig. 1. Representación gráfica de un "ArbolB".  --|
 	    
     Ahora un "NodoArbolB" contiene:
 
     	|-- "NodoArbolB" padre: Padre del nodo.
-	|-- "Integer" llaves: Ordenadas de menor a mayor.
-	|-- "NodoArbolB" intervalos: Nodos con más llaves separado por una
+		|-- "Integer" llaves: Ordenadas de menor a mayor.
+		|-- "NodoArbolB" intervalos: Nodos con más llaves separado por una
 	    		 	     llave x determinada.
-				     Las llaves del intervalo son o mayores
-				     o menores a x.
-	|-- "int" numHijos: m en el nodo.
-	|-- "int" numLlaves: r en el nodo.
+				     	 Las llaves del intervalo son o mayores
+				     	 o menores a x.
+		|-- "int" numHijos: m en el nodo.
+		|-- "int" numLlaves: r en el nodo.
 
     Recordemos que  las llaves que se encuentran en un NodoArbolB, estarán
     ordenadas de menor a mayor y no se permiten duplicados en la
@@ -112,8 +112,8 @@
     estructura Celda que contenga:
     
     	|-- "Integer" llave x: Llave que ingresaremos en el ArbolB.
-	|-- "NodoArbolB" intervaloMenor: Llaves menores a la llave x.
-	|-- "NodoArbolB" intervaloMayor: Llaves mayores a la llave x.
+		|-- "NodoArbolB" intervaloMenor: Llaves menores a la llave x.
+		|-- "NodoArbolB" intervaloMayor: Llaves mayores a la llave x.
 
     Entonces, con esta clase, en el NodoArbolB tendríamos un conjunto de
     "Celdas" donde cada celda tiene unaa llave y sus intervalos
@@ -126,7 +126,7 @@
     *    NodoArbolB con llaves                    NodoArbolB con llaves   *
     *         menores a x         Llave x = 30         mayores a x        *
     *             |                    |                   |              *
-    *             |		       |	    	   |              *
+    *             |		               |	    	       |              *
     *         [10 | 20]                30              [40 | 50]          *
     *                                                                     *
     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -151,11 +151,11 @@
     
     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
     *                                                                     *
-    *    NodoArbolB con llaves                  			  *
-    *         menores a x          Llave x      			  *
-    *             |                   |         			  *
-    *             |		      |	    	         		  *
-    *         [10 | 20]               30             			  *
+    *    NodoArbolB con llaves                  			              *
+    *         menores a x          Llave x      			              *
+    *             |                   |         			              *
+    *             |		              |	    	         		          *
+    *         [10 | 20]               30             			          *
     *                                                                     *
     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
          |--  Fig 3. Nuevo Enfoque de Celda con la llave 30 del  --|
@@ -175,17 +175,17 @@
     NodoArbolB:
     
         |-- NodoArbolB padre.
-	|-- LinkedList<Celda> celdas.
-	|-- NodoArbolB intervaloMayor.
-	|-- int numLlaves.
-	|-- int numHijos.
+		|-- LinkedList<Celda> celdas.
+		|-- NodoArbolB intervaloMayor.
+		|-- int numLlaves.
+		|-- int numHijos.
 
     Y una celda se ve como:
 
     Celda:
     
         |-- Integer llave
-	|-- NodoArbolB intervaloMenor.
+		|-- NodoArbolB intervaloMenor.
 
     Para la implementación en java decidimos crear las clases NodoArbolB y
     Celda de forma interna y privada en la clase ArbolB. De esta forma,
