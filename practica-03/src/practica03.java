@@ -277,5 +277,76 @@ public class practica03 {
 	
 	System.out.println("arbolB.buscar(25): " + tmp1);
 	System.out.println("arbolB.buscar(35): " + tmp2);
-    }   
+	System.out.println();
+	
+	// Ejecución Final.
+	imprimirTexto("--------------------------------------------------------------------------");
+	imprimirTexto("                      Verificación de Validar Árbol.");
+	imprimirTexto("--------------------------------------------------------------------------\n");
+	
+	arbolB = new ArbolB();
+	System.out.println("Arbol Actual: \n" + arbolB);
+	System.out.print("Validar Arbol: ");
+	System.out.println(arbolB.validarArbol());
+	System.out.println();
+	arbolB.insertar(20);
+	System.out.println("Arbol Actual: \n" + arbolB);
+	System.out.print("Validar Arbol: ");
+	System.out.println(arbolB.validarArbol());
+	System.out.println();
+	arbolB.insertar(40);
+	System.out.println("Arbol Actual: \n" + arbolB);
+	System.out.print("Validar Arbol: ");
+	System.out.println(arbolB.validarArbol());
+	System.out.println();
+	arbolB.insertar(10);
+	System.out.println("Arbol Actual: \n" + arbolB);
+	System.out.print("Validar Arbol: ");
+	System.out.println(arbolB.validarArbol());
+	System.out.println();
+	arbolB.insertar(30);
+	System.out.println("Arbol Actual: \n" + arbolB);
+	System.out.print("Validar Arbol: ");
+	System.out.println(arbolB.validarArbol());
+	System.out.println();
+	arbolB.insertar(50);
+	System.out.println("Arbol Actual: \n" + arbolB);
+	System.out.print("Validar Arbol: ");
+	System.out.println(arbolB.validarArbol());
+	System.out.println();
+	arbolB.insertar(60);
+	System.out.println("Arbol Actual: \n" + arbolB);
+	System.out.print("Validar Arbol: ");
+	System.out.println(arbolB.validarArbol());
+	System.out.println();
+	arbolB.insertar(70);
+	System.out.println("Arbol Actual: \n" + arbolB);
+	System.out.print("Validar Arbol: ");
+	System.out.println(arbolB.validarArbol());
+	System.out.println();
+	arbolB.insertar(5);
+	System.out.println("Arbol Actual: \n" + arbolB);
+	System.out.print("Validar Arbol: ");
+	System.out.println(arbolB.validarArbol());
+	System.out.println();
+	arbolB.insertar(15);
+	System.out.println("Arbol Actual: \n" + arbolB);
+	System.out.print("Validar Arbol: ");
+	System.out.println(arbolB.validarArbol());
+	System.out.println();
+	arbolB.insertar(25);
+	System.out.println("Arbol Actual: \n" + arbolB);
+	System.out.print("Validar Arbol: ");
+	System.out.println(arbolB.validarArbol());
+	System.out.println();
+	arbolB.insertar(35);
+	System.out.println("Arbol Actual: \n" + arbolB);
+	System.out.print("Validar Arbol: ");
+	System.out.println(arbolB.validarArbol());
+	System.out.println();
+	arbolB.insertar(45);
+	System.out.println("Arbol Actual: \n" + arbolB);
+	System.out.print("Validar Arbol: ");
+	System.out.println(arbolB.validarArbol());
+    }
 }

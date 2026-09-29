@@ -7,7 +7,7 @@ import java.util.ListIterator;
  */
 public class ArbolB {
 
-	/**
+        /**
 	 * Clase Privada NodoArbolB.
 	 * Clase destinada a crear nodos de árboles B.
 	 */
@@ -77,9 +77,9 @@ public class ArbolB {
 	// Atributos: ArbolB.
 
 	/* Orden */
-	private final static int m = 4;
+	private final static int M = 4;
 	/* Número mínimo de llaves por Nodo. */
-	private final static int p = (int) Math.ceil(m / 2.0) - 1;
+	private final static int P = (int) Math.ceil(M / 2.0) - 1;
 	/* Raiz. */
 	private NodoArbolB raiz;
 
@@ -408,7 +408,7 @@ public class ArbolB {
 		// Caso 1. El hijo izquierdo tiene suficientes llaves para usar el predecesor.
 
 		// Estricto >p por que quitarle una llavae lo dejaria subocupado
-		if (hijoIzq.numLlaves > p) {
+		if (hijoIzq.numLlaves > P) {
 			// En el hijo izquierdo buscamos su predecesor (la llave mayor del hijoIzq)
 			NodoArbolB predecesor = obtenerPredecesor(hijoIzq);
 			// La ultima celda de predecesor contiene la mayor llave.
@@ -444,7 +444,7 @@ public class ArbolB {
 		}
 
 		// Caso 2. El hijo derecho tiene suficientes llaves para usar el sucesor.
-		if (hijoDer.numLlaves > p) {
+		if (hijoDer.numLlaves > P) {
 			// Obtenemos al sucesor (la menor llave del hijo derecho)
 			NodoArbolB sucesor = obtenerSucesor(hijoDer);
 			// Tomamos la primera celda en las celdas del sucesor, por que contiene la menor
@@ -558,7 +558,7 @@ public class ArbolB {
 		if (nodo.numHijos == 0)
 			return nodo;
 		/*
-		 * Caso recursio, nos pasan el nodo izquierdo, y nos vamos todo a la derecha
+		 * Caso recursivo, nos pasan el nodo izquierdo, y nos vamos todo a la derecha
 		 * hasta llegar a una hoja, y regresamos el nodo que contiene a la llave menor
 		 * (Last)
 		 */
@@ -594,7 +594,7 @@ public class ArbolB {
 	private void subOcupacion(NodoArbolB nodo, Integer llave) {
 
 		// Si todavía cumple con el mínimo de llaves, terminamos.
-		if (nodo.numLlaves >= p)
+		if (nodo.numLlaves >= P)
 			return;
 
 		// Caso de la raiz
@@ -650,7 +650,7 @@ public class ArbolB {
 				 * 1. Intentamos redistribuir con hermano izquierdo
 				 */
 				// Necesitamos E hermano izquierdo y que tenga mas llaves para que preste una.
-				if (hermanoIzq != null && hermanoIzq.numLlaves > p) {
+				if (hermanoIzq != null && hermanoIzq.numLlaves > P) {
 					// Llamamos al metodo que se encarga
 					redistribuirHermanoIzquierdo(hermanoIzq, nodo, padre);
 					return;
@@ -672,7 +672,7 @@ public class ArbolB {
 				 * 2. Intentamos redistribuir con hermano derecho
 				 */
 				// Necesitamos E hermano derecho y que tenga mas llaves para que preste una.
-				if (hermanoDer != null && hermanoDer.numLlaves > p) {
+				if (hermanoDer != null && hermanoDer.numLlaves > P) {
 					// Llamamos al encargado
 					redistribuirHermanoDerecho(nodo, hermanoDer, padre);
 					return;
@@ -711,7 +711,7 @@ public class ArbolB {
 				 * 1. Intentamos redistribuir con hermano izquierdo
 				 */
 				// Necesitamos E hermano izquierdo y que tenga mas llaves para que preste una.
-				if (hermanoIzq != null && hermanoIzq.numLlaves > p) {
+				if (hermanoIzq != null && hermanoIzq.numLlaves > P) {
 					// Llamamos al encargado
 					redistribuirHermanoIzquierdo(hermanoIzq, nodo, padre);
 					return;
@@ -1005,6 +1005,256 @@ public class ArbolB {
 		subOcupacion(padre,llaveSeparadora);
 	}
 
+        /**
+	 * Método privado para determinar si un ÁrbolB es válido.
+	 * @return <code>true</code> si el ArbolB es válido.
+	 *         <code>false</code> en otro caso.
+	 */
+        public boolean validarArbol(){
+	        // Validamos la raíz.
+	        if (!validarRaiz()) {
+		        return false;
+	        }
+	        if (this.raiz == null) {
+	                return true;
+		}
+		// Verificamos si la raíz es hoja devolvemos true.
+		if (this.raiz.numHijos == 0) {
+		        return true;
+		}
+		// Luego validamos los hijos de la raíz hasta llegar a las hojas.
+		// Listas para guardar los nodos de un mismo nivel y sus hijos.
+		LinkedList<NodoArbolB> nodosActuales = new LinkedList<>();
+		LinkedList<NodoArbolB> nodosHijos = new LinkedList<>();
+		// Agregamos en los nodosActuales los hijos de la raíz.
+		for (Celda celda : this.raiz.celdas) {
+		        nodosActuales.add(celda.intervaloMenor);
+		}
+		nodosActuales.add(this.raiz.intervaloMayor);
+		// Contemplamos una constante del nivel de la primera hoja.
+		int nivelPrimeraHoja = -1;
+		int contadorNiveles = 1;
+		// Empezamos recorriendo los nodos.
+		while (nodosActuales.size() != 0) {
+		        // Revisamos los nodos en un nivel.
+		        for (NodoArbolB nodo : nodosActuales) {
+			        // Aseguramos obtener un nodo distinto de null.
+			        if (nodo != null) {
+				        // Validamos el nodo.
+				        validarNodo(nodo);
+					// Si no hemos asignado el nivel de una Hoja.
+					if (nivelPrimeraHoja == -1) {
+					        // Si el nodo es la primera hoja que encontramos.
+					        if (nodo.numHijos == 0) {
+						// Asignamos el nivel de la primera Hoja dado el contador de Niveles.
+						        nivelPrimeraHoja = contadorNiveles;
+						}
+						// Verificamos si la hoja tiene el nivel correcto.
+					} else {
+					        // Si el nodo es una hoja y no corresponde al mismo nivel que la primera hoja.
+					        if (nodo.numHijos == 0 && contadorNiveles != nivelPrimeraHoja) {
+						        // Arbol inválido al no tener el mismo nivel las hojas.
+						        return false;
+						}
+					}
+				}
+				// Agregamos los hijos para revisarlos en la siguiente pasada.
+				for (Celda celda : nodo.celdas) {
+				        if (celda.intervaloMenor != null)
+					        nodosHijos.add(celda.intervaloMenor);
+				}
+				if (nodo.intervaloMayor != null)
+				        nodosHijos.add(nodo.intervaloMayor);
+			}
+			//  Actuaalimos los nodos a revisar.
+			nodosActuales = nodosHijos;
+			// Limpiamos la lista para el proximo nivel.
+			nodosHijos.clear();
+			// Aumentamo el contador de niveles.
+			contadorNiveles++;
+		}
+		// Paso las pruebas 
+		return true;
+	}
+
+        /**
+	 * Método privado para validar la raíz.
+	 * @return <code>true</code> si la raíz es válida.
+	 *         <code>false</code> en otro caso.
+	 */
+        private boolean validarRaiz() {
+	        // Si el árbol esta vacío.
+	        if (this.raiz == null) {
+		        // Terminamos.
+		        return true;
+		}
+		// Tenemos la raíz pero sin elementos.
+		if (this.raiz.celdas.isEmpty()) {
+		        // Revisamos si alguno de sus parámetros está mal.
+		        if (this.raiz.intervaloMayor != null || this.raiz.numLlaves != 0 ||
+			        this.raiz.numHijos != 0 || this.raiz.padre != null) {
+			        return false;
+			}
+			// Terminamos.
+			return true;
+		}
+		// Validar Nodo.
+		return validarNodo(this.raiz);
+	}
+    
+        /**
+	 * Método privado para determinar si un NodoÁrbolB es válido.
+	 * @return <code>true</code> si el nodoArbolB es válido.
+	 *         <code>false</code> en otro caso.
+	 */
+        public boolean validarNodo(NodoArbolB nodo){
+	        // Verificamos que el nodo tenga a lo más m-1 llaves.
+	        if (nodo.celdas.size() > ArbolB.M - 1) {
+		        //
+		        return false;
+		}
+		// Notemos que nodo no está subocupado, es decir, tenemos por lo menos un elemento.
+		// Celdas y nodos auxiliares para realizar comparaciones.
+		Celda celdaAux1 = null;
+		NodoArbolB nodoAux = null;
+		// Contador de numHijos.
+		int contador = 0;
+		// Obtenemos la primera celda del nodo.
+		celdaAux1 = nodo.celdas.getFirst();
+		// Verificamos la celda dada.
+		if (!verificarCelda(celdaAux1)) {
+		        return false;
+		}
+		// Obtenemos el posible nodo.
+		nodoAux = celdaAux1.intervaloMenor;
+		// Garantizamos que sea distinto de null del nodoAux.
+		if (nodoAux != null) {
+		        // Verificamos el posible nodo.
+		        if (!verificarNodoIntermedio(nodoAux, celdaAux1)) {
+			        return false;
+			}
+			// Incrementa el contaador de num de Hijos.
+			contador++;
+		}
+		// Pasamos la prueba con la primer celda y llave del nodo.
+		// Revisamos las demás celdas.
+		// Iteramos sobre el nodo.
+		ListIterator<Celda> iteradorCeldas = nodo.celdas.listIterator();
+		// Avanzamos el iterador.
+		iteradorCeldas.next();
+		// Comparamos con el resto de celdas.
+		while (iteradorCeldas.hasNext()) {
+		        Celda tmp = iteradorCeldas.next();
+			// Actualizamos aux.
+			celdaAux1 = tmp;
+			// Actualizamos el nodo a comparar.
+			nodoAux = tmp.intervaloMenor;
+			// Garantizamos que sea distinto de null del nodoAux.
+			if (nodoAux != null) {
+			        // Verificamos el posible nodo.
+			        if (!verificarNodoIntermedio(nodoAux, celdaAux1)) {
+				    return false;
+			        }
+				// Incrementa el contaador de num de Hijos.
+				contador++;
+			}
+		}
+		// Verificamos el intervalo final.
+		if (nodo.intervaloMayor != null) {
+		        // Actualizamos el nodoAux.
+		        nodoAux = nodo.intervaloMayor;
+			// Verificamos el posible nodo.
+			if (!verificarNodoFinal(nodoAux, celdaAux1)) {
+			        return false;
+			}
+			// Incrementa el contaador de num de Hijos.
+			contador++;
+		}
+		// Verificamos si tiene el número de hijos correcto la raiz.
+		if (contador == 0) {
+		        if (contador != nodo.numHijos) {
+			    return false;
+			}
+		} else {
+		        if (contador != nodo.celdas.size() + 1 || contador != nodo.numHijos) {
+			    return false;
+			}
+		}
+		// Comparamos el intervaloMayor con la última celda.
+		return true;
+	}
+
+        /**
+	 * Método privado para determinar si una Celda es válida.
+	 * @return <code>true</code> si la Celda es válida.
+	 *         <code>false</code> en otro caso.
+	 */
+        public boolean verificarCelda(Celda celda){
+	        // Si la celda es null, es inválida.
+	        if (celda == null) {
+		        return false;
+		}
+		// No se permiten llaves nulas.
+		if (celda.llave == null) {
+		        return false;
+		}
+		return true;
+	}
+    
+        /**
+	 * Método privado para determinar si un NodoArbolB está bien definido.
+	 * @return <code>true</code> si el NodoArbolB está bien definido.
+	 *         <code>false</code> en otro caso.
+	 */
+        public boolean verificarNodoIntermedio(NodoArbolB nodo, Celda celdaAux1){
+	        // Celdas y nodos auxiliares para realizar comparaciones.
+	        Celda celdaAux2 = null;
+		// No podemos tener subocupación en un nodo que es distinto a la raíz.
+		if ((nodo.celdas.size() < ArbolB.P || nodo.celdas.size() != nodo.numLlaves) && nodo != raiz) {
+		        return false;
+		}
+		// Obtenemos la última celda del Nodo.
+		celdaAux2 = nodo.celdas.getLast();
+		// Verificamos la celdaAux2.
+		if (!verificarCelda(celdaAux2)) {
+		        return false;
+		}
+		// Verificamos orden.
+		if (celdaAux2.llave.compareTo(celdaAux1.llave) >= 0) {
+		        // No podemos tener un hijo que sea mayor al padre o duplicados.
+		        System.out.println(celdaAux2.llave);
+			System.out.println(celdaAux1.llave);
+			return false;
+		}
+		return true;
+	}
+
+        /**
+	 * Método privado para determinar si un NodoArbolB está bien definido.
+	 * @return <code>true</code> si el NodoArbolB está bien definido.
+	 *         <code>false</code> en otro caso.
+	 */
+        public boolean verificarNodoFinal(NodoArbolB nodo, Celda celdaAux1){
+	    // Celdas y nodos auxiliares para realizar comparaciones.
+	    Celda celdaAux2 = null;
+	    // No podemos tener subocupación en un nodo que es distinto a la raíz.
+	    if ((nodo.celdas.size() < ArbolB.P || nodo.celdas.size() != nodo.numLlaves) && nodo != raiz) {
+		    return false;
+	    }
+	    // Obtenemos la última celda del Nodo.
+	    celdaAux2 = nodo.celdas.getFirst();
+	    // Verificamos la celdaAux2.
+	    if (!verificarCelda(celdaAux2)) {
+		    return false;
+	    }
+	    // Verificamos orden.
+	    if (celdaAux2.llave.compareTo(celdaAux1.llave) <= 0) {
+		    // No podemos tener un hijo que sea mayor al padre o duplicados.
+		    return false;
+	    }
+	    return true;
+	}
+    
 	/**
 	 * Representación en cadena de texto del ArbolB.
 	 * 
