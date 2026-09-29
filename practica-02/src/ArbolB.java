@@ -205,7 +205,7 @@ public class ArbolB {
 	 */
 	private void split(NodoArbolB nodo) {
 		// Si arreglamos el problema, terminamos.
-		if (nodo.numLlaves <= 3)
+		if (nodo.numLlaves <= ArbolB.M - 1)
 			return;
 		// Preparamos un nuevo nodo para agregar.
 		NodoArbolB nodoDos = new NodoArbolB();
@@ -1266,7 +1266,7 @@ public class ArbolB {
 		StringBuilder arbolB = new StringBuilder();
 		// ArbolB vacío.
 		if (this.raiz == null)
-			return arbolB.append("Nivel ").append(String.format("%02d", nivel)).append(" : []").toString();
+			return arbolB.append(" : []").toString();
 		if (this.raiz.celdas.size() == 0)
 			return arbolB.append("Nivel ").append(String.format("%02d", nivel)).append(" : []").toString();
 		// ArbolB con al menos una llave.
