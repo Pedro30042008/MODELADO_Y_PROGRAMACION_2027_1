@@ -3,7 +3,7 @@
  * Clase destinda a ejecutar pruebas de las operaciones realizadas en la
  * clase ArbolB. 
  */
-public class practica03 {
+public class practica02 {
 
     /* Método privado para imprimir Texto. */
     private static void imprimirTexto(String texto){
