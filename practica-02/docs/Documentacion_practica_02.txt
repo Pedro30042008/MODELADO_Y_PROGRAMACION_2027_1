@@ -421,6 +421,235 @@
 	|-- Aumentamos el número de hijos del padre.
 
 ---------------------------------------------------------------------------------
+                         Método de ArbolB: eliminar(x)
+---------------------------------------------------------------------------------
+
+    Algoritmo de eliminar(x):
+
+    Para eliminar una llave x:
+
+        1. Buscar la llave x dentro del árbol;
+        2. Si x no se encuentra, terminar;
+        3. Si x se encuentra en una hoja, eliminarla directamente;
+        4. Si la hoja queda subocupada, intentar reparar mediante
+           redistribución o fusión;
+        5. Si x se encuentra en un nodo interno:
+            a. Intentar reemplazarla por su predecesor;
+            b. Si no es posible, intentar reemplazarla por su sucesor;
+            c. Si ninguno de los dos casos es posible, fusionar los
+               hijos izquierdo y derecho junto con x;
+        6. Si una fusión provoca subocupación en el padre, repetir la
+           reparación hacia arriba;
+        7. Si la raíz queda sin llaves y con un único hijo, dicho hijo
+           se convierte en la nueva raíz.
+
+    Método:
+
+    public void eliminar(Integer llave);
+
+        |-- Verificamos primero si la llave dada es válida.
+        |-- Si la llave es null, lanzamos una excepción.
+        |-- Si el árbol está vacío, terminamos.
+        |-- En otro caso, comenzamos la eliminación a partir de la raíz.
+
+    Métodos Auxiliares:
+
+    private void eliminar(NodoArbolB nodo, Integer llave);
+
+        |-- Mientras el nodo actual sea distinto de null:
+            |-- Recorremos las celdas del nodo actual.
+            |-- Si encontramos la llave:
+                |-- Si el nodo no tiene hijos, eliminamos la llave
+                    como una llave de hoja.
+                |-- En otro caso, eliminamos la llave como una llave
+                    de nodo interno.
+                |-- Terminamos.
+            |-- Si la llave buscada es menor que la llave de la celda
+                actual:
+                |-- Continuamos la búsqueda por intervaloMenor.
+            |-- Si la llave es mayor que todas las llaves del nodo:
+                |-- Continuamos por intervaloMayor.
+        |-- Si llegamos a null, la llave no existe y terminamos.
+
+    private void eliminarLlaveNodoHoja(NodoArbolB nodo,Integer llave,ListIterator<Celda> iteradorNodo);
+
+        |-- Eliminamos mediante el iterador la celda que contiene la llave.
+        |-- Disminuimos numLlaves.
+        |-- Si el nodo es la raíz:
+            |-- Si quedó sin llaves y sin hijos, el árbol queda vacío
+                y raiz pasa a ser null.
+            |-- Terminamos.
+        |-- En otro caso, verificamos si el nodo quedó subocupado.
+
+    private void eliminarLlaveNodoInterno(NodoArbolB nodo,Integer llave,ListIterator<Celda> iteradorNodo);
+
+        |-- Recuperamos la celda que contiene la llave a eliminar.
+        |-- Obtenemos el hijo izquierdo de dicha llave.
+
+        |-- Si el hijo izquierdo tiene más de p llaves:
+            |-- Obtenemos el nodo que contiene al predecesor.
+            |-- Obtenemos la última llave de dicho nodo.
+            |-- Reemplazamos la llave interna por la llave predecesora.
+            |-- Eliminamos la llave predecesora de su posición original.
+            |-- Terminamos.
+
+        |-- En otro caso, obtenemos el hijo derecho:
+            |-- Si existe una celda siguiente, utilizamos su intervaloMenor.
+            |-- Si la llave era la última del nodo, utilizamos
+                intervaloMayor.
+
+        |-- Si el hijo derecho tiene más de p llaves:
+            |-- Obtenemos el nodo que contiene al sucesor.
+            |-- Obtenemos la primera llave de dicho nodo.
+            |-- Reemplazamos la llave interna por la llave sucesora.
+            |-- Eliminamos la llave sucesora de su posición original.
+            |-- Terminamos.
+
+        |-- Si ninguno de los dos hijos tiene más de p llaves:
+            |-- Creamos un nuevo nodo fusionado.
+            |-- Agregamos al fusionado las celdas del hijo izquierdo.
+            |-- Bajamos al fusionado la llave que se desea eliminar.
+            |-- Agregamos las celdas del hijo derecho.
+            |-- Actualizamos las referencias padre de los hijos cuando
+                trabajamos con nodos internos.
+            |-- El intervaloMayor del fusionado será el intervaloMayor
+                del antiguo hijo derecho.
+            |-- Si la fusión es entre nodos internos, actualizamos
+                numHijos.
+            |-- Eliminamos del nodo padre la celda correspondiente a
+                la llave que bajó.
+            |-- Disminuimos numLlaves y numHijos del padre.
+            |-- Actualizamos la referencia del padre para que apunte al
+                nodo fusionado.
+            |-- Eliminamos ahora la llave dentro del nodo fusionado.
+            |-- Verificamos si el nodo padre quedó subocupado.
+
+    private NodoArbolB obtenerPredecesor(NodoArbolB nodo);
+
+        |-- Si el nodo no tiene hijos, lo regresamos.
+        |-- En otro caso, continuamos recursivamente por intervaloMayor.
+        |-- Al llegar a una hoja, su última llave corresponde al
+            predecesor buscado.
+
+    private NodoArbolB obtenerSucesor(NodoArbolB nodo);
+
+        |-- Si el nodo no tiene hijos, lo regresamos.
+        |-- En otro caso, continuamos recursivamente por el
+            intervaloMenor de la primera celda.
+        |-- Al llegar a una hoja, su primera llave corresponde al
+            sucesor buscado.
+
+    private void subOcupacion(NodoArbolB nodo, Integer llave);
+
+        |-- Si numLlaves es mayor o igual que p, el nodo sigue siendo
+            válido y terminamos.
+
+        |-- Si el nodo es la raíz:
+            |-- Si quedó sin llaves y tiene un único hijo:
+                |-- Su intervaloMayor se convierte en la nueva raíz.
+                |-- La nueva raíz tendrá padre igual a null.
+            |-- Terminamos.
+
+        |-- Obtenemos el padre del nodo subocupado.
+        |-- Buscamos en qué referencia del padre se encuentra dicho nodo.
+
+        |-- Si el nodo aparece como intervaloMenor de alguna celda:
+            |-- Buscamos, si existe, al hermano izquierdo.
+            |-- Si el hermano izquierdo tiene más de p llaves:
+                |-- Redistribuimos desde el hermano izquierdo.
+                |-- Terminamos.
+
+            |-- Buscamos al hermano derecho.
+                |-- Si existe otra celda después, su intervaloMenor
+                    corresponde al hermano derecho.
+                |-- En otro caso, el hermano derecho corresponde al
+                    intervaloMayor del padre.
+
+            |-- Si el hermano derecho tiene más de p llaves:
+                |-- Redistribuimos desde el hermano derecho.
+                |-- Terminamos.
+
+            |-- Si ningún hermano puede redistribuir:
+                |-- Si existe hermano izquierdo, fusionamos
+                    hermanoIzq con nodo.
+                |-- En otro caso, fusionamos nodo con hermanoDer.
+                |-- Terminamos.
+
+        |-- Si el nodo no apareció como intervaloMenor:
+            |-- Verificamos si corresponde al intervaloMayor del padre.
+            |-- Obtenemos como hermano izquierdo el intervaloMenor de
+                la última celda del padre.
+            |-- Si dicho hermano tiene más de p llaves:
+                |-- Redistribuimos desde el hermano izquierdo.
+            |-- En otro caso:
+                |-- Fusionamos el hermano izquierdo con el nodo.
+
+    private void redistribuirHermanoIzquierdo(NodoArbolB hermanoIzq,NodoArbolB nodoSubOcupado,NodoArbolB padre);
+
+        |-- Buscamos la celda del padre que separa exactamente al
+            hermano izquierdo y al nodo subocupado.
+        |-- Si no existe una separadora válida, lanzamos una excepción.
+        |-- Eliminamos la última celda del hermano izquierdo.
+        |-- Disminuimos numLlaves del hermano izquierdo.
+        |-- Creamos una nueva celda con la llave separadora del padre.
+        |-- La antigua llave separadora baja al principio del nodo
+            subocupado.
+        |-- La llave tomada del hermano izquierdo sube al padre.
+        |-- Si son nodos internos:
+            |-- Actualizamos las referencias de los hijos involucrados.
+            |-- Disminuimos numHijos del hermano izquierdo.
+            |-- Aumentamos numHijos del nodo subocupado.
+
+    private void redistribuirHermanoDerecho(NodoArbolB nodoSubOcupado,NodoArbolB hermanoDer,NodoArbolB padre);
+
+        |-- Buscamos la celda del padre que separa al nodo subocupado
+            y al hermano derecho.
+        |-- Si no existe una separadora válida, lanzamos una excepción.
+        |-- Eliminamos la primera celda del hermano derecho.
+        |-- Disminuimos numLlaves del hermano derecho.
+        |-- Creamos una nueva celda con la antigua llave separadora.
+        |-- La antigua separadora baja al final del nodo subocupado.
+        |-- La primera llave del hermano derecho sube al padre.
+        |-- Si son nodos internos:
+            |-- Actualizamos las referencias de los hijos involucrados.
+            |-- Disminuimos numHijos del hermano derecho.
+            |-- Aumentamos numHijos del nodo subocupado.
+
+    private void fusionarNodos(NodoArbolB nodoIzq,NodoArbolB nodoDer,NodoArbolB padre);
+
+        |-- Buscamos en el padre la llave que separa exactamente a
+            nodoIzq y nodoDer.
+        |-- Guardamos tanto la llave separadora como su posición.
+        |-- Si no encontramos una separadora válida, lanzamos una excepción.
+
+        |-- Creamos un nuevo nodo fusionado.
+        |-- Agregamos todas las celdas del nodo izquierdo.
+        |-- Bajamos al fusionado la llave separadora del padre.
+        |-- Agregamos todas las celdas del nodo derecho.
+        |-- Actualizamos las referencias padre de los hijos cuando
+            se trata de nodos internos.
+        |-- El intervaloMayor del nodo fusionado será el intervaloMayor
+            del antiguo nodo derecho.
+        |-- Si los nodos tienen hijos, actualizamos numHijos del
+            fusionado.
+        |-- El padre del nuevo nodo será el mismo padre de los dos
+            nodos originales.
+
+        |-- Eliminamos la llave separadora del padre.
+        |-- Disminuimos numLlaves y numHijos del padre.
+        |-- Actualizamos la referencia del padre para que apunte al
+            nodo fusionado.
+
+        |-- Si el padre era la raíz y quedó sin llaves:
+            |-- El nodo fusionado se convierte en la nueva raíz.
+            |-- Su padre pasa a ser null.
+            |-- Terminamos.
+
+        |-- En otro caso:
+            |-- Verificamos si la fusión dejó subocupado al padre.
+            |-- Si es necesario, la reparación continúa hacia arriba.
+
+---------------------------------------------------------------------------------
                      Método de ArbolB: imprimirPorNiveles()
 ---------------------------------------------------------------------------------
 

@@ -1098,6 +1098,10 @@ public class ArbolB {
 			// Terminamos.
 			return true;
 		}
+		// Verificamos padre.
+		if (this.raiz.padre != null) {
+		        return false;
+		}
 		// Validar Nodo.
 		return validarNodo(this.raiz);
 	}
@@ -1109,7 +1113,7 @@ public class ArbolB {
 	 */
         public boolean validarNodo(NodoArbolB nodo){
 	        // Verificamos que el nodo tenga a lo más m-1 llaves.
-	        if (nodo.celdas.size() > ArbolB.M - 1) {
+	        if (nodo.celdas.size() > ArbolB.M - 1 || nodo.celdas.size() != nodo.numLlaves) {
 		        //
 		        return false;
 		}
@@ -1254,51 +1258,203 @@ public class ArbolB {
 	    }
 	    return true;
 	}
+
+        /**
+	 * Método para verificar el método validarArbol.
+	 */
+	public void casosValidar() {
+	        /* Guardamos el arbol actual.*/
+	        NodoArbolB actual = this.raiz;
+
+		NodoArbolB arbolValido = crearArbolValido();
+		
+		/* Validamos el arbol. */
+		System.out.println();
+		System.out.println("Arbol 0:");
+		System.out.println(toString());
+		System.out.print("Validación: ");
+		System.out.println(validarArbol());
+		
+		/* Creamos árboles inválidos. */
+		NodoArbolB arbolInvalido = crearArbolValido();
+		
+		/* Caso 1: El numHijos esta mal. */
+		int hijos = arbolInvalido.numHijos;
+		arbolInvalido.numHijos = 0;
+
+		/* Validamos el arbol. */
+		System.out.println();
+		System.out.println("Arbol 1:");
+		System.out.println(toString());
+		System.out.print("Validación: ");
+		System.out.println(validarArbol());
+
+		arbolInvalido.numHijos = hijos;
+		
+		/* Caso 2: El numLlaves esta mal. */
+		int llaves = arbolInvalido.numLlaves;
+		arbolInvalido.numLlaves = 0;
+
+		/* Validamos el arbol. */
+		System.out.println();
+		System.out.println("Arbol 2:");
+		System.out.println(toString());
+		System.out.print("Validación: ");
+		System.out.println(validarArbol());
+
+		arbolInvalido.numLlaves = llaves;
+		
+		/* Caso 3: El padre de la raíz está mal. */
+
+		NodoArbolB padre = arbolInvalido.padre;
+		arbolInvalido.padre = new NodoArbolB();
+
+		/* Validamos el arbol. */
+		System.out.println();
+		System.out.println("Arbol 3:");
+		System.out.println(toString());
+		System.out.print("Validación: ");
+		System.out.println(validarArbol());
+
+		arbolInvalido.padre = padre;
+
+		/* Caso 4: Nodo desbordado. */
+	        arbolInvalido.celdas.add(new Celda(40));
+
+		/* Validamos el arbol. */
+		System.out.println();
+		System.out.println("Arbol 4:");
+		System.out.println(toString());
+		System.out.print("Validación: ");
+		System.out.println(validarArbol());
+
+		arbolInvalido.celdas.removeLast();
+		
+		/* Caso 5: Cantidad Incorrecta de hijos. */
+		NodoArbolB intervaloMayor = arbolInvalido.intervaloMayor;
+		arbolInvalido.intervaloMayor = null;
+		
+		/* Validamos el arbol. */
+		System.out.println();
+		System.out.println("Arbol 5:");
+		System.out.println(toString());
+		System.out.print("Validación: ");
+		System.out.println(validarArbol());
+
+		arbolInvalido.intervaloMayor = intervaloMayor;
+		
+		/* Caso 6: Hojas en distinto nivel. */
+		
+	        arbolInvalido = new NodoArbolB();
+		arbolInvalido.numLlaves = 1;
+		arbolInvalido.numHijos = 2;
+		arbolInvalido.celdas.add(new Celda(40));
+		for (Celda celda : arbolInvalido.celdas) {
+		    celda.intervaloMenor = new NodoArbolB();
+		    celda.intervaloMenor.celdas.add(new Celda(30));
+		}
+		
+		this.raiz = arbolInvalido;
+		
+		System.out.println();
+		System.out.println("Arbol 6:");
+		System.out.println(toString());
+		System.out.print("Validación: ");
+		System.out.println(validarArbol());
+
+	        arbolInvalido = crearArbolValido();
+		
+		/* Caso 7: Celda null. */
+		Celda primera = arbolInvalido.celdas.getFirst();
+		arbolInvalido.celdas.set(0, null);
+		
+		/* Validamos el arbol. */
+		System.out.println();
+		System.out.println("Arbol 7:");
+		System.out.println(toString());
+		System.out.print("Validación: ");
+		System.out.println(validarArbol());
+
+		arbolInvalido.celdas.set(0, primera);
+
+		/* Caso 8: El padre de la raiz es distinto de null. */
+		arbolInvalido.padre = new NodoArbolB();
+		
+		System.out.println();
+		System.out.println("Arbol 8:");
+		System.out.println(toString());
+		System.out.print("Validación: ");
+		System.out.println(validarArbol());
+
+	        arbolInvalido.padre = null;
+		
+		/* Volvemos a la normalidad. */
+		this.raiz = actual;
+	}
+    
+        /**
+	 * Método para verificar el método validarArbol.
+	 */
+        private NodoArbolB crearArbolValido() {
+		/* Iniciamos con un arbol válido nuevo. */
+		this.raiz = null;
+	        /* Construimos un árbol válido*/
+		for (int i = 100; i < 600; i += 100) {
+		    insertar(i);
+		}
+		return this.raiz;
+        }
     
 	/**
 	 * Representación en cadena de texto del ArbolB.
 	 * 
 	 * @return cadena de texto que representa al ArbolB actual.
 	 */
-	@Override
-	public String toString() {
-		int nivel = 0;
-		StringBuilder arbolB = new StringBuilder();
-		// ArbolB vacío.
-		if (this.raiz == null)
-			return arbolB.append(" : []").toString();
-		if (this.raiz.celdas.size() == 0)
-			return arbolB.append("Nivel ").append(String.format("%02d", nivel)).append(" : []").toString();
-		// ArbolB con al menos una llave.
-		// Listas para guardas los nodos de un mismo nivel y sus hijos.
-		LinkedList<NodoArbolB> nodosActuales = new LinkedList<>();
-		LinkedList<NodoArbolB> nodosHijos = new LinkedList<>();
-		// Empezamos por la raiz.
-		nodosActuales.add(this.raiz);
-		while (nodosActuales.size() != 0) {
-			// Impresión por nivel.
-			arbolB.append("Nivel ").append(String.format("%02d", nivel)).append(" : ");
-			// Impresión de los nodos en un nivel.
-			for (NodoArbolB nodo : nodosActuales) {
-				arbolB.append("[");
-				// Impresion de las llaves de cada nodo.
-				for (Celda celda : nodo.celdas) {
-					arbolB.append(celda.llave + " | ");
-					if (celda.intervaloMenor != null)
-						nodosHijos.add(celda.intervaloMenor);
-				}
-				arbolB.delete(arbolB.length() - 3, arbolB.length());
-				arbolB.append("] ");
-				if (nodo.intervaloMayor != null)
-					nodosHijos.add(nodo.intervaloMayor);
-			}
-			arbolB.setLength(arbolB.length() - 1);
-			arbolB.append("\n");
-			nodosActuales = nodosHijos;
-			nodosHijos = new LinkedList<>();
-			nivel++;
+        @Override
+    public String toString() {
+	StringBuilder arbolB = new StringBuilder();
+	int nivel = 0;
+	// ArbolB vacío.
+	if (this.raiz == null)
+	    return arbolB.append("Nivel ").append(String.format("%02d", nivel)).append(" : [ ]").toString();
+	if (this.raiz.celdas.size() == 0)
+	    return arbolB.append("Nivel ").append(String.format("%02d", nivel)).append(" : [ ]").toString();
+	// ArbolB con al menos una llave.
+	// Listas para guardas los nodos de un mismo nivel y sus hijos.
+	LinkedList<NodoArbolB> nodosActuales = new LinkedList<>();
+	LinkedList<NodoArbolB> nodosHijos = new LinkedList<>();
+	// Empezamos por la raiz.
+	nodosActuales.add(this.raiz);
+	while (nodosActuales.size() != 0) {
+	    arbolB.append("Nivel ").append(String.format("%02d", nivel)).append(" : ");
+	    for (NodoArbolB nodo : nodosActuales) {
+		arbolB.append("[");
+		if (nodo == null) {
+		    arbolB.append("] ");
+		    continue;
 		}
-		arbolB.setLength(arbolB.length() - 1);
-		return arbolB.toString();
+		for (Celda celda : nodo.celdas) {
+		    if (celda == null){
+			arbolB.append("* | ");
+			continue;
+		    }
+		    arbolB.append(celda.llave + " | ");
+		    if (nodo.numHijos != 0)
+			nodosHijos.add(celda.intervaloMenor);
+		}
+		arbolB.delete(arbolB.length() - 3, arbolB.length());
+		arbolB.append("] ");
+		if (nodo.numHijos != 0)
+		    nodosHijos.add(nodo.intervaloMayor);
+	    }
+	    arbolB.setLength(arbolB.length() - 1);
+	    arbolB.append("\n");
+	    nodosActuales = nodosHijos;
+	    nodosHijos = new LinkedList<>();
+	    nivel++;
 	}
+	arbolB.setLength(arbolB.length() - 1);
+	return arbolB.toString();
+    }
 }
+//Alan Gael, Pedro Pablo, Miranda Sanchez

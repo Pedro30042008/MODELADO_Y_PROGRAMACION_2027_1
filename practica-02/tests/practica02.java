@@ -348,5 +348,8 @@ public class practica02 {
 	System.out.println("Arbol Actual: \n" + arbolB);
 	System.out.print("Validar Arbol: ");
 	System.out.println(arbolB.validarArbol());
+
+	arbolB.casosValidar();
     }
 }
+//Alan Gael, Pedro Pablo, Miranda Sanchez
