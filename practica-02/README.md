@@ -97,9 +97,11 @@ javac -d bin src/*.java tests/*.java && java -cp bin practica02 && rm -rf bin
     Por esta razón una división puede propagarse hacia niveles superiores e incluso aumentar la altura del árbol.
    
 11. Convención de promoción utilizada
- 	Si tenemos un **desbordamiento** en un nodo, ocupamos la tercera celda para promoverla al nodo padre. En la implementación, quisimos generalizar la idea para cualquier _m_, entonces elegimos la mediana de las celdas para promoverla al nodo padre mediante la formula:
+ 	Si tenemos un **desbordamiento** en un nodo, ocupamos la tercera celda, que contiene la tercera llave, para promoverla al nodo padre. En la implementación, quisimos generalizar la idea para cualquier _m_, entonces elegimos la mediana de las celdas para promoverla al nodo padre mediante la fórmula:
 	
     _mediana = (r / 2) + 1_
+
+	con _r_ tomando el valor de 4, es decir, la cantidad de llaves que se considera como **desbordamiento** en un nodo para un árbol de orden _m = 4_, también la división _r / 2_ que toma la parte entera y el _+ 1_ para tomar la celda del lado derecho, en esta implementación, la tercera celda.
 
     Además, en la implementación se dividen las llaves de manera que la llave elegida o celda promovida se elimina del nodo original y se inserta en el padre. Las llaves menores permanecen en el nodo izquierdo y las llaves mayores pasan al nuevo nodo derecho.
     La celda promovida conserva la referencia necesaria al nodo izquierdo y el padre actualiza la referencia al nuevo nodo derecho.
