@@ -2,7 +2,7 @@
 
 ## Descripción 
 
-En esta practica implementamos una estructura de dato,**Arboles B** en java.
+En esta practica implementamos una estructura de dato, **Arboles B** en java.
 
 Los Árboles B son estructuras de datos de búsqueda auto-balanceadas optimizadas para sistemas de almacenamiento y bases de datos, ya que minimizan las operaciones de lectura/escritura en disco.
 
@@ -66,14 +66,16 @@ javac -d bin src/*.java tests/*.java && java -cp bin practica02 && rm -rf bin
     
     `NodoArbolB` funciona dando referencia directa al intervalo mayor y por cada celda dentro del nodo tiene referencia directa a su intervalo mayor.
     Decidimos implementarlo de esta forma para poder tener un orden a los hijos y para recuperar a hermanos.
+    Más detalles en _docs/Documentacion_practica_02.txt_
 
-5. ¿Que significa _m = 4_ y por que cada nodo acepta max 3 llaves?
+6. ¿Que significa _m = 4_ y por que cada nodo acepta max 3 llaves?
 
-    _m = 4_ indica que el árbol B es de **orden 4**. Esto significa que un nodo puede tener como máximo cuatro hijos.  
-    Por esta razón un nodo estable admite como máximo tres llaves.
-    Durante una inserción un nodo puede alcanzar temporalmente cuatro llaves. Cuando esto sucede se produce una división o `split`.
+    _m = 4_ indica que el árbol B es de **orden 4**. Esto significa que un nodo puede tener como máximo cuatro hijos.
+    
+    Por esta razón un nodo estable admite como máximo tres llaves, ya que _r_ es el máximo número de llaves por nodo, que es igual a _r = m - 1 = 4 - 1 = 3_ .
+    Durante una inserción un nodo puede alcanzar temporalmente cuatro llaves **desbordamiento**. Cuando esto sucede se produce una división o `split` para que el árbol B cumpla nuevamente las invariantes, incluido que un árbol con orden 4 tiene a lo más en cada nodo 3 llaves.
 
-6. ¿Cómo se decide qué hijo seguir durante una búsqueda?  
+8. ¿Cómo se decide qué hijo seguir durante una búsqueda?  
     Primero se recorren, en orden, las celdas del nodo actual.
     Para cada llave se realizan dos comprobaciones.
 
@@ -85,23 +87,25 @@ javac -d bin src/*.java tests/*.java && java -cp bin practica02 && rm -rf bin
     Si se recorren todas las llaves del nodo y ninguna es mayor que la llave buscada, significa que el valor buscado es mayor que todas las llaves del nodo. En ese caso se continúa mediante:
     `nodo.intervaloMayor`.  
 
-7. ¿Qué ocurre cuando un nodo alcanza cuatro llaves?
+9. ¿Qué ocurre cuando un nodo alcanza cuatro llaves?
 
-    Como el árbol tiene orden `m = 4`, tres es el máximo permitido de llaves en un nodo. Cuando una inserción provoca que un nodo tenga cuatro llaves, se ejecuta el método `split`.
+    Como el árbol tiene orden `m = 4`, tres es el máximo permitido de llaves en un nodo. Cuando una inserción provoca que un nodo tenga cuatro llaves, es decir, ocurre un **desbordamiento**, se ejecuta el método `split`.
     La división separa el nodo en dos nodos y una de sus llaves se promueve al padre.
 
     Si la división ocurre en la raíz, se crea una nueva raíz.
     Si al promover una llave el padre también alcanza cuatro llaves, el proceso se repite recursivamente sobre el padre.
-    Por esta razón una división puede propagarse hacia niveles superiores e incluso aumentar la altura del árbol.  
-8. Convención de promoción utilizada
+    Por esta razón una división puede propagarse hacia niveles superiores e incluso aumentar la altura del árbol.
+   
+11. Convención de promoción utilizada
+ 	Si tenemos un **desbordamiento** en un nodo, ocupamos la tercera celda para promoverla al nodo padre. En la implementación, quisimos generalizar la idea para cualquier _m_, entonces elegimos la mediana de las celdas para promoverla al nodo padre mediante la formula:
+	
+    _mediana = (r / 2) + 1_
 
-    Cuando un nodo alcanza cuatro llaves, la implementación selecciona la mediana en sus llaves para promoverla al nodo padre.
-
-    La implementación divide las llaves de manera que la llave elegida se elimina del nodo original y se inserta en el padre. Las llaves menores permanecen en el nodo izquierdo y las llaves mayores pasan al nuevo nodo derecho.
+    Además, en la implementación se dividen las llaves de manera que la llave elegida o celda promovida se elimina del nodo original y se inserta en el padre. Las llaves menores permanecen en el nodo izquierdo y las llaves mayores pasan al nuevo nodo derecho.
     La celda promovida conserva la referencia necesaria al nodo izquierdo y el padre actualiza la referencia al nuevo nodo derecho.
     Si el nodo dividido era la raíz, primero se crea una nueva raíz y posteriormente la llave promovida se inserta en ella.  
 
-9. Redistribución y fusión
+13. Redistribución y fusión
 
     La **redistribución** se utiliza durante la eliminación cuando un nodo queda con menos llaves que el mínimo permitido, pero uno de sus hermanos tiene llaves suficientes para prestar.
     La llave no se mueve directamente de un hermano al otro. El movimiento se realiza a través del padre.  
@@ -140,19 +144,19 @@ javac -d bin src/*.java tests/*.java && java -cp bin practica02 && rm -rf bin
     Como consecuencia, el padre pierde una llave y un hijo. Si el padre queda subocupado, la reparación continúa hacia niveles superiores.
     Si el padre era la raíz y queda sin llaves, el nodo fusionado se convierte en la nueva raíz, disminuyendo la altura del árbol.
 
-10. ¿Por qué al insertar una llave nueva no podemos decidir el hijo únicamente comparando con la primera llave del nodo?  
+14. ¿Por qué al insertar una llave nueva no podemos decidir el hijo únicamente comparando con la primera llave del nodo?  
 
     Porque un nodo puede contener varias llaves y, por lo tanto, varios intervalos posibles. Comparar únicamente con la primera llave no permite determinar con precisión cuál de esos intervalos corresponde a la nueva llave.
 
-    Por ejemplo, si un nodo contiene `[30 | 60]` y queremos insertar `50`, saber únicamente que 50 > 30 no basta; todavía necesitamos comparar con 60 para saber en qué intervalo debe continuar la inserción.
+    Por ejemplo, si un nodo contiene `[30 | 60]` y queremos insertar `70`, saber únicamente que 70 > 30 no basta; todavía necesitamos comparar con 60 para saber en qué intervalo debe continuar la inserción.
     
 
-11. ¿Por qué una búsqueda no debe recorrer todos los hijos de un nodo?  
+15. ¿Por qué una búsqueda no debe recorrer todos los hijos de un nodo?  
 
-    Porque las llaves del nodo permiten determinar cuál es el único intervalo en el que podría encontrarse la llave buscada. Recorrer   
-    todos los hijos sería innecesario, ya que las propiedades de orden del árbol B permiten descartar las demás ramas y continuar únicamente por el hijo correspondiente.     
+    Porque las llaves del nodo permiten determinar cuál es el único intervalo en el que podría encontrarse la llave buscada.
+    Recorrer todos los hijos sería innecesario si antes encontramos el intervalo correcto, ya que las propiedades de orden del árbol B permiten descartar las demás ramas y continuar únicamente por el hijo correspondiente.     
     
     
-    Por ejemplo, si un nodo contiene `[30 | 60]` y buscamos `40`, sabemos   que únicamente debemos seguir el intervalo entre 30 y 60.
+    Por ejemplo, si un nodo contiene `[30 | 60]` y buscamos `40`, sabemos que únicamente debemos seguir el intervalo entre 30 y 60.
 
 `Pedro Ruiz, Miranda Sánchez, Alan Alvarez <3`
