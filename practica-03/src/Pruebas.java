@@ -1,6 +1,4 @@
-/**
- * Comprueba los cinco casos de tamaño solicitados en la práctica.
- */
+
 public class Pruebas {
 
     /**
