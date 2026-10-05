@@ -1,17 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
 
-// CODIGO INICIAL DE LA PRACTICA 3.
-// No esta refactorizado: el objetivo es que el equipo detecte y mejore su diseno.
-abstract class Archivo {
-    String nombre;
-    int tamanio;
-
-    Archivo(String nombre, int tamanio) {
-        this.nombre = nombre;
-        this.tamanio = tamanio;
-    }
-}
 
 class ArchivoPDF extends Archivo {
     ArchivoPDF(String nombre, int tamanio) {
@@ -22,16 +11,6 @@ class ArchivoPDF extends Archivo {
 class ArchivoTexto extends Archivo {
     ArchivoTexto(String nombre, int tamanio) {
         super(nombre, tamanio);
-    }
-}
-
-class Carpeta {
-    String nombre;
-    List<Archivo> archivos = new ArrayList<>();
-    List<Carpeta> subcarpetas = new ArrayList<>();
-
-    Carpeta(String nombre) {
-        this.nombre = nombre;
     }
 }
 
@@ -69,6 +48,17 @@ public class Main {
                 "Tamanio total: " + obtenerTamanio(carpeta));
     }
 
+    // Mis modificaciones empiezan aqui
+    static void comprobar(String nombre, int esperado, int obtenido) {
+        if (esperado == obtenido) {
+            System.out.println("OK: " + nombre);
+        } else {
+            System.out.println("FALLO: " + nombre
+                     + " | esperado=" + esperado
+                     + " | obtenido=" + obtenido);
+        }
+    }
+
     public static void main(String[] args) {
         Carpeta clase = new Carpeta("MyP");
         agregarArchivo(clase, "pdf", "practica.pdf", 120);
@@ -80,5 +70,24 @@ public class Main {
 
         System.out.println(obtenerTamanio(clase));
         enviarResultado(clase, "profesor@universidad.edu");
+
+        //Prueba de carpeta vacia
+        Carpeta vacia = new Carpeta("Vacia");
+        int total = obtenerTamanio(vacia);
+        comprobar("Carpeta vacia", 0, total);
+
+
+        //pruebas restantes
+        /**
+         *
+         * Datos que deben preparar Tamaño esperado
+         * Carpeta sin archivos ni subcarpetas 0
+         * Carpeta con un PDF de 120 120
+         * Carpeta con PDF de 120 y texto de 80 200
+         * Ejemplo completo con subcarpeta de 50 250
+         * Carpeta con un archivo de tamaño 0 0
+         *
+         * **/
     }
 }
+
