@@ -1,19 +1,3 @@
-import java.util.ArrayList;
-import java.util.List;
-
-
-class ArchivoPDF extends Archivo {
-    ArchivoPDF(String nombre, int tamanio) {
-        super(nombre, tamanio);
-    }
-}
-
-class ArchivoTexto extends Archivo {
-    ArchivoTexto(String nombre, int tamanio) {
-        super(nombre, tamanio);
-    }
-}
-
 class CorreoLegacy {
     void send_email(String to, String body) {
         System.out.println("Para: " + to);
@@ -66,7 +50,7 @@ public class Main {
 
         Carpeta ejemplos = new Carpeta("Ejemplos");
         agregarArchivo(ejemplos, "txt", "ejemplo.txt", 50);
-        clase.subcarpetas.add(ejemplos);
+        clase.agregar(ejemplos);
 
         System.out.println(obtenerTamanio(clase));
         enviarResultado(clase, "profesor@universidad.edu");
