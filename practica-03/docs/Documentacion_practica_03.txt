@@ -1,0 +1,361 @@
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                 Práctica 03: Refactorización y diseño Modular.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+---------------------------------------------------------------------------------
+                                Planteamiento
+---------------------------------------------------------------------------------
+
+    Recibimos un programa que funciona.
+
+---------------------------------------------------------------------------------
+                                  Objetivo
+---------------------------------------------------------------------------------
+
+    Organizar eficientemente el código sin cambiar el resultado que ve la
+    persona que lo ejecuta.
+
+    Consejos del Ayudante:
+
+    Avanzar un cambio pequeño a la vez y comprobar el resultado después de
+    cada parte.
+
+    Las pistas ayudan, pero nosotros debemos escribir y explicar la solución.
+
+---------------------------------------------------------------------------------
+                                Marco Teórico
+---------------------------------------------------------------------------------
+
+    >> Malos Diseños:
+
+    Las señales que nos indican un problema de diseño en un código son:
+
+    |-- Rigidez, acoplamiento, duplicación y decisiones de creación dispersas.
+
+    De no solucionarlos, provocan bajo mantenimiento, pruebas frágiles y
+    mayor probabilidad de regresiones.
+
+    >> Composite: [Estructural]
+
+    |-- Tratar una parte y un conjunto de partes de la misma manera.
+    	Ej. Tratar archivos y carpetas mediante una interfaz común.
+
+    >> Factory Method: [Creacional]
+
+    |-- Resuelve cómo elegir qué implementación concreta usar.
+    	Ej. Creadores concretos deciden qué clase de archivo construir.
+
+    >> Adapter: [Estructural]
+
+    |-- Resuelve compatibilidad con APIs o clases distintas.
+    	Ej. Conectar el sistema con un componente de correo que tiene
+	    otro nombre de método.
+
+    >> Pruebas:
+
+    |-- Arrange - Preparar datos (lo que la prueba necesita).
+    |-- Act - Ejecutar la operación (operación a evaluar).
+    |-- Assert - Comparar el resultado obtenido con el esperado.
+
+---------------------------------------------------------------------------------
+                             Historia del Problema
+---------------------------------------------------------------------------------
+
+    Una carpeta de la materia:
+
+        |-- Contiene archivos PDF y de texto.
+	
+        |-- Puede tener otras carpetas adentro.
+
+    El programa debe:
+
+        |-- Calcular el tamaño total de una carpeta.
+       	    Suma todos sus archivos, incluso los que están dentro de
+	    subcarpetas.
+
+        |-- Mostrar el tamaño total de una carpeta y enviarlo por un
+	    correo simulado.
+
+    Ejemplo:
+
+    MyP/
+    | -- practica.pdf    (120)
+    | -- notas.txt       (80)
+    └ -- Ejemplos/
+      	 └ -- ejemplo.txt    (50)
+
+    >> Total esperado: 120 + 80 + 50 = 250.
+
+    >> La carpeta Ejemplos cuenta en la suma porque contiene un archivo de
+       tamaño 50.
+
+    >> Problema de diseño:
+
+       La clase Main decide
+
+       	  |-- Qué archivo crear.
+
+	  |-- Calcular el tamaño.
+
+	  |-- Conoce directamente el servicio de correo.
+
+	  |-- La carpeta guarda archivos y subcarpetas por separado.
+
+       Reorganizaremos estas responsabilidades sin alterar el ejemplo
+       anterior.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                   Proceso de Refactorización y Diseño Modular
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+---------------------------------------------------------------------------------
+                  Ejecución previa del programa como referencia
+---------------------------------------------------------------------------------
+
+    250
+    Para: profesor@universidad.edu
+    Tamanio total: 250
+
+---------------------------------------------------------------------------------
+                          Comprensión inicial del código
+---------------------------------------------------------------------------------
+
+    // Clase abstracta para definir archivos.
+
+    abstract class Archivo {
+        String nombre;
+    	int tamanio;
+
+    	Archivo(String nombre, int tamanio) {
+            this.nombre = nombre;
+            this.tamanio = tamanio;
+        }
+    }
+
+    // Clase concreta para definir un ArchivoPDF
+
+    class ArchivoPDF extends Archivo {
+        ArchivoPDF(String nombre, int tamanio) {
+            super(nombre, tamanio);
+        }
+    }
+
+    // Clase concreta para definir un ArchivoTexto
+
+    class ArchivoTexto extends Archivo {
+        ArchivoTexto(String nombre, int tamanio) {
+            super(nombre, tamanio);
+        }
+    }
+
+    // Clase concreta para definir una Carpeta con distinción de
+       archivos y subcarpetas.
+
+    class Carpeta {
+        String nombre;
+        List<Archivo> archivos = new ArrayList<>();
+        List<Carpeta> subcarpetas = new ArrayList<>();
+
+        Carpeta(String nombre) {
+            this.nombre = nombre;
+        }
+    }
+
+    // Clase concreta "externa" CorreoLegacy de la cual dependemos para
+       enviar correos con el método "send_email(String to, String body)".
+
+    class CorreoLegacy {
+        void send_email(String to, String body) {
+            System.out.println("Para: " + to);
+            System.out.println(body);
+        }
+    }
+
+    // Método Main que controla el flujo del programa.
+
+    public class Main {
+
+    	// Método que agrega un archivo a una carpeta revisando su tipo.
+
+	   /**
+	    * Problemas:
+	    *
+	    * Condicionales Explosivos.
+	    *
+	    * Al definir por separado cada tipo de archivo, tenemos que agregar
+	    * una condicional más para contemplarlo, lo cuál complica
+	    * la estructura del programa para futuras innovaciones.
+	    * Debemos formar una clase para que instancie los archivos.
+	    *
+	    * Acoplamiento Alto.
+	    *
+	    * Main conoce como las carpetas agregan archivos.
+	    */
+	    
+        static void agregarArchivo(Carpeta carpeta,
+                String tipo, String nombre, int tamanio) {
+            if (tipo.equals("pdf")) {
+                carpeta.archivos.add(new ArchivoPDF(nombre, tamanio));
+            } else if (tipo.equals("txt")) {
+                carpeta.archivos.add(new ArchivoTexto(nombre, tamanio));
+            }
+        }
+
+	// Método que obtiene el tamaño de una carpeta sumando
+	   recursivamente por separado archivos y carpetas.
+
+	   /**
+	    * Problema:
+	    *
+	    * Duplicación:
+	    * 
+	    * Estamos duplicando la lógica de sumar elementos que en escencia
+	    * tienen la misma estructura de tamanio, tanto archivos como
+	    * carpetas. Debemos tratarlos de la misma forma para sumarlos.
+	    *
+	    * Acoplamiento Alto.
+	    *
+	    * Main conoce como las carpetas deben calcular su tamanio.
+	    */
+	    
+        static int obtenerTamanio(Carpeta carpeta) {
+            int total = 0;
+            for (Archivo archivo : carpeta.archivos) {
+                total += archivo.tamanio;
+            }
+            for (Carpeta subcarpeta : carpeta.subcarpetas) {
+                total += obtenerTamanio(subcarpeta);
+            }
+            return total;
+        }
+
+	// Método para enviar un e_mail con un objeto CorreoLegacy.
+	
+	/**
+	 * Problema:
+	 *
+	 * Rigidez y Dependencia de Terceros.
+	 *
+	 * Si por algún motivo quisieramos modificar la clase de la cual
+	 * dependemos para enviar correos o agregar más clases, necesitamos
+	 * modificar como la o las invoca la clase Main, agregar métodos
+	 * para que cada uno decida como hacerlo, etc. Ello se vuelve engorroso
+	 * y provoca un difícil mantenimiento.	 
+	 */
+
+        static void enviarResultado(Carpeta carpeta, String destino) {
+            CorreoLegacy correo = new CorreoLegacy();
+            correo.send_email(destino,
+                    "Tamanio total: " + obtenerTamanio(carpeta));
+        }
+
+	// Al ejecutar java Main invocamos al método main.
+
+        public static void main(String[] args) {
+
+	    // Creacíon de una carpeta.
+            Carpeta clase = new Carpeta("MyP");
+            agregarArchivo(clase, "pdf", "practica.pdf", 120);
+            agregarArchivo(clase, "txt", "notas.txt", 80);
+
+	    // Creación de subcarpeta.
+            Carpeta ejemplos = new Carpeta("Ejemplos");
+            agregarArchivo(ejemplos, "txt", "ejemplo.txt", 50);
+            clase.subcarpetas.add(ejemplos);
+
+	    // Salida del programa.
+
+	    /**
+	     *	250
+	     *  Para: profesor@universidad.edu
+	     *  Tamanio total: 250
+	     */
+
+            System.out.println(obtenerTamanio(clase));
+            enviarResultado(clase, "profesor@universidad.edu");
+        }
+    }
+
+---------------------------------------------------------------------------------
+                Definición de Pruebas antes del Cambio de Diseño
+---------------------------------------------------------------------------------
+
+    Casos frontera.
+    1. Carpeta vacía: debe medir 0.
+    2. Carpeta con un PDF de 120: debe medir 120.
+    5. Carpeta con un archivo de tamaño 0: debe medir 0.
+
+    Casos normales:
+    3. PDF de 120 y texto de 80: debe medir 200.
+    4. Agregamos una subcarpeta con un texto de 50.
+
+    En JAVA:
+    
+    public class Pruebas {
+
+        /**
+     	  * Compara el valor esperado con el obtenido.
+     	  *
+     	  * @param nombre descripción de la prueba
+     	  * @param esperado tamaño que debería obtenerse
+     	  * @param obtenido tamaño calculado por el programa
+     	  */
+     
+        static void comprobar(String nombre, int esperado, int obtenido) {
+            if (esperado == obtenido) {
+                System.out.println("OK: " + nombre
+                        + " | esperado=" + esperado
+                        + " | obtenido=" + obtenido);
+            } else {
+                System.out.println("FALLO: " + nombre
+                        + " | esperado=" + esperado
+                        + " | obtenido=" + obtenido);
+            }
+        }
+
+        /**
+         * Prepara los datos y ejecuta las cinco pruebas de tamaño.
+         *
+         * @param args argumentos de ejecución, no utilizados
+         */
+        public static void main(String[] args) {
+            CreadorArchivo pdf = new CreadorPDF();
+            CreadorArchivo texto = new CreadorTexto();
+
+            // 1. Carpeta vacía: debe medir 0.
+            Carpeta vacia = new Carpeta("Vacia"); // Preparar - Arrange
+	    int total = obtenerTamnio(vacia); // Ejecutar - Act
+            comprobar("Carpeta vacia", 0, total); // Comprobar - Assert
+
+            // 2. Carpeta con un PDF de 120: debe medir 120.
+            Carpeta uno = new Carpeta("Un PDF");
+            uno.agregarArchivo(uno, "pdf", "practica.pdf", 120);
+	    total = uno.obtenerTamanio();
+            comprobar("Un PDF", 120, total);
+	    
+            // 3. PDF de 120 y texto de 80: debe medir 200.
+            Carpeta dos = new Carpeta("PDF y texto"); // Arrange
+	    dos.agregarArchivo(dos, "pdf", "practica.pdf", 120); // Arrange
+	    dos.agregarArchivo(dos, "txt", "notas.txt", 80); // Arrange
+	    total = dos.obtenerTamanio(); // Act
+            comprobar("PDF y texto", 200, total); // Assert
+
+            // 4. Agregamos una subcarpeta con un texto de 50.
+            // El total debe ser 120 + 80 + 50 = 250.
+            Carpeta ejemplos = new Carpeta("Ejemplos"); // Arrange
+	    ejemplos.agregarArchivo(ejemplos, "txt", "ejemplo.txt", 50); // Arrange
+            dos.subcarpetas.add(ejemplos); // Arrange
+	    total = dos.obtenerTamanio(); // Act
+            comprobar("Ejemplo completo", 250, total); // Assert
+
+            // 5. Carpeta con un archivo de tamaño 0: debe medir 0.
+            Carpeta cero = new Carpeta("Archivo de cero"); // Arrange
+	    cero.agregarArchivo(cero, "txt", "vacio.txt", 0); // Arrange
+	    total = cero.obtenerTamanio();
+            comprobar("Archivo de cero", 0, total);
+        }
+    }
+
+---------------------------------------------------------------------------------
+                              
+---------------------------------------------------------------------------------
