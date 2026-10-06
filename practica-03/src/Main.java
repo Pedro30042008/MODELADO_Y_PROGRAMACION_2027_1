@@ -1,84 +1,39 @@
-import java.util.ArrayList;
-import java.util.List;
-
-// CODIGO INICIAL DE LA PRACTICA 3.
-// No esta refactorizado: el objetivo es que el equipo detecte y mejore su diseno.
-abstract class Archivo {
-    String nombre;
-    int tamanio;
-
-    Archivo(String nombre, int tamanio) {
-        this.nombre = nombre;
-        this.tamanio = tamanio;
-    }
-}
-
-class ArchivoPDF extends Archivo {
-    ArchivoPDF(String nombre, int tamanio) {
-        super(nombre, tamanio);
-    }
-}
-
-class ArchivoTexto extends Archivo {
-    ArchivoTexto(String nombre, int tamanio) {
-        super(nombre, tamanio);
-    }
-}
-
-class Carpeta {
-    String nombre;
-    List<Archivo> archivos = new ArrayList<>();
-    List<Carpeta> subcarpetas = new ArrayList<>();
-
-    Carpeta(String nombre) {
-        this.nombre = nombre;
-    }
-}
-
-class CorreoLegacy {
-    void send_email(String to, String body) {
-        System.out.println("Para: " + to);
-        System.out.println(body);
-    }
-}
-
+/**
+ * Organiza el ejemplo de la práctica y muestra y notifica su tamaño total.
+ */
 public class Main {
-    static void agregarArchivo(Carpeta carpeta,
-                               String tipo, String nombre, int tamanio) {
-        if (tipo.equals("pdf")) {
-            carpeta.archivos.add(new ArchivoPDF(nombre, tamanio));
-        } else if (tipo.equals("txt")) {
-            carpeta.archivos.add(new ArchivoTexto(nombre, tamanio));
-        }
+    /**
+     * Envía el tamaño de la carpeta mediante el notificador recibido.
+     *
+     * @param carpeta carpeta cuyo tamaño se informa
+     * @param destino destinatario del resultado
+     * @param notificador componente encargado del envío
+     */
+    static void enviarResultado(Carpeta carpeta, String destino,
+                                Notificador notificador) {
+        notificador.enviar(destino,
+                "Tamanio total: " + carpeta.obtenerTamanio());
     }
 
-    static int obtenerTamanio(Carpeta carpeta) {
-        int total = 0;
-        for (Archivo archivo : carpeta.archivos) {
-            total += archivo.tamanio;
-        }
-        for (Carpeta subcarpeta : carpeta.subcarpetas) {
-            total += obtenerTamanio(subcarpeta);
-        }
-        return total;
-    }
-
-    static void enviarResultado(Carpeta carpeta, String destino) {
-        CorreoLegacy correo = new CorreoLegacy();
-        correo.send_email(destino,
-                "Tamanio total: " + obtenerTamanio(carpeta));
-    }
-
+    /**
+     * Construye el ejemplo MyP, imprime su tamaño y envía el correo simulado.
+     *
+     * @param args argumentos de ejecución, no utilizados
+     */
     public static void main(String[] args) {
+        CreadorArchivo creadorPDF = new CreadorPDF();
+        CreadorArchivo creadorTexto = new CreadorTexto();
+
         Carpeta clase = new Carpeta("MyP");
-        agregarArchivo(clase, "pdf", "practica.pdf", 120);
-        agregarArchivo(clase, "txt", "notas.txt", 80);
+        clase.agregar(creadorPDF.crearArchivo("practica.pdf", 120));
+        clase.agregar(creadorTexto.crearArchivo("notas.txt", 80));
 
         Carpeta ejemplos = new Carpeta("Ejemplos");
-        agregarArchivo(ejemplos, "txt", "ejemplo.txt", 50);
-        clase.subcarpetas.add(ejemplos);
+        ejemplos.agregar(creadorTexto.crearArchivo("ejemplo.txt", 50));
+        clase.agregar(ejemplos);
 
-        System.out.println(obtenerTamanio(clase));
-        enviarResultado(clase, "profesor@universidad.edu");
+        System.out.println(clase.obtenerTamanio());
+        Notificador notificador = new AdaptadorCorreo(new CorreoLegacy());
+        enviarResultado(clase, "profesor@universidad.edu", notificador);
     }
 }

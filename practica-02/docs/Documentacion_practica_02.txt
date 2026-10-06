@@ -1,0 +1,758 @@
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                            Práctica 02: Árboles B.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    La implementación deberá conservar las propiedades del árbol B después de
+    insertar o eliminar llaves.
+    
+    Para reducir la dificultad de la práctica, no se implementará un árbol B
+    genérico: el orden será siempre m = 4 y las llaves serán enteros sin
+    valores asociados.
+    
+---------------------------------------------------------------------------------
+                                    Objetivo
+---------------------------------------------------------------------------------
+
+    Implementar desde cero un árbol B acotado de orden 4 capaz de almacenar
+    llaves enteras y soportar, como mínimo, las operaciones:
+
+    |-- insertar(x)
+    |-- buscar(x)
+    |-- eliminar(x)
+    |-- imprimirPorNiveles()
+    
+    En esta práctica interesa especialmente que el equipo pueda explicar:
+    
+    |-- ¿Cómo decide por qué hijo continuar durante una búsqueda?
+    |-- ¿Qué significa que un nodo se desborde?
+    |-- ¿Cómo funciona un split y la promoción de una llave?
+    |-- ¿Qué ocurre si una división llega hasta la raíz?
+    |-- ¿Qué significa una subocupación durante la eliminación?
+    |-- ¿Cuándo se redistribuye y cuándo se fusiona?
+
+---------------------------------------------------------------------------------
+                             Introducción Árboles B.
+---------------------------------------------------------------------------------
+
+    Un árbol de orden m admite como máximo m hijos y m − 1 llaves por nodo.
+    
+    En esta práctica:
+
+    |-- m = 4
+    |-- r = m − 1 = 3.
+    
+    Por lo tanto, cada nodo puede contener como máximo:
+    
+    |-- 4 hijos.
+    |-- 3 llaves.
+    
+    Para los nodos que no son la raíz, el mínimo de llaves es:
+
+    |-- q = techo(m/2) - 1 = 1
+
+    La raíz es un caso especial y puede contener menos llaves.
+    
+    ++ Invariantes que siempre deben cumplirse. ++
+    
+	1. Las llaves dentro de cada nodo están ordenadas.
+    	2. Ningún nodo contiene más de 3 llaves.
+    	3. Un nodo interno con r llaves tiene exactamente r + 1 hijos.
+    	4. Los hijos respetan los intervalos determinados por las llaves.
+    	5. Salvo la raíz, ningún nodo contiene menos de 1 llave.
+    	6. Todas las hojas se encuentran en el mismo nivel.
+    
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                            Implementación de ArbolB
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    Los árbolesB son una estructura que conserva orden de "llaves" y se
+    caracterizan por tener una menor profundidad a comparción de otros tipos
+    de árboles, por decir un ejemplo, los binarios.
+
+    A continuación, presentamos el desarrollo de las ideas para llevar a cabo
+    la estructura y comportamiento de la clase ArbolB.
+
+    En primer lugar, un ArbolB se conforma por nodos ("NodoArbolB").
+
+    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+    * 	      	      	      	      	      	      	      	      	  *
+    *                           [30 | 60]    	      	      	      	  *
+    *                 	      /     |     \				                  *
+    *                 	     /      |	   \				              *
+    *                [10 | 20]  [40 | 50]   [70 | 80| 90]		          *
+    *		     	   	      	    	      			                  *
+    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+            |--  Fig. 1. Representación gráfica de un "ArbolB".  --|
+	    
+    Ahora un "NodoArbolB" contiene:
+
+    	|-- "NodoArbolB" padre: Padre del nodo.
+		|-- "Integer" llaves: Ordenadas de menor a mayor.
+		|-- "NodoArbolB" intervalos: Nodos con más llaves separado por una
+	    		 	     llave x determinada.
+				     	 Las llaves del intervalo son o mayores
+				     	 o menores a x.
+		|-- "int" numHijos: m en el nodo.
+		|-- "int" numLlaves: r en el nodo.
+
+    Recordemos que  las llaves que se encuentran en un NodoArbolB, estarán
+    ordenadas de menor a mayor y no se permiten duplicados en la
+    implementación.
+    
+    Notemos que en esta es una primera abstracción del "NodoArbolB" surge
+    un problema, pues no sabemos como se organizarán los intervalos si
+    solo consideramos al conjunto de intervalos por un lado y al de llaves
+    como otro conjunto aparte.
+
+    Es decir, hay un problema de consulta, pues si bien las llaves pueden
+    ordenarse, cuando lo hagamos, perderemos el orden de los intervalos y
+    tendremos que volver acomodar los intervalos.
+
+    Como queremos evitar ordenaciones inecesarias, optamos por crear una
+    estructura Celda que contenga:
+    
+    	|-- "Integer" llave x: Llave que ingresaremos en el ArbolB.
+		|-- "NodoArbolB" intervaloMenor: Llaves menores a la llave x.
+		|-- "NodoArbolB" intervaloMayor: Llaves mayores a la llave x.
+
+    Entonces, con esta clase, en el NodoArbolB tendríamos un conjunto de
+    "Celdas" donde cada celda tiene unaa llave y sus intervalos
+    correspondientes.
+    
+    Con ello en mente, podemos pensar a una celda gráficamente como:
+
+    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+    *                                                                     *
+    *    NodoArbolB con llaves                    NodoArbolB con llaves   *
+    *         menores a x         Llave x = 30         mayores a x        *
+    *             |                    |                   |              *
+    *             |		               |	    	       |              *
+    *         [10 | 20]                30              [40 | 50]          *
+    *                                                                     *
+    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+      	  |--  Fig. 2. Representación gráfica de una Celda dada  --|
+    	  |--          la llave 30 del ArbolB de la Fig 1.       --|
+
+    Sin embargo, ello conlleva a un gasto extra de memoria al contemplar
+    dos veces un mismo intervalo.
+
+    Por ejemplo, dado el ejemplo anterior, tenemos que la celda con la
+    llave 30 hace referencia a su intervalo mayor que es el nodoArbolB
+    "[40|50]" pero a su vez, la celda 60 hace referencia a su intervalo
+    menor que es el nodoArbolB "[40|60]".
+
+    Es decir, hacemos referencia doble al mismo nodoArbolB "[40|60]".
+    
+    Para solucionarlo, podemos optar por un nuevo enfoque de la Celda, el
+    cual, consiste en sólo apuntar al nodoArbolB que es el intervaloMenor
+    dada la llave x, visto gráficamente.
+    
+    Celda dada la llave x = 30:
+    
+    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+    *                                                                     *
+    *    NodoArbolB con llaves                  			              *
+    *         menores a x          Llave x      			              *
+    *             |                   |         			              *
+    *             |		              |	    	         		          *
+    *         [10 | 20]               30             			          *
+    *                                                                     *
+    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+         |--  Fig 3. Nuevo Enfoque de Celda con la llave 30 del  --|
+         |--                 ArbolB de la Fig 1.                 --|
+
+
+    De esta manera, una celda garantiza tener una llave y el
+    intervaloMenor de la llave. No obstante, esta modificación conlleva
+    a la perdida del intervaloMayor, y con ello, en el NodoArbolB faltaría
+    representar al intervaloMayor de la última Celda.
+
+    Para compensar esto último, podemos simplemente añadir el
+    intervaloMayorcomo atributo del NodoArbolB.
+
+    Entonces, finalmente un NodoArbolB se ve como:
+
+    NodoArbolB:
+    
+        |-- NodoArbolB padre.
+		|-- LinkedList<Celda> celdas.
+		|-- NodoArbolB intervaloMayor.
+		|-- int numLlaves.
+		|-- int numHijos.
+
+    Y una celda se ve como:
+
+    Celda:
+    
+        |-- Integer llave
+		|-- NodoArbolB intervaloMenor.
+
+    Para la implementación en java decidimos crear las clases NodoArbolB y
+    Celda de forma interna y privada en la clase ArbolB. De esta forma,
+    podremos acceder facilmente a los atributos de las mismas para realizar
+    las operaciones necesarias y sólo podrán ser manejados por la clase
+    ArbolB.
+    
+---------------------------------------------------------------------------------
+                           Clase Interna: NodoArbolB
+---------------------------------------------------------------------------------
+
+    Clase interna privada dentro de ArbolB destinada a crear los nodos que
+    utilizaremos en la clase ArbolB.
+
+    |-- Estructura:
+
+    	+--+ Atributos:              +--------------------------------------+
+
+	|-- NodoArbolB padre:
+	    Referencia al padre único del NodoArbolB.
+	    
+	|-- LinkedList<Celda> celdas:
+	    Conjunto de llaves x, donde cada x tiene ref a su intervalo con
+	    llaves menores.
+	    
+	|-- NodoArbolB intervaloMayor:
+	    Referencia al intervalo con llaves mayores a la última celda del
+	    NodoArbolB.
+
+	|-- int numLlaves:
+	    Contador de llaves de un NodoArbolB.
+	    
+	|-- int numHijos:
+	    Contador de hijos de un NodoArbolB.
+	    
+	+--+ Comportamiento:         +--------------------------------------+
+
+	|-- public NodoArbolB() :
+	    Método para construir un NodoArbolB vacío.
+
+---------------------------------------------------------------------------------
+                          Clase Interna: Celda
+---------------------------------------------------------------------------------
+
+    Clase interna privada dentro de ArbolB destinada a crear la estructura
+    auxiliar para guardar una llave con su intervaloMenor correspondiente.
+
+    |-- Estructura:
+
+    	+--+ Atributos:              +--------------------------------------+
+
+	|-- Integer llave:
+	    Llave a guardar en el ÁrbolB.
+	    
+	|-- NodoArbolB intervaloMenor:
+	    NodoArbolB con llaves menores a la llave de la Celda.
+	    
+	+--+ Comportamiento:         +--------------------------------------+
+
+	|-- public Celda() :
+	    Método para construir una Celda vacía.
+
+	|-- public Celda(Integer llave) :
+	    Método para construir una Celda dada una llave.
+	    	    
+---------------------------------------------------------------------------------
+                                 Clase: ArbolB
+---------------------------------------------------------------------------------
+
+    Un árbol B tiene referencia al nodo raíz donde parten todas las
+    operaciones básicas del mismo (buscar(x), insertar(x), eliminar(x) e
+    imprimirPorNiveles(x)).
+
+    Además, contempla un número determinado de llaves y un mínimo de llaves
+    en los nodos.
+    
+    |-- Estructura:
+
+    	+--+ Atributos:              +--------------------------------------+
+
+	|-- private final static int M = 4:
+	    Orden del ArbolB.
+	
+    	|-- private final static int P = (int) Math.ceil(M / 2.0) - 1:
+	    Número mínimo de llaves en un NodoArbolB.
+
+	|-- private NodoArbolB raiz:
+	    Raíz del ArbolB.
+	
+	+--+ Comportamiento:         +--------------------------------------+    
+
+	|-- public ArbolB() :
+	    Método para construir un arbolB vacío.
+	    
+	|-- public Integer buscar(Integer llave) :
+	    Método para buscar una llave en el ArbolB.
+
+	|-- public Integer buscar(Integer llave) :
+	    Método para buscar una llave en el ArbolB.
+
+	|-- public void insertar(Integer llave) :
+	    Método para insertar una llave en el ArbolB.
+
+	|-- public void eliminar(Integer llave) :
+	    Método para eliminar una llave en el ArbolB.
+
+	|-- public boolean validarArbol() :
+	    Método para verificar la estructura del ArbolB.
+	    
+        |-- public String toString() :
+	    Método para obtener la representación en cadena de texto
+	    del ArbolB.
+	    
+---------------------------------------------------------------------------------
+                         Método de ArbolB: buscar(x)
+---------------------------------------------------------------------------------
+
+    Algoritmo de buscar(x):
+    
+    Para buscar una llave x:
+    
+        1. Comenzar en la raíz;
+    	2. Comparar x con las llaves ordenadas del nodo actual;
+    	3. Si existe coincidencia, terminar con éxito;
+    	4. Si no existe, identificar el intervalo al que pertenece x;
+    	5. Si el nodo es interno, seguir el hijo correspondiente;
+    	6. Si el nodo es una hoja y x no aparece, regresar NOT_FOUND o un
+	   equivalente claro.
+
+    Método:
+
+    public Integer buscar(Integer llave);
+    
+        |-- Verificamos primero si la llave dada es válida.
+	    |-- Si no es válida, lanzamos error.
+	    |-- Si es válida, buscamos a partir de la raíz.
+
+    Métodos Auxiliares:
+    
+    private Integer buscar(NodoArbolB nodo, Integer llave);
+
+    	|-- Si el nodo es null.
+	    |-- Terminamos, fallamos en la búsqueda, devolvemos null.
+	    |-- En otro caso, comenzamos a buscar en las celdas del nodo.
+	    	|-- Si lo encontramos, devolvemos el número.
+		|-- Si la llave a buscar es menor a la llave de la celda,
+		    buscamos en el intervaloMenor de la celda.
+            |-- Si no lo encontramos en las celdas del nodo, buscamos en el
+	    	intervaloMayor del nodo.
+
+---------------------------------------------------------------------------------
+                         Método de ArbolB: insertar(x)
+---------------------------------------------------------------------------------
+
+    Algoritmo de insertar(x):
+    
+    Para insertar una llave x:
+    
+        Para insertar x:
+	
+	    1. Buscar la hoja donde debe quedar x;
+	    2. Insertar x manteniendo las llaves ordenadas;
+	    3. Si el nodo tiene a lo más 3 llaves, terminar;
+	    4. Si alcanza 4 llaves, realizar un split;
+	    5. Promover una llave al padre;
+	    6. Si el padre también se desborda, repetir hacia arriba;
+	    7. Si la raíz se divide, crear una nueva raíz.
+
+    Método:
+
+    public void insertar(Integer llave);
+    
+        |-- Verificamos primero si la llave dada es válida.
+	    |-- Si no es válida, lanzamos error.
+	    |-- Si es válida, verificamos si el árbol es vacío.
+	    	|-- Si lo es, creamos una nueva raíz, e insertamos la llave
+		    dada la nueva raíz.
+		|-- En caso contrario, insertamos la llave a partir de la
+		    raíz.
+
+    Métodos Auxiliares:
+
+    /* Nota: El nodo es distinto de null. */
+    /* Siempre llegaremos a una hoja en la inserción. */
+    private void insertar(NodoArbolB nodo, Integer llave);
+
+    	|-- Si llegamos a una hoja.
+	    |-- Ordenamos la llave en el nodo al crear una nueva celda.
+	    |-- Hacemos split(nodo) en caso de ser necesario.
+	    |-- Terminamos.
+	|-- En otro caso, buscamos el nodo al que pertenece la llave.
+	    |-- Si encontramos la llave en el nodo, terminamos.
+	    	No permitimos duplicados.
+	    |-- Si la llave a insertar es menor a la llave de la celda,
+	    	insertamos en el intervaloMenor de la celda.
+            |-- Si no lo encontramos en las celdas del nodo, insertamos en el
+	    	intervaloMayor del nodo.
+
+    /* Nota: Método para ordenar una celda en un nodo. */
+    private void ordenar(NodoArbolB nodo, Celda celda);
+    
+        |-- Ordenamos la celda en el lugar correcto del nodo.
+
+    /* Nota: Método para arreglar desbordamiento en un nodo. */
+    private void split(NodoArbolB nodo);
+    
+        |-- Si el nodo no está desbordado, terminamos.
+	|-- En otro caso:
+	    |-- Creamos un nuevo nodo, sea nodoDos.
+	    |-- Recorremos en orden inverso hasta llegar a la mitad.
+	    	|-- Eliminamos la última celda del nodo desbordado.
+	    	|-- En el nodoDos agregamos al principio la celda anterior.
+		|-- Actualizamos referencias del intervaloMayor de los nodos
+		    tanto del desbordado como del dos.
+		|-- Obtenemos la celda que será promovida al padre.
+		|-- Actualizamos referencia del intervaloMenor de la celda
+		    anterior.
+		|-- Actualizamos el número de Hijos de ser necesario, es
+		    decir, si son nodos internos.
+		|-- Si el padre del desbordado es null, estamos en la raíz,
+		    tenemos que crear una nueva raíz.
+		|-- Actualizamos el padre del intervaloMayor si el nodo
+		    desbordado no es hoja.
+		|-- Actualizamos el padre con la nueva celda.
+		|-- Hacemos recursión con el padre.
+
+    /* Nota: Método para actualizar los hijos del padre después de un split. */
+    private void actualizarPadre(NodoArbolB nodo, Celda celda, NodoArbolB nodoDos);
+        |-- Recorremos los nodos del padre hasta encontrar el lugar correcto
+	    para colocar la llave promovida.
+	|-- Finalmente verificamos donde debemos colocar el nodoDos,
+	    dependiendo si va en una celda o el intervaloMayor del nodo padre.
+	|-- Aumentamos el número de hijos del padre.
+
+---------------------------------------------------------------------------------
+                         Método de ArbolB: eliminar(x)
+---------------------------------------------------------------------------------
+
+    Algoritmo de eliminar(x):
+
+    Para eliminar una llave x:
+
+        1. Buscar la llave x dentro del árbol;
+        2. Si x no se encuentra, terminar;
+        3. Si x se encuentra en una hoja, eliminarla directamente;
+        4. Si la hoja queda subocupada, intentar reparar mediante
+           redistribución o fusión;
+        5. Si x se encuentra en un nodo interno:
+            a. Intentar reemplazarla por su predecesor;
+            b. Si no es posible, intentar reemplazarla por su sucesor;
+            c. Si ninguno de los dos casos es posible, fusionar los
+               hijos izquierdo y derecho junto con x;
+        6. Si una fusión provoca subocupación en el padre, repetir la
+           reparación hacia arriba;
+        7. Si la raíz queda sin llaves y con un único hijo, dicho hijo
+           se convierte en la nueva raíz.
+
+    Método:
+
+    public void eliminar(Integer llave);
+
+        |-- Verificamos primero si la llave dada es válida.
+        |-- Si la llave es null, lanzamos una excepción.
+        |-- Si el árbol está vacío, terminamos.
+        |-- En otro caso, comenzamos la eliminación a partir de la raíz.
+
+    Métodos Auxiliares:
+
+    private void eliminar(NodoArbolB nodo, Integer llave);
+
+        |-- Mientras el nodo actual sea distinto de null:
+            |-- Recorremos las celdas del nodo actual.
+            |-- Si encontramos la llave:
+                |-- Si el nodo no tiene hijos, eliminamos la llave
+                    como una llave de hoja.
+                |-- En otro caso, eliminamos la llave como una llave
+                    de nodo interno.
+                |-- Terminamos.
+            |-- Si la llave buscada es menor que la llave de la celda
+                actual:
+                |-- Continuamos la búsqueda por intervaloMenor.
+            |-- Si la llave es mayor que todas las llaves del nodo:
+                |-- Continuamos por intervaloMayor.
+        |-- Si llegamos a null, la llave no existe y terminamos.
+
+    private void eliminarLlaveNodoHoja(NodoArbolB nodo,Integer llave,ListIterator<Celda> iteradorNodo);
+
+        |-- Eliminamos mediante el iterador la celda que contiene la llave.
+        |-- Disminuimos numLlaves.
+        |-- Si el nodo es la raíz:
+            |-- Si quedó sin llaves y sin hijos, el árbol queda vacío
+                y raiz pasa a ser null.
+            |-- Terminamos.
+        |-- En otro caso, verificamos si el nodo quedó subocupado.
+
+    private void eliminarLlaveNodoInterno(NodoArbolB nodo,Integer llave,ListIterator<Celda> iteradorNodo);
+
+        |-- Recuperamos la celda que contiene la llave a eliminar.
+        |-- Obtenemos el hijo izquierdo de dicha llave.
+
+        |-- Si el hijo izquierdo tiene más de p llaves:
+            |-- Obtenemos el nodo que contiene al predecesor.
+            |-- Obtenemos la última llave de dicho nodo.
+            |-- Reemplazamos la llave interna por la llave predecesora.
+            |-- Eliminamos la llave predecesora de su posición original.
+            |-- Terminamos.
+
+        |-- En otro caso, obtenemos el hijo derecho:
+            |-- Si existe una celda siguiente, utilizamos su intervaloMenor.
+            |-- Si la llave era la última del nodo, utilizamos
+                intervaloMayor.
+
+        |-- Si el hijo derecho tiene más de p llaves:
+            |-- Obtenemos el nodo que contiene al sucesor.
+            |-- Obtenemos la primera llave de dicho nodo.
+            |-- Reemplazamos la llave interna por la llave sucesora.
+            |-- Eliminamos la llave sucesora de su posición original.
+            |-- Terminamos.
+
+        |-- Si ninguno de los dos hijos tiene más de p llaves:
+            |-- Creamos un nuevo nodo fusionado.
+            |-- Agregamos al fusionado las celdas del hijo izquierdo.
+            |-- Bajamos al fusionado la llave que se desea eliminar.
+            |-- Agregamos las celdas del hijo derecho.
+            |-- Actualizamos las referencias padre de los hijos cuando
+                trabajamos con nodos internos.
+            |-- El intervaloMayor del fusionado será el intervaloMayor
+                del antiguo hijo derecho.
+            |-- Si la fusión es entre nodos internos, actualizamos
+                numHijos.
+            |-- Eliminamos del nodo padre la celda correspondiente a
+                la llave que bajó.
+            |-- Disminuimos numLlaves y numHijos del padre.
+            |-- Actualizamos la referencia del padre para que apunte al
+                nodo fusionado.
+            |-- Eliminamos ahora la llave dentro del nodo fusionado.
+            |-- Verificamos si el nodo padre quedó subocupado.
+
+    private NodoArbolB obtenerPredecesor(NodoArbolB nodo);
+
+        |-- Si el nodo no tiene hijos, lo regresamos.
+        |-- En otro caso, continuamos recursivamente por intervaloMayor.
+        |-- Al llegar a una hoja, su última llave corresponde al
+            predecesor buscado.
+
+    private NodoArbolB obtenerSucesor(NodoArbolB nodo);
+
+        |-- Si el nodo no tiene hijos, lo regresamos.
+        |-- En otro caso, continuamos recursivamente por el
+            intervaloMenor de la primera celda.
+        |-- Al llegar a una hoja, su primera llave corresponde al
+            sucesor buscado.
+
+    private void subOcupacion(NodoArbolB nodo, Integer llave);
+
+        |-- Si numLlaves es mayor o igual que p, el nodo sigue siendo
+            válido y terminamos.
+
+        |-- Si el nodo es la raíz:
+            |-- Si quedó sin llaves y tiene un único hijo:
+                |-- Su intervaloMayor se convierte en la nueva raíz.
+                |-- La nueva raíz tendrá padre igual a null.
+            |-- Terminamos.
+
+        |-- Obtenemos el padre del nodo subocupado.
+        |-- Buscamos en qué referencia del padre se encuentra dicho nodo.
+
+        |-- Si el nodo aparece como intervaloMenor de alguna celda:
+            |-- Buscamos, si existe, al hermano izquierdo.
+            |-- Si el hermano izquierdo tiene más de p llaves:
+                |-- Redistribuimos desde el hermano izquierdo.
+                |-- Terminamos.
+
+            |-- Buscamos al hermano derecho.
+                |-- Si existe otra celda después, su intervaloMenor
+                    corresponde al hermano derecho.
+                |-- En otro caso, el hermano derecho corresponde al
+                    intervaloMayor del padre.
+
+            |-- Si el hermano derecho tiene más de p llaves:
+                |-- Redistribuimos desde el hermano derecho.
+                |-- Terminamos.
+
+            |-- Si ningún hermano puede redistribuir:
+                |-- Si existe hermano izquierdo, fusionamos
+                    hermanoIzq con nodo.
+                |-- En otro caso, fusionamos nodo con hermanoDer.
+                |-- Terminamos.
+
+        |-- Si el nodo no apareció como intervaloMenor:
+            |-- Verificamos si corresponde al intervaloMayor del padre.
+            |-- Obtenemos como hermano izquierdo el intervaloMenor de
+                la última celda del padre.
+            |-- Si dicho hermano tiene más de p llaves:
+                |-- Redistribuimos desde el hermano izquierdo.
+            |-- En otro caso:
+                |-- Fusionamos el hermano izquierdo con el nodo.
+
+    private void redistribuirHermanoIzquierdo(NodoArbolB hermanoIzq,NodoArbolB nodoSubOcupado,NodoArbolB padre);
+
+        |-- Buscamos la celda del padre que separa exactamente al
+            hermano izquierdo y al nodo subocupado.
+        |-- Si no existe una separadora válida, lanzamos una excepción.
+        |-- Eliminamos la última celda del hermano izquierdo.
+        |-- Disminuimos numLlaves del hermano izquierdo.
+        |-- Creamos una nueva celda con la llave separadora del padre.
+        |-- La antigua llave separadora baja al principio del nodo
+            subocupado.
+        |-- La llave tomada del hermano izquierdo sube al padre.
+        |-- Si son nodos internos:
+            |-- Actualizamos las referencias de los hijos involucrados.
+            |-- Disminuimos numHijos del hermano izquierdo.
+            |-- Aumentamos numHijos del nodo subocupado.
+
+    private void redistribuirHermanoDerecho(NodoArbolB nodoSubOcupado,NodoArbolB hermanoDer,NodoArbolB padre);
+
+        |-- Buscamos la celda del padre que separa al nodo subocupado
+            y al hermano derecho.
+        |-- Si no existe una separadora válida, lanzamos una excepción.
+        |-- Eliminamos la primera celda del hermano derecho.
+        |-- Disminuimos numLlaves del hermano derecho.
+        |-- Creamos una nueva celda con la antigua llave separadora.
+        |-- La antigua separadora baja al final del nodo subocupado.
+        |-- La primera llave del hermano derecho sube al padre.
+        |-- Si son nodos internos:
+            |-- Actualizamos las referencias de los hijos involucrados.
+            |-- Disminuimos numHijos del hermano derecho.
+            |-- Aumentamos numHijos del nodo subocupado.
+
+    private void fusionarNodos(NodoArbolB nodoIzq,NodoArbolB nodoDer,NodoArbolB padre);
+
+        |-- Buscamos en el padre la llave que separa exactamente a
+            nodoIzq y nodoDer.
+        |-- Guardamos tanto la llave separadora como su posición.
+        |-- Si no encontramos una separadora válida, lanzamos una excepción.
+
+        |-- Creamos un nuevo nodo fusionado.
+        |-- Agregamos todas las celdas del nodo izquierdo.
+        |-- Bajamos al fusionado la llave separadora del padre.
+        |-- Agregamos todas las celdas del nodo derecho.
+        |-- Actualizamos las referencias padre de los hijos cuando
+            se trata de nodos internos.
+        |-- El intervaloMayor del nodo fusionado será el intervaloMayor
+            del antiguo nodo derecho.
+        |-- Si los nodos tienen hijos, actualizamos numHijos del
+            fusionado.
+        |-- El padre del nuevo nodo será el mismo padre de los dos
+            nodos originales.
+
+        |-- Eliminamos la llave separadora del padre.
+        |-- Disminuimos numLlaves y numHijos del padre.
+        |-- Actualizamos la referencia del padre para que apunte al
+            nodo fusionado.
+
+        |-- Si el padre era la raíz y quedó sin llaves:
+            |-- El nodo fusionado se convierte en la nueva raíz.
+            |-- Su padre pasa a ser null.
+            |-- Terminamos.
+
+        |-- En otro caso:
+            |-- Verificamos si la fusión dejó subocupado al padre.
+            |-- Si es necesario, la reparación continúa hacia arriba.
+
+---------------------------------------------------------------------------------
+                     Método de ArbolB: imprimirPorNiveles()
+---------------------------------------------------------------------------------
+
+    Algoritmo de toString():
+    
+    Para imprimir por niveles un ÁrbolB:
+    
+	1. Recorremos el árbol por niveles, comenzando en la raíz.
+    	2. Obtenemos los nodos por niveles.
+	/* Nota: Hay que tener precaución con las ref null. */
+    	3. Agregamos a la cadena cada nodo en un mismo nivel.
+
+    Método:
+
+    public String toString();
+    
+        |-- Verificamos si el ábol es vacío.
+	    |-- Regresamos la representación del árbol vacío.
+	|-- En una lista guardamos los nodos de un nivel actual.
+	|-- En otra lista guardamos los nodos de un nivel posterior a revisar.
+	|-- Recorremos cada nodo de los actuales.
+	    |-- Concatenamos la apertura del nodo.
+	    |-- Concatenamos cada llave del nodo.
+	    |-- Concatenamos el cierre del nodo.
+	    |-- Agregamos a la segunda lista los nodos de las celdas y el
+	    	intervaloMayor del nodo actual.
+	|-- Cuando terminemos, actualizamos la lista 1 con la lista 2.
+	|-- Limpiamos la lista 2 y continuamos revisando los nodos actuales.
+	    
+---------------------------------------------------------------------------------
+                     Método de ArbolB: validarArbolB()
+---------------------------------------------------------------------------------
+
+    Algoritmo de validarArbolB():
+    
+    Para validar un ÁrbolB:
+    
+	1. Recorremos el árbol por niveles, comenzando en la raíz.
+    	2. Verificamos para cada NodoArbolB que no tenga:
+	   -> SubOcupacion si es distinto de la raíz.
+	   -> Desbordamiento.
+	   -> Número incorrecto de llaves.
+	   -> Número inCorrecto de Hijos.
+	   -> Celdas null.
+	   En caso contrario, el árbol es inválido.
+	/* Nota: Hay que tener precaución con las ref null. */
+    	3. Si llegamos a un nodo hoja, verificamos que tenga el mismo
+	   nivel que las demás hojas.
+	4. Si pasas todas las pruebas, es válido.
+
+   /* Nota: El secreto es la programación defensiva. */
+   -> Por ejemplo, el árbolB no puede tener llaves null, celdas null, numLlaves
+      desbordado o subOcupado en caso correspondiente, las hojas en distintos
+      niveles, etc.
+
+   /* Nota: Aquí sólo consideramos lo que indicaba la práctica, es decir: */
+      |-- Llaves ordenadas en cada nodo;
+      |-- máximo tres llaves por nodo;
+      |-- cantidad correcta de hijos en nodos internos;
+      |-- Mínimo de una llave en nodos distintos de la raíz;
+      |-- todas las hojas en el mismo nivel.
+   
+    Método:
+
+    public boolean validarArbol();
+        |-- Primero hay que validar la raíz.
+	    |-- Si la raíz es null o es vacía, por default es correcto.
+	    |-- Verificamos que la raiz vacía tenga los parámetro correctos.
+	    |-- Si la raíz cumple las invariantes y es hoja, es correcto.
+	|-- Con lo anterior, tenemos el caso donde hay por lo menos un nivel
+	    más, entonces hay que revisar los hijos de la raíz recusrivamente
+	    hasta llegar a las hojas. De esta manera, revisaremos todos los
+	    nodos y validaremos gran parte de la estructura.
+	|-- Si cada cumple con las invariantes, el árbol es correcto.
+	    
+    Métodos Auxiliares:
+
+    /* Dado un nodo distinto de null, verificamos que cumpla las invariantes
+       y este bien definido en el ArbolB. */
+    private boolean validarNodo(NodoArbolB nodo);
+        |-- Si el nodo tiene desbordamiento, esta incorrecto el ArbolB.
+	|-- Sacamos una celda para verificar el orden respecto a su intervalo
+	    menor, posteriormente, hacemos lo mismo para cada celda del nodo.
+	|-- Para el inteervaloMayor del nodo, verificamos que sus llaves sean
+	    mayores a la última celda.
+	|-- Finalmente, si tiene hijos, verificampos que tenga la cantidad
+	    correcta de hijos.
+	|-- Si es hoja, verificamos que no tenga hijos.
+
+    /* Método que utilizara verificarNodo para revisar las celdas. */
+    private boolean verificarNodoIntermedio(NodoArbolB nodo, Celda celda);
+        |-- Si el nodo tiene subocupacion, esta incorrecto el ArbolB.
+	|-- Verificamos que la llave de la celda sea mayor a la ultima llave
+	    del nodo intervaloMenor.
+
+    /* Método que utilizara verificarNodo para revisar el intervaloMayor. */
+    private boolean verificarNodoFinal(NodoArbolB nodo, Celda celda);
+        |-- Si el nodo tiene subocupacion, esta incorrecto el ArbolB.
+	|-- Verificamos que la llave de la celda sea menor a la primera llave
+	    del nodo intervaloMayor.
+
+    /* Método para verificar que una celda este bien definida dentro de un
+       nodo. */
+    private boolean verificarNodoFinal(Celda celda);
+        |-- Si la celda tiene llave null o la celda es null, eso no puede
+	    ocurrir dentro de un nodo del ArbolB.
