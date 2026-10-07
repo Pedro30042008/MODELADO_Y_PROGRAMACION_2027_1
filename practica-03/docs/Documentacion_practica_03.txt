@@ -291,9 +291,11 @@
 
     En JAVA:
     
-    public class Pruebas {
+    public class Main {
 
-        /**
+        // Pruebas Temporalmente en Main.
+
+	/**
      	  * Compara el valor esperado con el obtenido.
      	  *
      	  * @param nombre descripción de la prueba
@@ -319,43 +321,215 @@
          * @param args argumentos de ejecución, no utilizados
          */
         public static void main(String[] args) {
-            CreadorArchivo pdf = new CreadorPDF();
-            CreadorArchivo texto = new CreadorTexto();
-
             // 1. Carpeta vacía: debe medir 0.
             Carpeta vacia = new Carpeta("Vacia"); // Preparar - Arrange
-	    int total = obtenerTamnio(vacia); // Ejecutar - Act
+	    int total = obtenerTamanio(vacia); // Ejecutar - Act
             comprobar("Carpeta vacia", 0, total); // Comprobar - Assert
 
             // 2. Carpeta con un PDF de 120: debe medir 120.
             Carpeta uno = new Carpeta("Un PDF");
-            uno.agregarArchivo(uno, "pdf", "practica.pdf", 120);
-	    total = uno.obtenerTamanio();
+            agregarArchivo(uno, "pdf", "practica.pdf", 120);
+	    total = obtenerTamanio(uno);
             comprobar("Un PDF", 120, total);
 	    
             // 3. PDF de 120 y texto de 80: debe medir 200.
             Carpeta dos = new Carpeta("PDF y texto"); // Arrange
-	    dos.agregarArchivo(dos, "pdf", "practica.pdf", 120); // Arrange
-	    dos.agregarArchivo(dos, "txt", "notas.txt", 80); // Arrange
-	    total = dos.obtenerTamanio(); // Act
+	    agregarArchivo(dos, "pdf", "practica.pdf", 120); // Arrange
+	    agregarArchivo(dos, "txt", "notas.txt", 80); // Arrange
+	    total = obtenerTamanio(dos); // Act
             comprobar("PDF y texto", 200, total); // Assert
 
             // 4. Agregamos una subcarpeta con un texto de 50.
             // El total debe ser 120 + 80 + 50 = 250.
             Carpeta ejemplos = new Carpeta("Ejemplos"); // Arrange
-	    ejemplos.agregarArchivo(ejemplos, "txt", "ejemplo.txt", 50); // Arrange
+	    agregarArchivo(ejemplos, "txt", "ejemplo.txt", 50); // Arrange
             dos.subcarpetas.add(ejemplos); // Arrange
-	    total = dos.obtenerTamanio(); // Act
+	    total = obtenerTamanio(dos); // Act
             comprobar("Ejemplo completo", 250, total); // Assert
 
             // 5. Carpeta con un archivo de tamaño 0: debe medir 0.
             Carpeta cero = new Carpeta("Archivo de cero"); // Arrange
-	    cero.agregarArchivo(cero, "txt", "vacio.txt", 0); // Arrange
-	    total = cero.obtenerTamanio();
-            comprobar("Archivo de cero", 0, total);
+	    agregarArchivo(cero, "txt", "vacio.txt", 0); // Arrange
+	    total = obtenerTamanio(cero); // Act
+            comprobar("Archivo de cero", 0, total); // Assert
         }
     }
 
+    Resultado de ejecutar las pruebas:
+
+    OK: Carpeta vacia | esperado=0 | obtenido=0
+    OK: Un PDF | esperado=120 | obtenido=120
+    OK: PDF y texto | esperado=200 | obtenido=200
+    OK: Ejemplo completo | esperado=250 | obtenido=250
+    OK: Archivo de cero | esperado=0 | obtenido=0
+
 ---------------------------------------------------------------------------------
-                              
+                                 Composite
 ---------------------------------------------------------------------------------
+
+    En la práctica, el código trabaja con archivos (elemento individual) y
+    carpetas (grupo de elementos).
+
+    Para calcular tamaños no queremos preguntar cada vez ¿es archivo o
+    carpeta?. Ambos deben responder a la misma operación.
+
+    Aplicamos el patrón de diseño composite para refactorizar.
+
+    Definimos la implementación en Java:
+
+    |-- Interfaz Elemento:
+
+    Definimos la interfaz que todos los elementos compartirán:
+
+    public interface Elemento {
+    	  int obtenerTamanio();
+    }
+
+    |-- Archivo implementa la interfaz Elemento:
+
+    	+ Atributos +
+
+    	|-- Nombre
+	|-- Tamanio
+
+	+ Métodos +
+
+	|-- Constructor
+	    Construir un archivo dado un nombre y su tamanio.
+	    
+	    >> public Archivo(String nombre, int tamanio);
+
+	|-- Obtener Tamanio
+	    Obtenemos el tamaño del archivo.
+
+	    >> public int obtenerTamanio();
+
+    |-- Carpeta implementa la interfaz Elemento:
+
+    	+ Atributos +
+
+    	|-- Nombre
+	|-- Lista de elementos [Archivos o Subcarpetas]
+
+	+ Métodos +
+
+    	|-- Constructor:
+	
+	    Construir una carpeta dado un nombre.
+	    
+	    >> public Carpeta(String nombre);
+
+	|-- Agregar un Elemento [Archivo o Subcarpeta]:
+	
+	    Agregamos a la lista de elementos el archivo o subcarpeta.
+
+	    >> public void agregar(Elemento elemento);
+
+	|-- Obtener Tamanio:
+	
+	    Obtenemos el tamaño de la carpeta sumando el tamanio de los
+	    archivos y subcarpetas, las subcarpetas lo hacen recursivamente.
+
+	    >> public int obtenerTamanio();
+
+---------------------------------------------------------------------------------
+                               Factory Method
+---------------------------------------------------------------------------------
+
+    Notemos que Main.agregarArchivo decide si contruir un ArchivoPDF o un
+    ArchivoTexto. 
+
+    Para crear archivos, queremos que sólo tengamos una clase que invoque
+    a la clase correspondiente para crearlos. De tal forma que las clases
+    invocadas trabajan con métodos que se llaman igual (y podrían parecer
+    que hacen lo mismo), pero estrictamente hacen distintas cosas.
+
+    Aplicamos el patrón de diseño factory method para refactorizar.
+
+    Definimos la implementación en Java:
+
+    |-- CreadorArchivo:
+
+    	Definimos la clase abstracta CreadorArchivo que se encargará de
+    	representar a los archivos y manejarlos por igual.
+
+    	abstract class CreadorArchivo {
+            abstract Archivo crearArchivo(String nombre, int tamanio);
+        }
+
+    |-- Subclase CreadorPDF:
+    
+        Extiende CreadorArchivo y está encargada de instanciar un ArchivoPDF.
+
+	+ Métodos +
+
+	|-- crearArchivo
+	    Creamos un archivo de tipo PDF
+
+	    >> Archivo crearArchivo(String nombre, int tamanio);
+
+    |-- Subclase CreadorTexto:
+
+        Extiende CreadorArchivo y está encargada de instanciar un
+	ArchivoTexto.
+
+	+ Métodos +
+
+	|-- crearArchivo
+	    Creamos un archivo de tipo Texto
+
+	    >> Archivo crearArchivo(String nombre, int tamanio);
+	    
+---------------------------------------------------------------------------------
+                                   Adapter
+---------------------------------------------------------------------------------
+
+    En el programa actual tenemos una forma de enviar mensaje:
+
+    |-- enviar(destino, mensaje)
+
+    pero la clase CorreoLegacy que desamos ocupar lo hace de otra forma:
+
+    |-- send_email(to, body)
+
+    Entonces, para no modificar la estructura que utilizamos originalmente,
+    podemos utilizar un adaptador para que se comuniquen ambas partes sin
+    modificar o reescribir ninguna de sus partes.
+
+    Aplicamos el patrón de diseño adapter para refactorizar.
+
+    Definimos la implementación en Java:
+
+    |-- Notificador:
+
+    	Definimos la interfaz que determina como se envían mensajes en el
+    	programa.
+
+    	interface Notificador {
+            void enviar(String destino, String mensaje);
+    	}
+
+    |-- Adaptador Correo:
+
+    	Implementa la interfaz Notificador y contiene CorreoLegacy para que
+    	envie este objeto de la forma que espera el programa principal.
+
+	+ Atributos +
+
+	|-- CorreoLegacy correo.
+	    
+	+ Métodos +
+
+	|-- Constructor:
+	
+	    Crea un AdaptadorCorreo para trabajar una instancia de
+	    CorreoLegacy con enviar(String destino, String mensaje);
+
+	    >> AdaptadorCorreo(CorreoLegacy correo);
+
+    	|-- Enviar mensaje de CorreoLegacy
+
+	    Dado un mensaje y destino trabajamos con la instancia de
+	    CorreoLegacy
+
+	    >> public void enviar(String destino, String mensaje);

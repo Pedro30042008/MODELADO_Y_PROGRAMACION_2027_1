@@ -18,7 +18,7 @@ Crea un `CorreoLegacy`, obtiene el tamaño total y llama a `send_email` para env
 
 | Dónde aparece | Problema | Qué cambio sería difícil | Clase o interfaz responsable |
 | --- | --- | --- | --- |
-| `Main.obtenerTamanio` y las listas separadas de `Carpeta` | **Acoplamiento Alto y Duplicación:** Main conoce la estructura interna de la carpeta y realiza el cálculo por partes con la misma lógica. | Incorporar otra clase de elemento obligaría a revisar el recorrido y las colecciones. | `Elemento` define el contrato; `Archivo` y `Carpeta` calculan su tamaño. |
+| `Main.obtenerTamanio` y las listas separadas de `Carpeta` | **Acoplamiento Alto y Duplicación:** Main conoce la estructura interna de la carpeta y realiza el cálculo del tamaño recorriendo los archivos y posteriormente subcarpetas. | Agregar un nuevo tipo de elemento obligaría a modificar Carpeta y Main para almacenar y recorrer ese nuevo tipo | `Elemento` define el contrato común; `Archivo` y `Carpeta` calculan su tamaño. |
 | `Main.agregarArchivo` | **Acoplamiento Alto y Condicionales Explosivos:** Main decide qué clase concreta construir mediante condiciones. | Agregar otro tipo de archivo exigiría modificar la selección. | `CreadorArchivo` y sus creadores concretos. |
 | `Main.enviarResultado` | **Rigidez y Dependencia de Terceros:** El envío depende directamente del servicio y de su método `send_email`. | Cambiar de proveedor obligaría a cambiar este método. | `Notificador` y un adaptador para el proveedor. |
 
