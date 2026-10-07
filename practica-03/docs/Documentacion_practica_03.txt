@@ -95,11 +95,11 @@
 
        	  |-- Qué archivo crear.
 
-	  |-- Calcular el tamaño.
+	      |-- Calcular el tamaño.
 
-	  |-- Conoce directamente el servicio de correo.
+	      |-- Conoce directamente el servicio de correo.
 
-	  |-- La carpeta guarda archivos y subcarpetas por separado.
+	      |-- La carpeta guarda archivos y subcarpetas por separado.
 
        Reorganizaremos estas responsabilidades sin alterar el ejemplo
        anterior.
@@ -295,7 +295,7 @@
 
         // Pruebas Temporalmente en Main.
 
-	/**
+	     /**
      	  * Compara el valor esperado con el obtenido.
      	  *
      	  * @param nombre descripción de la prueba
@@ -381,37 +381,39 @@
 
     Definimos la interfaz que todos los elementos compartirán:
 
-    public interface Elemento {
-    	  int obtenerTamanio();
-    }
+        public interface Elemento {
+            int obtenerTamanio();
+        }
 
     |-- Archivo implementa la interfaz Elemento:
 
     	+ Atributos +
 
     	|-- Nombre
-	|-- Tamanio
+	    |-- Tamanio
 
-	+ Métodos +
+	    + Métodos +
 
-	|-- Constructor
-	    Construir un archivo dado un nombre y su tamanio.
+	    |-- Constructor
+
+	        Construir un archivo dado un nombre y su tamanio.
 	    
-	    >> public Archivo(String nombre, int tamanio);
+	        >> public Archivo(String nombre, int tamanio);
 
-	|-- Obtener Tamanio
-	    Obtenemos el tamaño del archivo.
+	    |-- Obtener Tamanio
 
-	    >> public int obtenerTamanio();
+	        Obtenemos el tamaño del archivo.
+
+	        >> public int obtenerTamanio();
 
     |-- Carpeta implementa la interfaz Elemento:
 
     	+ Atributos +
 
     	|-- Nombre
-	|-- Lista de elementos [Archivos o Subcarpetas]
+	    |-- Lista de elementos [Archivos o Subcarpetas]
 
-	+ Métodos +
+	    + Métodos +
 
     	|-- Constructor:
 	
@@ -464,6 +466,7 @@
 	+ Métodos +
 
 	|-- crearArchivo
+
 	    Creamos un archivo de tipo PDF
 
 	    >> Archivo crearArchivo(String nombre, int tamanio);
@@ -471,11 +474,12 @@
     |-- Subclase CreadorTexto:
 
         Extiende CreadorArchivo y está encargada de instanciar un
-	ArchivoTexto.
+	    ArchivoTexto.
 
 	+ Métodos +
 
 	|-- crearArchivo
+
 	    Creamos un archivo de tipo Texto
 
 	    >> Archivo crearArchivo(String nombre, int tamanio);
@@ -514,22 +518,22 @@
     	Implementa la interfaz Notificador y contiene CorreoLegacy para que
     	envie este objeto de la forma que espera el programa principal.
 
-	+ Atributos +
+	    + Atributos +
 
-	|-- CorreoLegacy correo.
+	    |-- CorreoLegacy correo.
 	    
-	+ Métodos +
+	    + Métodos +
 
-	|-- Constructor:
+	    |-- Constructor:
 	
-	    Crea un AdaptadorCorreo para trabajar una instancia de
-	    CorreoLegacy con enviar(String destino, String mensaje);
+	        Crea un AdaptadorCorreo para trabajar una instancia de
+	        CorreoLegacy con enviar(String destino, String mensaje);
 
-	    >> AdaptadorCorreo(CorreoLegacy correo);
+	        >> AdaptadorCorreo(CorreoLegacy correo);
 
     	|-- Enviar mensaje de CorreoLegacy
 
-	    Dado un mensaje y destino trabajamos con la instancia de
-	    CorreoLegacy
+	        Dado un mensaje y destino trabajamos con la instancia de
+	        CorreoLegacy
 
-	    >> public void enviar(String destino, String mensaje);
+	        >> public void enviar(String destino, String mensaje);
