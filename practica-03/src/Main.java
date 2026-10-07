@@ -37,3 +37,4 @@ public class Main {
         enviarResultado(clase, "profesor@universidad.edu", notificador);
     }
 }
+//Alan Gael, Pedro Pablo, Miranda Sanchez

@@ -23,6 +23,7 @@ Crea un `CorreoLegacy`, obtiene el tamaño total y llama a `send_email` para env
 | `Main.enviarResultado` | **Rigidez y Dependencia de Terceros:** El envío depende directamente del servicio y de su método `send_email`. | Cambiar de proveedor obligaría a cambiar este método. | `Notificador` y un adaptador para el proveedor. |
 
 ## Etapa 2. Preparar y comprobar las pruebas
+Tabla de resultados esperados:
 
 | Entrada | Esperado  |
 | --- | ---: |
@@ -32,6 +33,15 @@ Crea un `CorreoLegacy`, obtiene el tamaño total y llama a `send_email` para env
 | Ejemplo completo con subcarpeta de 50 | 250 |
 | Archivo de tamaño 0 | 0 |
 
+Vemos que le comportamiento que teniamos en el codigo inicial se mantuvo durante la refactorización.
+
+| Entrada | Esperado | Obtenido | Resultado |
+|---|---:|---:|---|
+| Carpeta vacía | 0 | 0 | OK |
+| Un PDF de 120 | 120 | 120 | OK |
+| PDF de 120 y texto de 80 | 200 | 200 | OK |
+| Ejemplo completo con subcarpeta de 50 | 250 | 250 | OK |
+| Archivo de tamaño 0 | 0 | 0 | OK |
 
 ## Etapa 3. Composite
 
@@ -44,6 +54,17 @@ Se sustituyeron las listas `archivos` y `subcarpetas` por `List<Elemento>`. `agr
 ### Cambios realizados
 
 Main utiliza los creadores y agrega sus productos mediante `Carpeta.agregar`. Se retiró la selección antigua con `if/else`. Se corrigió `CreadorTexto`, que en la versión parcial construía un PDF. El constructor de `Archivo` usa el orden `(nombre, tamanio)`.
+
+## Etapa 5. Adapter
+
+### Cambios realizados
+
+Se definió la interfaz Notificador, que establece el método `enviar`.
+Posteriormente, se creó la clase `AdaptadorCorreo`, que implementa esta interfaz y recibe un objeto `CorreoLegacy`.
+El adaptador permite utilizar el método `send_email` del servicio existente mediante la operación enviar, sin modificar la implementación original de `CorreoLegacy`.
+Finalmente, se modificó `Main.enviarResultado` para recibir un Notificador como parámetro, evitando depender directamente de CorreoLegacy.
+
+El programa conserva el envío simulado del correo y permite utilizar otros servicios de notificación mediante implementaciones de Notificador, sin modificar la lógica de cálculo del tamaño.
 
 ## Etapa 6. Comprobar y explicar la solución
 

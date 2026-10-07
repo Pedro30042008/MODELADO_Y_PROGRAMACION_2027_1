@@ -1,5 +1,5 @@
 
-public class Pruebas {
+public class practica03 {
 
     /**
      * Compara el valor esperado con el obtenido.

@@ -14,3 +14,4 @@ public class CreadorPDF extends CreadorArchivo {
         return new ArchivoPDF(nombre, tamanio);
     }
 }
+//Alan Gael, Pedro Pablo, Miranda Sanchez

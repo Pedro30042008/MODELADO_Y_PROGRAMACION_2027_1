@@ -12,3 +12,4 @@ public class ArchivoTexto extends Archivo {
         super(nombre, tamanio);
     }
 }
+//Alan Gael, Pedro Pablo, Miranda Sanchez

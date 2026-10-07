@@ -14,3 +14,4 @@ public class CreadorTexto extends CreadorArchivo {
         return new ArchivoTexto(nombre, tamanio);
     }
 }
+//Alan Gael, Pedro Pablo, Miranda Sanchez

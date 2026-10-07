@@ -32,3 +32,4 @@ abstract class Archivo implements Elemento {
         return tamanio;
     }
 }
+//Alan Gael, Pedro Pablo, Miranda Sanchez

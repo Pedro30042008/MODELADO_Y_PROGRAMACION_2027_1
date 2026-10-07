@@ -9,3 +9,4 @@ public interface Elemento {
      */
     int obtenerTamanio();
 }
+//Alan Gael, Pedro Pablo, Miranda Sanchez

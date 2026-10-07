@@ -27,3 +27,4 @@ public class AdaptadorCorreo implements Notificador {
         correo.send_email(destino, mensaje);
     }
 }
+//Alan Gael, Pedro Pablo, Miranda Sanchez

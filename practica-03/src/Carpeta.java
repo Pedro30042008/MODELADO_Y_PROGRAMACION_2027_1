@@ -47,3 +47,4 @@ public class Carpeta implements Elemento {
         return total;
         }
 }
+//Alan Gael, Pedro Pablo, Miranda Sanchez

@@ -10,3 +10,4 @@ public interface Notificador {
      */
     void enviar(String destino, String mensaje);
 }
+//Alan Gael, Pedro Pablo, Miranda Sanchez
