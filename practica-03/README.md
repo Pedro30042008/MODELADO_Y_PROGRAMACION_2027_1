@@ -16,7 +16,9 @@ Se utilizan tres patrones:
 practica-03/
 |
 ├── docs/
+|   ├── ANALISIS.md
 |   └── Documentacion_practica_03.txt
+|   
 ├── src/ 
 |   ├── ArbolB.java
 |   ├── AdaptadorCorreo.java
