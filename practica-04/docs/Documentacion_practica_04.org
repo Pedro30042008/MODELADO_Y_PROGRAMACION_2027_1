@@ -807,7 +807,6 @@ at ([xshift=12.10cm,yshift=-24.78cm]current page.north west)
 
 
 
-
 #+BEGIN_EXPORT latex
 \Needspace{7\baselineskip}
 #+END_EXPORT
@@ -993,6 +992,11 @@ Comportamiento esperado:
 
 *R11.* Si el tipo de cliente no es válido, el sistema debe lanzar un error.
 
+#+latex: \vspace{\baselineskip}
+#+latex: \vspace{\baselineskip}
+#+latex: \vspace{\baselineskip}
+#+latex: \vspace{\baselineskip}
+#+latex: \vspace{\baselineskip}
 
 #+BEGIN_EXPORT latex
 \Needspace{6\baselineskip}
@@ -1218,6 +1222,12 @@ Costo Total:
 \[
    \text{\$}20.00
 \]
+
+#+latex: \vspace{\baselineskip}
+#+latex: \vspace{\baselineskip}
+#+latex: \vspace{\baselineskip}
+#+latex: \vspace{\baselineskip}
+#+latex: \vspace{\baselineskip}
 
 Las horas adicionales completas valen @@latex:\$@@15.00 cada una;
 
@@ -1467,6 +1477,11 @@ Costo Total:
    \text{\$}20.00
 \]
 
+#+latex: \vspace{\baselineskip}
+#+latex: \vspace{\baselineskip}
+#+latex: \vspace{\baselineskip}
+#+latex: \vspace{\baselineskip}
+
 Las horas adicionales completas valen @@latex:\$@@15.00 cada una;
 
 \[
@@ -1549,6 +1564,8 @@ Costo Total: @@latex:\$@@300.00
 *Caso Números decimales en el resultado:*
 
 Verificamos que el descuento con decimales se aplique adecuadamente al cliente "frecuente".
+
+#+latex: \vspace{\baselineskip}
 
 *Resultado Esperado:*
 
@@ -1644,7 +1661,11 @@ Lanza Excepción: Minutos inválidos.
 
 ** Implementación en Python
 
+En estacionamiento.py se encuentra el Código original a evaluar con una suit de pruebas, de ser necesario, se modifica para que pase las pruebas establecidas en base al modelo del Sistema.
 
+#+latex: \vspace{\baselineskip}
+
+El análisis de la implementación de las pruebas se encuentra en casos-prueba.pdf y la implementación en test_estacionamiento.py.
 
 #+BEGIN_EXPORT latex
 \Needspace{7\baselineskip}
@@ -1652,18 +1673,18 @@ Lanza Excepción: Minutos inválidos.
 
 * Checklist
 
-Ejemplo:
+Estado de las Actividades:
 
 - [X] Actividad terminada
 - [-] Actividad parcialmente realizada
 - [ ] Una actividad
 
-Actividades:
+Registro de Actividades:
 
 - [-] Documentación.
-- [ ] Planteamiento de Pruebas.
-- [ ] Implementación de Pruebas.
-- [ ] Evidencia de Ejecución.
+- [X] Planteamiento de Pruebas.
+- [-] Implementación de Pruebas.
+- [-] Evidencia de Ejecución.
 - [ ] Preguntas de Análisis.
-- [ ] Organización de Archivos.
+- [-] Organización de Archivos.
 - [ ] README.md.

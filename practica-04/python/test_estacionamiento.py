@@ -1,8 +1,6 @@
-
 import pytest
 
 from estacionamiento import Estacionamiento
-
 
 @pytest.fixture
 def sistema():
@@ -24,7 +22,28 @@ def test_ejemplo_inicial(sistema):
     # Assert
     assert resultado == 0.0
 
+# Arrange
+@pytest.mark.parametrize(
+    "minutos, esperado",
+    [
+                        # | Núm. |   Caso   | Regla(s) |                Descripción                 |
 
+        (10, 0.00),     # |  1   |  Normal  |    R5    | Cliente "normal" con boleto pasó 10 min.   |
+        (40, 20.00),    # |  2   |  Normal  |    R6    | Cliente "normal" con boleto pasó 40 min.   |    
+        (1250, 320.00), # |  3   |  Normal  |    R7    | Cliente "normal" con boleto pasó 1250 min. |
+    ],
+)
+def test_cliente_Normal_con_Boleto(sistema, minutos, esperado):
+    """
+    Verifica el cobro calculado para un cliente "normal" con boleto dado un cierto tiempo.
+    """
+    
+    # Act
+    resultado = sistema.calcular_total(minutos, "normal", False)
+    
+    # Assert
+    assert resultado == pytest.approx(esperado)
+    
 # TODO:
 # 1. Agregue casos normales.
 # 2. Agregue casos frontera.
