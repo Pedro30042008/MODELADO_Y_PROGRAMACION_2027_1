@@ -1,0 +1,1201 @@
+#+TITLE: Reporte
+#+AUTHOR: Nombre del alumno
+#+LANGUAGE: es
+#+OPTIONS: title:nil toc:nil num:t ^:nil
+#+LATEX_CLASS: article
+#+LATEX_CLASS_OPTIONS: [11pt,letterpaper]
+#+LATEX_COMPILER: pdflatex
+
+
+# ============================================================
+# DATOS PERSONALIZABLES
+# ============================================================
+
+# Materia y práctica
+#+LATEX_HEADER: \newcommand{\materia}{MODELADO Y PROGRAMACIÓN}
+
+#+LATEX_HEADER: \newcommand{\tipoPractica}{CASOS PRUEBA}
+
+#+LATEX_HEADER: \newcommand{\practicaTitulo}{PRÁCTICA 4:\\PRUEBAS UNITARIAS}
+
+#+LATEX_HEADER: \newcommand{\practicaSubtitulo}{DISEÑO DE PRUEBAS PARA UN SISTEMA}
+
+
+# Equipo
+# Cambia únicamente el contenido entre llaves.
+#+LATEX_HEADER: \newcommand{\autorUno}{Alan Gael Alvarez Hernández}
+
+#+LATEX_HEADER: \newcommand{\autorDos}{María Fernanda Miranda Sánchez}
+
+#+LATEX_HEADER: \newcommand{\autorTres}{Pedro Pablo Ruiz Hernández}
+
+
+# Profesora
+#+LATEX_HEADER: \newcommand{\nombreProfesora}{Karla Adriana Esquivel Guzmán}
+
+
+# Ayudantes
+#+LATEX_HEADER: \newcommand{\ayudanteTeoria}{Ossiel Aguilar Espíndola}
+
+#+LATEX_HEADER: \newcommand{\ayudanteLaboratorio}{Enoc Pineda Aguirre}
+
+
+# Año
+#+LATEX_HEADER: \newcommand{\semestreFinal}{SEMESTRE 1-2027}
+
+#+LATEX_HEADER: \newcommand{\fechaPortada}{Ciudad de México, 20 de octubre de 2026}
+
+
+# Leyenda bajo el escudo de Ciencias
+#+LATEX_HEADER: \newcommand{\leyendaEscudoLineaUno}{FACULTAD DE CIENCIAS}
+
+#+LATEX_HEADER: \newcommand{\leyendaEscudoLineaDos}{UNAM}
+
+
+# ============================================================
+# ENCABEZADO
+# ============================================================
+
+#+LATEX_HEADER: \newcommand{\encabezadoIzquierdo}{Modelado y Programación}
+
+#+LATEX_HEADER: \newcommand{\encabezadoDerecho}{Práctica 5: TDD}
+
+
+# ============================================================
+# OPCIONES
+#
+# PORTADA:
+#
+# \portadatrue
+# \portadafalse
+#
+# BIBLIOGRAFÍA:
+#
+# \bibliografiatrue
+# \bibliografiafalse
+# ============================================================
+
+#+LATEX_HEADER: \newif\ifportada
+#+LATEX_HEADER: \portadatrue
+
+#+LATEX_HEADER: \newif\ifbibliografia
+#+LATEX_HEADER: \bibliografiatrue
+
+
+# ============================================================
+# FUENTES Y CODIFICACIÓN
+# ============================================================
+
+#+LATEX_HEADER: \usepackage[T1]{fontenc}
+#+LATEX_HEADER: \usepackage[utf8]{inputenc}
+#+LATEX_HEADER: \usepackage{lmodern}
+#+LATEX_HEADER: \usepackage{microtype}
+#+LATEX_HEADER: \usepackage[normalem]{ulem}
+
+
+# ============================================================
+# FUENTES DE LA PORTADA
+#
+# Times:
+# resto del contenido de la portada.
+#
+# Times:
+# encabezados institucionales construidos con tamaños mixtos.
+#
+# La referencia NO usa versalitas automáticas:
+# usa iniciales de aproximadamente 16 pt y el resto a 13 pt.
+# ============================================================
+
+#+LATEX_HEADER: \newcommand{\fuentePortada}{\fontfamily{ptm}\selectfont}
+
+#+LATEX_HEADER: \newcommand{\fuenteInstitucional}{\fontfamily{ptm}\fontseries{m}\selectfont}
+
+
+# ============================================================
+# ESPAÑOL
+# ============================================================
+
+#+LATEX_HEADER: \AtBeginDocument{\renewcommand{\contentsname}{Índice}\renewcommand{\tablename}{Tabla}\renewcommand{\figurename}{Figura}\renewcommand{\refname}{Bibliografía}}
+
+#+LATEX_HEADER: \AtBeginDocument{\decimalpoint}
+
+#+LATEX_HEADER: \AtBeginDocument{\shorthandoff{"}}
+
+
+# ============================================================
+# MÁRGENES
+# ============================================================
+
+#+LATEX_HEADER: \usepackage[top=2.2cm,bottom=2.2cm,left=2.3cm,right=2.3cm]{geometry}
+
+
+# ============================================================
+# PÁRRAFOS
+# ============================================================
+# Esta versión no utiliza sangría en los párrafos.
+
+#+LATEX_HEADER: \setlength{\parindent}{0cm}
+
+#+LATEX_HEADER: \setlength{\parskip}{0.65em}
+
+#+LATEX_HEADER: \emergencystretch=2em
+
+
+# ============================================================
+# IMÁGENES
+# ============================================================
+
+#+LATEX_HEADER: \usepackage{graphicx}
+
+#+LATEX_HEADER: \usepackage{float}
+
+#+LATEX_HEADER: \usepackage{caption}
+
+
+# ============================================================
+# TABLAS
+# ============================================================
+
+
+#+LATEX_HEADER: \usepackage{array}
+
+#+LATEX_HEADER: \usepackage{longtable}
+
+#+LATEX_HEADER: \usepackage{ragged2e}
+
+#+LATEX_HEADER: \usepackage{makecell}
+
+#+LATEX_HEADER: \newcolumntype{L}[1]{>{\RaggedRight\arraybackslash\sloppy\hspace{0pt}}p{#1}}
+
+#+LATEX_HEADER: \newcolumntype{C}[1]{>{\Centering\arraybackslash}p{#1}}
+
+
+
+# ============================================================
+# LISTAS
+# ============================================================
+
+#+LATEX_HEADER: \usepackage{enumitem}
+
+#+LATEX_HEADER: \setlist[itemize,1]{label=\textbullet}
+
+#+LATEX_HEADER: \setlist[itemize,2]{label=--}
+
+#+LATEX_HEADER: \setlist[itemize,3]{label=$\circ$}
+
+#+LATEX_HEADER: \setlist[enumerate,1]{label=\arabic*.}
+
+#+LATEX_HEADER: \setlist[enumerate,2]{label=\alph*)}
+
+
+# ============================================================
+# COLORES
+# ============================================================
+
+#+LATEX_HEADER: \usepackage{xcolor}
+
+
+# ============================================================
+# TIKZ
+# ============================================================
+
+#+LATEX_HEADER: \usepackage{tikz}
+
+#+LATEX_HEADER: \usetikzlibrary{calc}
+
+
+# ============================================================
+# RECUADROS DE CÓDIGO
+# ============================================================
+
+#+LATEX_HEADER: \usepackage{listings}
+
+#+LATEX_HEADER: \lstdefinestyle{practica}{
+#+LATEX_HEADER: basicstyle=\ttfamily\small,
+#+LATEX_HEADER: backgroundcolor=\color{gray!7},
+#+LATEX_HEADER: frame=single,
+#+LATEX_HEADER: rulecolor=\color{black},
+#+LATEX_HEADER: framerule=0.45pt,
+#+LATEX_HEADER: framesep=5pt,
+#+LATEX_HEADER: xleftmargin=0pt,
+#+LATEX_HEADER: xrightmargin=0pt,
+#+LATEX_HEADER: aboveskip=0.4em,
+#+LATEX_HEADER: belowskip=0.8em,
+#+LATEX_HEADER: showstringspaces=false,
+#+LATEX_HEADER: columns=fullflexible,
+#+LATEX_HEADER: keepspaces=true,
+#+LATEX_HEADER: breaklines=true,
+#+LATEX_HEADER: literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1 {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1 {ñ}{{\~n}}1 {Ñ}{{\~N}}1
+#+LATEX_HEADER: }
+
+
+# ============================================================
+# TÍTULOS Y SUBTÍTULOS
+#
+# CUERPO:
+#
+# Introducción
+# Objetivos
+#
+# ÍNDICE:
+#
+# 1 Introducción
+# 1.1 Objetivos
+# ============================================================
+
+#+LATEX_HEADER: \usepackage{titlesec}
+
+#+LATEX_HEADER: \setcounter{secnumdepth}{2}
+
+#+LATEX_HEADER: \setcounter{tocdepth}{2}
+
+#+LATEX_HEADER: \titleformat{\section}{\Large\bfseries}{}{0pt}{}
+
+#+LATEX_HEADER: \titleformat{\subsection}{\large\bfseries}{}{0pt}{}
+
+#+LATEX_HEADER: \titlespacing*{\section}{0pt}{1.5em}{0.8em}
+
+#+LATEX_HEADER: \titlespacing*{\subsection}{0pt}{1.2em}{0.5em}
+
+
+# ============================================================
+# ENCABEZADO Y PIE
+# ============================================================
+
+#+LATEX_HEADER: \usepackage{fancyhdr}
+
+#+LATEX_HEADER: \setlength{\headheight}{15pt}
+
+#+LATEX_HEADER: \pagestyle{fancy}
+
+#+LATEX_HEADER: \fancyhf{}
+
+#+LATEX_HEADER: \fancyhead[L]{\encabezadoIzquierdo}
+
+#+LATEX_HEADER: \fancyhead[R]{\encabezadoDerecho}
+
+#+LATEX_HEADER: \fancyfoot[C]{\thepage}
+
+#+LATEX_HEADER: \renewcommand{\headrulewidth}{0.4pt}
+
+#+LATEX_HEADER: \renewcommand{\footrulewidth}{0pt}
+
+
+# ============================================================
+# HIPERVÍNCULOS
+# ============================================================
+
+#+LATEX_HEADER: \hypersetup{colorlinks=true,linkcolor=black,urlcolor=blue,citecolor=black}
+
+
+
+# ============================================================
+# ============================================================
+#
+#                         PORTADA
+#
+# ============================================================
+# ============================================================
+#
+# docs/
+# |
+# |-- DOC.org
+# |
+# `-- imagenes/
+#     |
+#     |-- unam.png
+#     `-- ciencias.png
+#
+# ============================================================
+
+
+#+BEGIN_EXPORT latex
+
+\ifportada
+
+\hypersetup{pageanchor=false}
+
+\begin{titlepage}
+
+\thispagestyle{empty}
+
+
+\begin{tikzpicture}[remember picture,overlay]
+
+
+% ============================================================
+% ESCUDO UNAM
+% ============================================================
+
+\IfFileExists{imagenes/unam.png}{
+
+    \node[
+        anchor=north west,
+        inner sep=0pt
+    ]
+    at ([xshift=2.92cm,yshift=-2.17cm]current page.north west)
+    {
+        \includegraphics[width=3.68cm]{imagenes/unam.png}
+    };
+
+}{}
+
+
+% ============================================================
+% UNIVERSIDAD NACIONAL AUTÓNOMA DE MÉXICO
+%
+% La referencia usa Times con iniciales manualmente más grandes.
+% Iniciales: ~16 pt.
+% Resto: ~13 pt.
+% ============================================================
+
+\node[
+    anchor=north,
+    align=center,
+    font=\fuenteInstitucional
+]
+at ([xshift=12.10cm,yshift=-2.51cm]current page.north west)
+{
+    {\fontsize{16.02}{18.4}\selectfont U}{\fontsize{13.02}{18.4}\selectfont NIVERSIDAD }
+    {\fontsize{16.02}{18.4}\selectfont N}{\fontsize{13.02}{18.4}\selectfont ACIONAL }
+    {\fontsize{16.02}{18.4}\selectfont A}{\fontsize{13.02}{18.4}\selectfont UTÓNOMA}\\[0.12cm]
+    {\fontsize{13.02}{18.4}\selectfont DE }
+    {\fontsize{16.02}{18.4}\selectfont M}{\fontsize{13.02}{18.4}\selectfont ÉXICO}
+};
+
+
+% ============================================================
+% DOBLE LÍNEA HORIZONTAL
+% ============================================================
+
+% Línea principal
+
+\draw[line width=1.90pt]
+([xshift=7.00cm,yshift=-3.98cm]current page.north west)
+--
+([xshift=17.05cm,yshift=-3.98cm]current page.north west);
+
+
+% Línea secundaria
+
+\draw[line width=0.60pt]
+([xshift=7.00cm,yshift=-4.50cm]current page.north west)
+--
+([xshift=17.05cm,yshift=-4.50cm]current page.north west);
+
+
+% ============================================================
+% FACULTAD DE CIENCIAS
+%
+% Misma construcción tipográfica de la referencia:
+% iniciales grandes + resto ligeramente menor.
+% ============================================================
+
+\node[
+    anchor=north,
+    align=center,
+    font=\fuenteInstitucional
+]
+at ([xshift=12.10cm,yshift=-5.31cm]current page.north west)
+{
+    {\fontsize{16.02}{18.0}\selectfont F}{\fontsize{13.02}{18.0}\selectfont ACULTAD DE }
+    {\fontsize{16.02}{18.0}\selectfont C}{\fontsize{13.02}{18.0}\selectfont IENCIAS}
+};
+
+
+% ============================================================
+% TRES LÍNEAS VERTICALES
+% ============================================================
+
+% Línea izquierda
+
+\draw[line width=0.60pt]
+([xshift=4.22cm,yshift=-6.27cm]current page.north west)
+--
+([xshift=4.22cm,yshift=-21.35cm]current page.north west);
+
+
+% Línea central
+
+\draw[line width=1.95pt]
+([xshift=4.78cm,yshift=-6.27cm]current page.north west)
+--
+([xshift=4.78cm,yshift=-21.35cm]current page.north west);
+
+
+% Línea derecha
+
+\draw[line width=0.60pt]
+([xshift=5.35cm,yshift=-6.27cm]current page.north west)
+--
+([xshift=5.35cm,yshift=-21.35cm]current page.north west);
+
+
+% ============================================================
+% MATERIA
+% ============================================================
+
+\node[
+    anchor=north,
+    align=center,
+    text width=11.5cm,
+    font=\fuentePortada\fontsize{13.0}{15.2}\selectfont
+]
+at ([xshift=12.10cm,yshift=-7.78cm]current page.north west)
+{
+    \materia
+};
+
+
+% ============================================================
+% TIPO DE PRÁCTICA
+% ============================================================
+
+\node[
+    anchor=north,
+    align=center,
+    font=\fuentePortada\fontsize{10.8}{12.8}\selectfont
+]
+at ([xshift=12.10cm,yshift=-8.60cm]current page.north west)
+{
+    \tipoPractica
+};
+
+
+% ============================================================
+% TÍTULO DE LA PRÁCTICA
+% ============================================================
+
+\node[
+    anchor=north,
+    align=center,
+    text width=11.8cm,
+    font=\fuentePortada\fontsize{20.8}{24.2}\selectfont
+]
+at ([xshift=12.10cm,yshift=-10.36cm]current page.north west)
+{
+    \practicaTitulo
+};
+
+
+% ============================================================
+% SUBTÍTULO DE LA PRÁCTICA
+% ============================================================
+
+\node[
+    anchor=north,
+    align=center,
+    text width=11.6cm,
+    font=\fuentePortada\fontsize{10.8}{12.8}\selectfont
+]
+at ([xshift=12.10cm,yshift=-12.42cm]current page.north west)
+{
+    \practicaSubtitulo
+};
+
+
+% ============================================================
+% PRESENTAN
+% ============================================================
+
+\node[
+    anchor=north,
+    align=center,
+    font=\fuentePortada\fontsize{11.3}{13.4}\selectfont
+]
+at ([xshift=12.10cm,yshift=-14.42cm]current page.north west)
+{
+    P\hspace{0.31cm}
+    R\hspace{0.31cm}
+    E\hspace{0.31cm}
+    S\hspace{0.31cm}
+    E\hspace{0.31cm}
+    N\hspace{0.31cm}
+    T\hspace{0.31cm}
+    A\hspace{0.31cm}
+    N
+    \hspace{0.31cm}:
+};
+
+
+% ============================================================
+% EQUIPO
+%
+% Alineado con las líneas horizontales superiores:
+% ancho = 10.05 cm.
+%
+% Separaciones:
+% encabezado -> primer integrante = 0.52 cm
+% entre integrantes = 0.44 cm
+% último integrante -> PROFESORA = 1.04 cm
+%
+% Los datos se editan al inicio del archivo:
+% \autorUno / \cuentaUno
+% \autorDos / \cuentaDos
+% \autorTres / \cuentaTres
+% ============================================================
+
+% Encabezados
+% Mismo tamaño y altura tipográfica que PROFESORA:
+\node[
+    anchor=north,
+    align=center,
+    font=\fuentePortada\mdseries\fontsize{10.8}{12.8}\selectfont
+]
+at ([xshift=12.025cm,yshift=-16.25cm]current page.north west)
+{
+    INTEGRANTES DEL EQUIPO:
+};
+
+
+% Integrante 1
+% La separación visual EQUIPO -> primer integrante es la misma
+% que PROFESORA -> nombre de profesora.
+\node[
+    anchor=north,
+    align=center,
+    text width=12.2cm,
+    font=\fuentePortada\mdseries\fontsize{9.8}{11.6}\selectfont
+]
+at ([xshift=12.025cm,yshift=-16.9cm]current page.north west)
+{
+    \autorUno
+};
+
+
+% Integrante 2
+\node[
+    anchor=north,
+    align=center,
+    text width=12.2cm,
+    font=\fuentePortada\mdseries\fontsize{9.8}{11.6}\selectfont
+]
+at ([xshift=12.025cm,yshift=-17.34cm]current page.north west)
+{
+    \autorDos
+};
+
+
+% Integrante 3
+\node[
+    anchor=north,
+    align=center,
+    text width=12.2cm,
+    font=\fuentePortada\mdseries\fontsize{9.8}{11.6}\selectfont
+]
+at ([xshift=12.025cm,yshift=-17.78cm]current page.north west)
+{
+    \autorTres
+};
+
+% ============================================================
+% PROFESORA
+% ============================================================
+
+\node[
+    anchor=north,
+    align=center,
+    font=\fuentePortada\fontsize{10.8}{12.8}\selectfont
+]
+at ([xshift=12.10cm,yshift=-18.82cm]current page.north west)
+{
+    PROFESORA:
+};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=12.2cm,
+    font=\fuentePortada\mdseries\fontsize{9.8}{11.6}\selectfont
+]
+at ([xshift=12.10cm,yshift=-19.32cm]current page.north west)
+{
+    \nombreProfesora
+};
+
+
+% ============================================================
+% AYUDANTE DE TEORÍA
+% ============================================================
+
+\node[
+    anchor=north,
+    align=center,
+    font=\fuentePortada\fontsize{10.0}{11.9}\selectfont
+]
+at ([xshift=12.10cm,yshift=-20.36cm]current page.north west)
+{
+    AYUDANTE DE TEORÍA:
+};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=12.2cm,
+    font=\fuentePortada\mdseries\fontsize{9.8}{11.6}\selectfont
+]
+at ([xshift=12.10cm,yshift=-20.88cm]current page.north west)
+{
+    \ayudanteTeoria
+};
+
+
+% ============================================================
+% AYUDANTE DE LABORATORIO
+% ============================================================
+
+\node[
+    anchor=north,
+    align=center,
+    font=\fuentePortada\fontsize{10.0}{11.9}\selectfont
+]
+at ([xshift=12.10cm,yshift=-21.92cm]current page.north west)
+{
+    AYUDANTE DE LABORATORIO:
+};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=12.2cm,
+    font=\fuentePortada\mdseries\fontsize{9.8}{11.6}\selectfont
+]
+at ([xshift=12.10cm,yshift=-22.44cm]current page.north west)
+{
+    \ayudanteLaboratorio
+};
+
+
+% ============================================================
+% ESCUDO FACULTAD DE CIENCIAS
+% ============================================================
+
+\IfFileExists{imagenes/ciencias.png}{
+
+    \node[
+        anchor=north west,
+        inner sep=0pt
+    ]
+    at ([xshift=3.49cm,yshift=-22.20cm]current page.north west)
+    {
+        \includegraphics[width=2.65cm]{imagenes/ciencias.png}
+    };
+
+    % ========================================================
+    % LEYENDA DEBAJO DEL ESCUDO DE CIENCIAS
+    %
+    % Se deja en dos comandos separados para que sea fácil cambiar,
+    % por ejemplo, a otra facultad.
+    % ========================================================
+
+    % Primera línea de la leyenda:
+    % centrada con el escudo y muy cerca de la imagen.
+    \node[
+        anchor=north,
+        align=center,
+        font=\fuentePortada\fontsize{4.05}{4.60}\selectfont
+    ]
+    at ([xshift=4.815cm,yshift=-25.12cm]current page.north west)
+    {
+        \leyendaEscudoLineaUno
+    };
+
+    % Segunda línea:
+    % separada de forma independiente para que UNAM quede
+    % pegado a FACULTAD DE CIENCIAS como en la referencia.
+    \node[
+        anchor=north,
+        align=center,
+        font=\fuentePortada\fontsize{3.70}{4.20}\selectfont
+    ]
+    at ([xshift=4.815cm,yshift=-25.33cm]current page.north west)
+    {
+        \leyendaEscudoLineaDos
+    };
+
+}{}
+
+
+% ============================================================
+% SEMESTRE
+% ============================================================
+
+\node[
+    anchor=north,
+    align=center,
+    font=\fuentePortada\mdseries\fontsize{11.0}{13.0}\selectfont
+]
+at ([xshift=12.10cm,yshift=-24.12cm]current page.north west)
+{
+    \semestreFinal
+};
+
+
+% ============================================================
+% LUGAR Y FECHA
+%
+% Se deja editable al inicio del archivo con \fechaPortada.
+% ============================================================
+
+\node[
+    anchor=north,
+    align=center,
+    font=\fuentePortada\mdseries\fontsize{10.4}{12.4}\selectfont
+]
+at ([xshift=12.10cm,yshift=-24.78cm]current page.north west)
+{
+    \fechaPortada
+};
+
+
+\end{tikzpicture}
+
+
+\end{titlepage}
+
+
+% ============================================================
+% REINICIO DE NUMERACIÓN
+% ============================================================
+
+\setcounter{page}{2}
+
+\hypersetup{pageanchor=true}
+
+\fi
+
+
+% ============================================================
+% NOMBRES EN ESPAÑOL
+% ============================================================
+
+\renewcommand{\contentsname}{Índice}
+
+\renewcommand{\tablename}{Tabla}
+
+\renewcommand{\figurename}{Figura}
+
+\renewcommand{\refname}{Bibliografía}
+
+
+% ============================================================
+% ÍNDICE
+% ============================================================
+
+\tableofcontents
+
+\clearpage
+
+#+END_EXPORT
+
+
+
+# ============================================================
+# ============================================================
+#
+#                         CONTENIDO
+#
+# ============================================================
+# ============================================================
+
+
+* Reglas del Sistema: Ticket de Estacionamiento
+
+Las reglas del Sistema de Ticket de Estacionamiento son:
+
+#+BEGIN_EXPORT latex
+\begingroup
+\setlength{\parskip}{0.85em}
+#+END_EXPORT
+
+*R1.* Los minutos deben ser un número entero mayor o igual que 0.
+
+*R2.* Los tipos de clientes válidos son:
+
+- *"normal"*
+- *"frecuente"*
+
+*R3.* Si el boleto está perdido, el costo final es de $300.00, sin importar los minutos ni el tipo de cliente.
+
+*R4.* Si los minutos son 0, el costo es $0.00
+
+*R5.* De 1 a 15 minutos, el costo es $0.00
+
+*R6.* De 16 a 60 minutos, el costo es de $20.00
+
+*R7.* Después de 60 minutos se cobran $20.00 por la primera hora y $15.00 por cada hora adicional *iniciada*.
+
+*R8.* Un cliente *"frecuente"* recibe un 10% de descuento sobre el costo calculado, excepto cuando perdió el boleto.
+
+*R9.* El costo nunca puede ser negativo.
+
+*R10.* Si los minutos son negativos, el sistema debe lanzar un error.
+
+*R11.* Si el tipo de cliente no es válido, el sistema debe lanzar un error.
+
+#+BEGIN_EXPORT latex
+\endgroup
+#+END_EXPORT
+
+* Construcción de la Tabla de casos
+
+** Planteamiento de pruebas
+
+Planteamos para el Sistema de Ticket de etacionamiento:
+
+- 3 casos normales;
+- 6 casos frontera;
+- 2 entradas inválidas;
+- 2 casos de interacción entre reglas;
+- 1 caso para números decimales en el resultado;
+- 1 caso adicional propuesto por el equipo (caso por verse).
+
+** Tabla de casos
+
+#+BEGIN_EXPORT latex
+
+% ============================================================
+% TABLA DE CASOS MULTIPÁGINA
+%
+% Esta tabla:
+% - continúa automáticamente en la siguiente página;
+% - repite el encabezado en las páginas siguientes;
+% - deja espacio horizontal y vertical dentro de las celdas;
+% - alinea solo Núm. al centro y el resto a la izquierda;
+% - ajusta el texto normal dentro de cada columna;
+% - nunca parte un caso entre dos páginas: cambia de página entre filas.
+%
+% IMPORTANTE:
+% longtable puede dividir la TABLA entre páginas, pero una sola
+% fila no debe contener una página completa de texto. Para los
+% casos de prueba normales (una o varias líneas por celda)
+% funciona correctamente.
+% ============================================================
+
+\begingroup
+
+\small
+
+% Espacio horizontal entre el texto y las líneas verticales.
+\setlength{\tabcolsep}{8pt}
+
+% Espacio vertical dentro de cada fila.
+\setlength{\extrarowheight}{4pt}
+\renewcommand{\arraystretch}{1.35}
+
+% Centrar la tabla.
+\setlength\LTleft{\fill}
+\setlength\LTright{\fill}
+
+\begin{longtable}{
+    |C{1.00cm}
+    |L{1.95cm}
+    |L{3.00cm}
+    |L{2.25cm}
+    |L{1.60cm}
+    |L{3.35cm}|
+}
+
+% ------------------------------------------------------------
+% ENCABEZADO DE LA PRIMERA PÁGINA
+% ------------------------------------------------------------
+
+\hline
+
+\textbf{Núm.} &
+\textbf{Caso} &
+\textbf{Entrada} &
+\textbf{Resultado esperado} &
+\textbf{Regla(s)} &
+\textbf{Justificación}
+\\
+
+\hline
+
+\endfirsthead
+
+
+% ------------------------------------------------------------
+% ENCABEZADO DE LAS PÁGINAS SIGUIENTES
+% ------------------------------------------------------------
+
+\hline
+
+\textbf{Núm.} &
+\textbf{Caso} &
+\textbf{Entrada} &
+\textbf{Resultado esperado} &
+\textbf{Regla(s)} &
+\textbf{Justificación}
+\\
+
+\hline
+
+\endhead
+
+
+% No agregamos texto extra al pie de cada fragmento.
+\endfoot
+
+% Tampoco agregamos una línea adicional al final:
+% cada caso ya termina con \hline.
+\endlastfoot
+
+
+% ------------------------------------------------------------
+% CASOS
+% ------------------------------------------------------------
+
+
+1 &
+Normal &
+- &
+- &
+- &
+-
+\\
+\hline
+
+2 &
+Normal &
+- &
+- &
+- &
+-
+\\
+\hline
+
+3 &
+Normal &
+- &
+- &
+- &
+-
+\\
+\hline
+
+4 &
+Frontera &
+- &
+- &
+- &
+-
+\\
+\hline
+
+5 &
+Frontera &
+- &
+- &
+- &
+-
+\\
+\hline
+
+6 &
+Frontera &
+- &
+- &
+- &
+-
+\\
+\hline
+
+7 &
+Frontera &
+- &
+- &
+- &
+-
+\\
+\hline
+
+8 &
+Frontera &
+- &
+- &
+- &
+-
+\\
+\hline
+
+9 &
+Frontera &
+- &
+- &
+- &
+-
+\\
+\hline
+
+10 &
+Entrada inválida &
+- &
+- &
+- &
+-
+\\
+\hline
+
+11 &
+Entrada inválida &
+- &
+- &
+- &
+-
+\\
+\hline
+
+12 &
+Interacción entre reglas &
+- &
+- &
+- &
+-
+\\
+\hline
+
+13 &
+Interacción entre reglas &
+- &
+- &
+- &
+-
+\\
+\hline
+
+14 &
+Números decimales en el resultado &
+- &
+- &
+- &
+-
+\\
+\hline
+
+15 &
+Por verse &
+- &
+- &
+- &
+-
+\\
+\hline
+
+
+% ------------------------------------------------------------
+% TÍTULO DE LA TABLA
+% ------------------------------------------------------------
+
+\caption{Casos establecidos para el Sistema: Ticket de estacionamiento.}
+\label{tab:casos-ticket}
+
+\end{longtable}
+
+\endgroup
+
+#+END_EXPORT
+
+* Evidencia de Ejecución
+
+** Caso 1
+
+D1
+
+#+BEGIN_EXPORT latex
+
+\begin{lstlisting}[style=practica]
+# Arrange
+minutos = 16
+
+# Act
+resultado = sistema.calcular_total(minutos, "normal", False)
+
+# Assert
+assert resultado == 20.0
+\end{lstlisting}
+
+#+END_EXPORT
+
+** Caso 2
+
+D2
+
+** Caso 3
+
+D3
+
+** Caso 4
+
+D4
+
+** Caso 5
+
+D5
+
+** Caso 6
+
+D6
+
+** Caso 7
+
+D7
+
+** Caso 8
+
+D8
+
+** Caso 9
+
+D9
+
+** Caso 10
+
+D10
+
+** Caso 11
+
+D11
+
+** Caso 12
+
+D12
+
+** Caso 13
+
+D13
+
+** Caso 14
+
+D14
+
+** Caso 15
+
+D15
+
+
+* Preguntas de análisis
+
+*1.* ¿Qué diferencia hay entre un caso normal y un caso frontera?
+
+R
+
+   
+*2.* ¿Cuál de sus pruebas considera más importante y por qué?
+
+R
+
+   
+*3.* ¿Encontró algún comportamiento de la implementación que no coincida con el modelo?
+
+R
+
+   
+*4.* ¿Una suite con 100 % de pruebas aprobadas demuestra que el programa es correcto? Explique.
+
+R
+
+   
+*5.* Si una IA generara automáticamente 50 pruebas, ¿qué tendría que revisar una persona antes de confiar en ellas?
+
+R

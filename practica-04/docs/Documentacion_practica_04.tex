@@ -1,0 +1,785 @@
+% Created 2026-10-17 Sat 14:12
+% Intended LaTeX compiler: pdflatex
+\documentclass[11pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\newcommand{\materia}{MODELADO Y PROGRAMACIÓN}
+\newcommand{\tipoPractica}{DOCUMENTACIÓN}
+\newcommand{\practicaTitulo}{PRÁCTICA 4:\\PRUEBAS UNITARIAS}
+\newcommand{\practicaSubtitulo}{DISEÑO DE PRUEBAS PARA UN SISTEMA}
+\newcommand{\autorUno}{Alan Gael Alvarez Hernández}
+\newcommand{\autorDos}{María Fernanda Miranda Sánchez}
+\newcommand{\autorTres}{Pedro Pablo Ruiz Hernández}
+\newcommand{\nombreProfesora}{Karla Adriana Esquivel Guzmán}
+\newcommand{\ayudanteTeoria}{Ossiel Aguilar Espíndola}
+\newcommand{\ayudanteLaboratorio}{Enoc Pineda Aguirre}
+\newcommand{\semestreFinal}{SEMESTRE 1-2027}
+\newcommand{\fechaPortada}{Ciudad de México, 20 de octubre de 2026}
+\newcommand{\leyendaEscudoLineaUno}{FACULTAD DE CIENCIAS}
+\newcommand{\leyendaEscudoLineaDos}{UNAM}
+\newcommand{\encabezadoIzquierdo}{Modelado y Programación}
+\newcommand{\encabezadoDerecho}{Práctica 5: TDD}
+\newif\ifportada
+\portadatrue
+\newif\ifbibliografia
+\bibliografiatrue
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[normalem]{ulem}
+\newcommand{\fuentePortada}{\fontfamily{ptm}\selectfont}
+\newcommand{\fuenteInstitucional}{\fontfamily{ptm}\fontseries{m}\selectfont}
+\AtBeginDocument{\renewcommand{\contentsname}{Índice}\renewcommand{\tablename}{Tabla}\renewcommand{\figurename}{Figura}\renewcommand{\refname}{Bibliografía}}
+\AtBeginDocument{\decimalpoint}
+\AtBeginDocument{\shorthandoff{"}}
+\usepackage[top=2.2cm,bottom=2.2cm,left=2.3cm,right=2.3cm]{geometry}
+\setlength{\parindent}{0cm}
+\setlength{\parskip}{0.65em}
+\emergencystretch=2em
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{ragged2e}
+\usepackage{makecell}
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash\sloppy\hspace{0pt}}p{#1}}
+\newcolumntype{C}[1]{>{\Centering\arraybackslash}p{#1}}
+\usepackage{enumitem}
+\setlist[itemize,1]{label=\textbullet}
+\setlist[itemize,2]{label=--}
+\setlist[itemize,3]{label=$\circ$}
+\setlist[enumerate,1]{label=\arabic*.}
+\setlist[enumerate,2]{label=\alph*)}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage{listings}
+\lstdefinestyle{practica}{
+basicstyle=\ttfamily\small,
+backgroundcolor=\color{gray!7},
+frame=single,
+rulecolor=\color{black},
+framerule=0.45pt,
+framesep=5pt,
+xleftmargin=0pt,
+xrightmargin=0pt,
+aboveskip=0.4em,
+belowskip=0.8em,
+showstringspaces=false,
+columns=fullflexible,
+keepspaces=true,
+breaklines=true,
+literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1 {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1 {ñ}{{\~n}}1 {Ñ}{{\~N}}1
+}
+\usepackage{titlesec}
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{2}
+\titleformat{\section}{\Large\bfseries}{}{0pt}{}
+\titleformat{\subsection}{\large\bfseries}{}{0pt}{}
+\titlespacing*{\section}{0pt}{1.5em}{0.8em}
+\titlespacing*{\subsection}{0pt}{1.2em}{0.5em}
+\usepackage{fancyhdr}
+\setlength{\headheight}{15pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\encabezadoIzquierdo}
+\fancyhead[R]{\encabezadoDerecho}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+\hypersetup{colorlinks=true,linkcolor=black,urlcolor=blue,citecolor=black}
+\author{Nombre del alumno}
+\date{\today}
+\title{Reporte}
+\hypersetup{
+ pdfauthor={Nombre del alumno},
+ pdftitle={Reporte},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 30.1 (Org mode 9.7.11)}, 
+ pdflang={Spanish}}
+\begin{document}
+
+
+\ifportada
+
+\hypersetup{pageanchor=false}
+
+\begin{titlepage}
+
+\thispagestyle{empty}
+
+
+\begin{tikzpicture}[remember picture,overlay]
+
+
+% ============================================================
+% ESCUDO UNAM
+% ============================================================
+
+\IfFileExists{imagenes/unam.png}{
+
+    \node[
+        anchor=north west,
+        inner sep=0pt
+    ]
+    at ([xshift=2.92cm,yshift=-2.17cm]current page.north west)
+    {
+        \includegraphics[width=3.68cm]{imagenes/unam.png}
+    };
+
+}{}
+
+
+% ============================================================
+% UNIVERSIDAD NACIONAL AUTÓNOMA DE MÉXICO
+%
+% La referencia usa Times con iniciales manualmente más grandes.
+% Iniciales: ~16 pt.
+% Resto: ~13 pt.
+% ============================================================
+
+\node[
+    anchor=north,
+    align=center,
+    font=\fuenteInstitucional
+]
+at ([xshift=12.10cm,yshift=-2.51cm]current page.north west)
+{
+    {\fontsize{16.02}{18.4}\selectfont U}{\fontsize{13.02}{18.4}\selectfont NIVERSIDAD }
+    {\fontsize{16.02}{18.4}\selectfont N}{\fontsize{13.02}{18.4}\selectfont ACIONAL }
+    {\fontsize{16.02}{18.4}\selectfont A}{\fontsize{13.02}{18.4}\selectfont UTÓNOMA}\\[0.12cm]
+    {\fontsize{13.02}{18.4}\selectfont DE }
+    {\fontsize{16.02}{18.4}\selectfont M}{\fontsize{13.02}{18.4}\selectfont ÉXICO}
+};
+
+
+% ============================================================
+% DOBLE LÍNEA HORIZONTAL
+% ============================================================
+
+% Línea principal
+
+\draw[line width=1.90pt]
+([xshift=7.00cm,yshift=-3.98cm]current page.north west)
+--
+([xshift=17.05cm,yshift=-3.98cm]current page.north west);
+
+
+% Línea secundaria
+
+\draw[line width=0.60pt]
+([xshift=7.00cm,yshift=-4.50cm]current page.north west)
+--
+([xshift=17.05cm,yshift=-4.50cm]current page.north west);
+
+
+% ============================================================
+% FACULTAD DE CIENCIAS
+%
+% Misma construcción tipográfica de la referencia:
+% iniciales grandes + resto ligeramente menor.
+% ============================================================
+
+\node[
+    anchor=north,
+    align=center,
+    font=\fuenteInstitucional
+]
+at ([xshift=12.10cm,yshift=-5.31cm]current page.north west)
+{
+    {\fontsize{16.02}{18.0}\selectfont F}{\fontsize{13.02}{18.0}\selectfont ACULTAD DE }
+    {\fontsize{16.02}{18.0}\selectfont C}{\fontsize{13.02}{18.0}\selectfont IENCIAS}
+};
+
+
+% ============================================================
+% TRES LÍNEAS VERTICALES
+% ============================================================
+
+% Línea izquierda
+
+\draw[line width=0.60pt]
+([xshift=4.22cm,yshift=-6.27cm]current page.north west)
+--
+([xshift=4.22cm,yshift=-21.35cm]current page.north west);
+
+
+% Línea central
+
+\draw[line width=1.95pt]
+([xshift=4.78cm,yshift=-6.27cm]current page.north west)
+--
+([xshift=4.78cm,yshift=-21.35cm]current page.north west);
+
+
+% Línea derecha
+
+\draw[line width=0.60pt]
+([xshift=5.35cm,yshift=-6.27cm]current page.north west)
+--
+([xshift=5.35cm,yshift=-21.35cm]current page.north west);
+
+
+% ============================================================
+% MATERIA
+% ============================================================
+
+\node[
+    anchor=north,
+    align=center,
+    text width=11.5cm,
+    font=\fuentePortada\fontsize{13.0}{15.2}\selectfont
+]
+at ([xshift=12.10cm,yshift=-7.78cm]current page.north west)
+{
+    \materia
+};
+
+
+% ============================================================
+% TIPO DE PRÁCTICA
+% ============================================================
+
+\node[
+    anchor=north,
+    align=center,
+    font=\fuentePortada\fontsize{10.8}{12.8}\selectfont
+]
+at ([xshift=12.10cm,yshift=-8.60cm]current page.north west)
+{
+    \tipoPractica
+};
+
+
+% ============================================================
+% TÍTULO DE LA PRÁCTICA
+% ============================================================
+
+\node[
+    anchor=north,
+    align=center,
+    text width=11.8cm,
+    font=\fuentePortada\fontsize{20.8}{24.2}\selectfont
+]
+at ([xshift=12.10cm,yshift=-10.36cm]current page.north west)
+{
+    \practicaTitulo
+};
+
+
+% ============================================================
+% SUBTÍTULO DE LA PRÁCTICA
+% ============================================================
+
+\node[
+    anchor=north,
+    align=center,
+    text width=11.6cm,
+    font=\fuentePortada\fontsize{10.8}{12.8}\selectfont
+]
+at ([xshift=12.10cm,yshift=-12.42cm]current page.north west)
+{
+    \practicaSubtitulo
+};
+
+
+% ============================================================
+% PRESENTAN
+% ============================================================
+
+\node[
+    anchor=north,
+    align=center,
+    font=\fuentePortada\fontsize{11.3}{13.4}\selectfont
+]
+at ([xshift=12.10cm,yshift=-14.42cm]current page.north west)
+{
+    P\hspace{0.31cm}
+    R\hspace{0.31cm}
+    E\hspace{0.31cm}
+    S\hspace{0.31cm}
+    E\hspace{0.31cm}
+    N\hspace{0.31cm}
+    T\hspace{0.31cm}
+    A\hspace{0.31cm}
+    N
+    \hspace{0.31cm}:
+};
+
+
+% ============================================================
+% EQUIPO
+%
+% Alineado con las líneas horizontales superiores:
+% ancho = 10.05 cm.
+%
+% Separaciones:
+% encabezado -> primer integrante = 0.52 cm
+% entre integrantes = 0.44 cm
+% último integrante -> PROFESORA = 1.04 cm
+%
+% Los datos se editan al inicio del archivo:
+% \autorUno / \cuentaUno
+% \autorDos / \cuentaDos
+% \autorTres / \cuentaTres
+% ============================================================
+
+% Encabezados
+% Mismo tamaño y altura tipográfica que PROFESORA:
+\node[
+    anchor=north,
+    align=center,
+    font=\fuentePortada\mdseries\fontsize{10.8}{12.8}\selectfont
+]
+at ([xshift=12.025cm,yshift=-16.25cm]current page.north west)
+{
+    INTEGRANTES DEL EQUIPO:
+};
+
+
+% Integrante 1
+% La separación visual EQUIPO -> primer integrante es la misma
+% que PROFESORA -> nombre de profesora.
+\node[
+    anchor=north,
+    align=center,
+    text width=12.2cm,
+    font=\fuentePortada\mdseries\fontsize{9.8}{11.6}\selectfont
+]
+at ([xshift=12.025cm,yshift=-16.9cm]current page.north west)
+{
+    \autorUno
+};
+
+
+% Integrante 2
+\node[
+    anchor=north,
+    align=center,
+    text width=12.2cm,
+    font=\fuentePortada\mdseries\fontsize{9.8}{11.6}\selectfont
+]
+at ([xshift=12.025cm,yshift=-17.34cm]current page.north west)
+{
+    \autorDos
+};
+
+
+% Integrante 3
+\node[
+    anchor=north,
+    align=center,
+    text width=12.2cm,
+    font=\fuentePortada\mdseries\fontsize{9.8}{11.6}\selectfont
+]
+at ([xshift=12.025cm,yshift=-17.78cm]current page.north west)
+{
+    \autorTres
+};
+
+% ============================================================
+% PROFESORA
+% ============================================================
+
+\node[
+    anchor=north,
+    align=center,
+    font=\fuentePortada\fontsize{10.8}{12.8}\selectfont
+]
+at ([xshift=12.10cm,yshift=-18.82cm]current page.north west)
+{
+    PROFESORA:
+};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=12.2cm,
+    font=\fuentePortada\mdseries\fontsize{9.8}{11.6}\selectfont
+]
+at ([xshift=12.10cm,yshift=-19.32cm]current page.north west)
+{
+    \nombreProfesora
+};
+
+
+% ============================================================
+% AYUDANTE DE TEORÍA
+% ============================================================
+
+\node[
+    anchor=north,
+    align=center,
+    font=\fuentePortada\fontsize{10.0}{11.9}\selectfont
+]
+at ([xshift=12.10cm,yshift=-20.36cm]current page.north west)
+{
+    AYUDANTE DE TEORÍA:
+};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=12.2cm,
+    font=\fuentePortada\mdseries\fontsize{9.8}{11.6}\selectfont
+]
+at ([xshift=12.10cm,yshift=-20.88cm]current page.north west)
+{
+    \ayudanteTeoria
+};
+
+
+% ============================================================
+% AYUDANTE DE LABORATORIO
+% ============================================================
+
+\node[
+    anchor=north,
+    align=center,
+    font=\fuentePortada\fontsize{10.0}{11.9}\selectfont
+]
+at ([xshift=12.10cm,yshift=-21.92cm]current page.north west)
+{
+    AYUDANTE DE LABORATORIO:
+};
+
+\node[
+    anchor=north,
+    align=center,
+    text width=12.2cm,
+    font=\fuentePortada\mdseries\fontsize{9.8}{11.6}\selectfont
+]
+at ([xshift=12.10cm,yshift=-22.44cm]current page.north west)
+{
+    \ayudanteLaboratorio
+};
+
+
+% ============================================================
+% ESCUDO FACULTAD DE CIENCIAS
+% ============================================================
+
+\IfFileExists{imagenes/ciencias.png}{
+
+    \node[
+        anchor=north west,
+        inner sep=0pt
+    ]
+    at ([xshift=3.49cm,yshift=-22.20cm]current page.north west)
+    {
+        \includegraphics[width=2.65cm]{imagenes/ciencias.png}
+    };
+
+    % ========================================================
+    % LEYENDA DEBAJO DEL ESCUDO DE CIENCIAS
+    %
+    % Se deja en dos comandos separados para que sea fácil cambiar,
+    % por ejemplo, a otra facultad.
+    % ========================================================
+
+    % Primera línea de la leyenda:
+    % centrada con el escudo y muy cerca de la imagen.
+    \node[
+        anchor=north,
+        align=center,
+        font=\fuentePortada\fontsize{4.05}{4.60}\selectfont
+    ]
+    at ([xshift=4.815cm,yshift=-25.12cm]current page.north west)
+    {
+        \leyendaEscudoLineaUno
+    };
+
+    % Segunda línea:
+    % separada de forma independiente para que UNAM quede
+    % pegado a FACULTAD DE CIENCIAS como en la referencia.
+    \node[
+        anchor=north,
+        align=center,
+        font=\fuentePortada\fontsize{3.70}{4.20}\selectfont
+    ]
+    at ([xshift=4.815cm,yshift=-25.33cm]current page.north west)
+    {
+        \leyendaEscudoLineaDos
+    };
+
+}{}
+
+
+% ============================================================
+% SEMESTRE
+% ============================================================
+
+\node[
+    anchor=north,
+    align=center,
+    font=\fuentePortada\mdseries\fontsize{11.0}{13.0}\selectfont
+]
+at ([xshift=12.10cm,yshift=-24.12cm]current page.north west)
+{
+    \semestreFinal
+};
+
+
+% ============================================================
+% LUGAR Y FECHA
+%
+% Se deja editable al inicio del archivo con \fechaPortada.
+% ============================================================
+
+\node[
+    anchor=north,
+    align=center,
+    font=\fuentePortada\mdseries\fontsize{10.4}{12.4}\selectfont
+]
+at ([xshift=12.10cm,yshift=-24.78cm]current page.north west)
+{
+    \fechaPortada
+};
+
+
+\end{tikzpicture}
+
+
+\end{titlepage}
+
+
+% ============================================================
+% REINICIO DE NUMERACIÓN
+% ============================================================
+
+\setcounter{page}{2}
+
+\hypersetup{pageanchor=true}
+
+\fi
+
+
+% ============================================================
+% NOMBRES EN ESPAÑOL
+% ============================================================
+
+\renewcommand{\contentsname}{Índice}
+
+\renewcommand{\tablename}{Tabla}
+
+\renewcommand{\figurename}{Figura}
+
+\renewcommand{\refname}{Bibliografía}
+
+
+% ============================================================
+% ÍNDICE
+% ============================================================
+
+\tableofcontents
+
+\clearpage
+\section{Introducción}
+\label{sec:org3b51c88}
+
+\subsection{Pruebas Unitarias}
+\label{sec:org3063f07}
+
+Una \textbf{Prueba Unitaria} verifica un comportamiento pequeño del sistema: una función, un método o una regla concreta. Para el desarrollo de las mismas se recomienda seguir el siguiente flujo:
+
+
+\begin{figure}[H]
+
+\centering
+
+{\large
+\textbf{Problema}
+\,$\longrightarrow$\,
+\textbf{Modelo}
+\,$\longrightarrow$\,
+\textbf{Casos}
+\,$\longrightarrow$\,
+\textbf{Pruebas}
+\,$\longleftrightarrow$\,
+\textbf{Implementación}
+}
+
+\caption{Flujo general del diseño de pruebas.}
+
+\end{figure}
+
+\textbf{Nota:} El resultado esperado se decide antes de ejecutar el código. No se copia lo que devuelve la implementación.
+
+Los casos de prueba definidos se clasifican como:
+
+\begin{itemize}
+\item \textbf{Normal:} Un valor dentro de la regla.
+\item \textbf{Frontera:} Justo antes, en y después de un límite.
+\item \textbf{Inválido:} Un valor que el sistema debe rechazar.
+\item \textbf{Excepción:} Un error esperado.
+\item \textbf{Cruce de reglas:} Cuando dos condiciones se cumplen al mismo tiempo.
+\end{itemize}
+
+\textbf{Ejemplo:}
+
+Si hasta 15 minutos es gratis, y desde 16 se cobra, probar 14, 15, 16 y 17.
+\subsection{Estructura de una prueba Arrange - Act - Asseert}
+\label{sec:org1e57857}
+
+\begin{itemize}
+\item \textbf{Arrange:} Preparación de los datos, objetos, o estado inicial.
+\item \textbf{Act}: Ejecución de la función o método que se desea probar.
+\item \textbf{Assert:} Comprobación de que lo obtenido sea lo esperado.
+\end{itemize}
+
+\textbf{Ejemplo:}
+
+
+\begin{lstlisting}[style=practica]
+# Arrange
+minutos = 16
+
+# Act
+resultado = sistema.calcular_total(minutos, "normal", False)
+
+# Assert
+assert resultado == 20.0
+\end{lstlisting}
+
+\textbf{Nota:} Una buena prueba responde tres preguntas: \textbf{¿qué regla comprueba?, ¿qué entrada utiliza? y ¿qué resultado debería producir?}
+\section{Objetivo}
+\label{sec:orgd4851fc}
+
+El alumno diseñará un conjunto de pruebas unitarias para verificar el comportamiento de un sistema a partir de su especificación, no únicamente a partir de lo que hace el código.
+
+Al finalizar la práctica, el alumno deberá ser capaz de:
+
+\begin{itemize}
+\item identificar casos normales;
+\item identificar casos frontera;
+\item detectar entradas inválidas;
+\item verificar errores y excepciones;
+\item escribir pruebas usando el patrón Arrange–Act–Assert;
+\item justificar de qué regla del modelo proviene cada caso de prueba;
+\item ejecutar una suite de pruebas y analizar sus resultados;
+\item diferenciar entre “la prueba pasó” y “el programa es correcto”.
+\end{itemize}
+\section{Desarrollo de la práctica}
+\label{sec:orgdcb2f5e}
+
+\subsection{Durante la práctica}
+\label{sec:org05a9391}
+
+\begin{enumerate}
+\item Lea primero el modelo.
+\item Diseñe los casos sin ejecutar todavía el sistema.
+\item Escriba el resultado esperado de cada caso.
+\item Implemente las pruebas.
+\item Ejecute la suite.
+\item Si alguna prueba falla, no cambie inmediatamente la prueba.
+\item Compare:
+\end{enumerate}
+
+\begin{center}
+
+
+\textbf{modelo esperado} vs. \textbf{resultado obtenido}
+\end{center}
+
+\begin{enumerate}
+\item Determine si el problema esta en:
+\begin{enumerate}
+\item la implementación;
+\item la prueba;
+\item la interpretación del modelo.
+\end{enumerate}
+\end{enumerate}
+\subsection{Plantemaiento del Problema}
+\label{sec:orge387a45}
+
+Probar el sistema de Ticket de estacionamiento.
+
+El sistema recibe:
+
+\begin{itemize}
+\item minutos de permanencia;
+\item tipo de cliente;
+\item si perdió el boleto;
+\end{itemize}
+\subsubsection{Modelo del Sistema: Ticket de estacionamiento}
+\label{sec:orgf85885d}
+
+Comportamiento esperado:
+
+\textbf{R1.} Los minutos deben ser un número entero mayor o igual que 0.
+
+\textbf{R2.} Los tipos de clientes válidos son:
+
+\begin{itemize}
+\item \textbf{"normal"}
+\item \textbf{"frecuente"}
+\end{itemize}
+
+\textbf{R3.} Si el boleto está perdido, el costo final es de \$300.00, sin importar los minutos ni el tipo de cliente.
+
+\textbf{R4.} Si los minutos son 0, el costo es \$0.00
+
+\textbf{R5.} De 1 a 15 minutos, el costo es \$0.00
+
+\textbf{R6.} De 16 a 60 minutos, el costo es de \$20.00
+
+\textbf{R7.} Después de 60 minutos se cobran \$20.00 por la primera hora y \$15.00 por cada hora adicional \textbf{iniciada}.
+
+\textbf{R8.} Un cliente \textbf{"frecuente"} recibe un 10\% de descuento sobre el costo calculado, excepto cuando perdió el boleto.
+
+\textbf{R9.} El costo nunca puede ser negativo.
+
+\textbf{R10.} Si los minutos son negativos, el sistema debe lanzar un error.
+
+\textbf{R11.} Si el tipo de cliente no es válido, el sistema debe lanzar un error.
+\subsubsection{Ejemplos del Sistema: Ticket de estacionamiento}
+\label{sec:orgdbf9ccc}
+
+Ejemplos de interpretación:
+
+\begin{itemize}
+\item 15 minutos, \textbf{cliente normal} → \$0.00
+\item 16 minutos, \textbf{cliente normal} → \$20.00
+\item 60 minutos, \textbf{cliente normal} → \$20.00
+\item 61 minutos, \textbf{cliente normal} → \$35.00
+\item 120 minutos, \textbf{cliente normal} → \$35.00
+\item 121 minutos, \textbf{cliente normal} → \$50.00
+\item 61 minutos, \textbf{cliente frecuente} → \$20.00
+\item \emph{boleto perdido} → \$300.00
+\end{itemize}
+\subsection{Planteamiento de Pruebas}
+\label{sec:orga091683}
+
+\subsection{Implementación en Python}
+\label{sec:orga70e9c2}
+\section{Checklist}
+\label{sec:org65f5aad}
+
+Ejemplo:
+
+\begin{itemize}
+\item[{$\boxtimes$}] Actividad terminada
+\item[{$\boxminus$}] Actividad parcialmente realizada
+\item[{$\square$}] Una actividad
+\end{itemize}
+
+Actividades:
+
+\begin{itemize}
+\item[{$\boxminus$}] Documentación.
+\item[{$\square$}] Planteamiento de Pruebas.
+\item[{$\square$}] Implementación de Pruebas.
+\item[{$\square$}] Evidencia de Ejecución.
+\item[{$\square$}] Preguntas de Análisis.
+\item[{$\square$}] Organización de Archivos.
+\item[{$\square$}] README.md.
+\end{itemize}
+\end{document}
