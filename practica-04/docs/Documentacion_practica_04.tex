@@ -1,4 +1,4 @@
-% Created 2026-10-17 Sat 14:12
+% Created 2026-10-17 Sat 14:39
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt,letterpaper]{article}
 \usepackage[utf8]{inputenc}
@@ -9,7 +9,7 @@
 \usepackage{amssymb}
 \usepackage{hyperref}
 \newcommand{\materia}{MODELADO Y PROGRAMACIÓN}
-\newcommand{\tipoPractica}{DOCUMENTACIÓN}
+\newcommand{\tipoPractica}{CASOS PRUEBA}
 \newcommand{\practicaTitulo}{PRÁCTICA 4:\\PRUEBAS UNITARIAS}
 \newcommand{\practicaSubtitulo}{DISEÑO DE PRUEBAS PARA UN SISTEMA}
 \newcommand{\autorUno}{Alan Gael Alvarez Hernández}
@@ -23,7 +23,7 @@
 \newcommand{\leyendaEscudoLineaUno}{FACULTAD DE CIENCIAS}
 \newcommand{\leyendaEscudoLineaDos}{UNAM}
 \newcommand{\encabezadoIzquierdo}{Modelado y Programación}
-\newcommand{\encabezadoDerecho}{Práctica 5: TDD}
+\newcommand{\encabezadoDerecho}{Práctica 4: Pruebas unitarias}
 \newif\ifportada
 \portadatrue
 \newif\ifbibliografia
@@ -42,15 +42,17 @@
 \setlength{\parindent}{0cm}
 \setlength{\parskip}{0.65em}
 \emergencystretch=2em
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{needspace}
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{caption}
+\usepackage{booktabs}
 \usepackage{array}
+\usepackage{tabularx}
 \usepackage{longtable}
-\usepackage{ragged2e}
-\usepackage{makecell}
-\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash\sloppy\hspace{0pt}}p{#1}}
-\newcolumntype{C}[1]{>{\Centering\arraybackslash}p{#1}}
 \usepackage{enumitem}
 \setlist[itemize,1]{label=\textbullet}
 \setlist[itemize,2]{label=--}
@@ -75,8 +77,7 @@ belowskip=0.8em,
 showstringspaces=false,
 columns=fullflexible,
 keepspaces=true,
-breaklines=true,
-literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1 {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1 {ñ}{{\~n}}1 {Ñ}{{\~N}}1
+breaklines=true
 }
 \usepackage{titlesec}
 \setcounter{secnumdepth}{2}
@@ -385,6 +386,7 @@ at ([xshift=12.025cm,yshift=-17.78cm]current page.north west)
     \autorTres
 };
 
+
 % ============================================================
 % PROFESORA
 % ============================================================
@@ -555,7 +557,7 @@ at ([xshift=12.10cm,yshift=-24.78cm]current page.north west)
 % REINICIO DE NUMERACIÓN
 % ============================================================
 
-\setcounter{page}{2}
+\setcounter{page}{1}
 
 \hypersetup{pageanchor=true}
 
@@ -582,11 +584,18 @@ at ([xshift=12.10cm,yshift=-24.78cm]current page.north west)
 \tableofcontents
 
 \clearpage
-\section{Introducción}
-\label{sec:org3b51c88}
 
+
+
+
+\Needspace{7\baselineskip}
+\section{Introducción}
+\label{sec:org7b3b0af}
+
+
+\Needspace{6\baselineskip}
 \subsection{Pruebas Unitarias}
-\label{sec:org3063f07}
+\label{sec:org5355741}
 
 Una \textbf{Prueba Unitaria} verifica un comportamiento pequeño del sistema: una función, un método o una regla concreta. Para el desarrollo de las mismas se recomienda seguir el siguiente flujo:
 
@@ -626,8 +635,11 @@ Los casos de prueba definidos se clasifican como:
 \textbf{Ejemplo:}
 
 Si hasta 15 minutos es gratis, y desde 16 se cobra, probar 14, 15, 16 y 17.
-\subsection{Estructura de una prueba Arrange - Act - Asseert}
-\label{sec:org1e57857}
+
+
+\Needspace{6\baselineskip}
+\subsection{Estructura de una prueba Arrange - Act - Assert}
+\label{sec:org27de0fb}
 
 \begin{itemize}
 \item \textbf{Arrange:} Preparación de los datos, objetos, o estado inicial.
@@ -650,8 +662,11 @@ assert resultado == 20.0
 \end{lstlisting}
 
 \textbf{Nota:} Una buena prueba responde tres preguntas: \textbf{¿qué regla comprueba?, ¿qué entrada utiliza? y ¿qué resultado debería producir?}
+
+
+\Needspace{7\baselineskip}
 \section{Objetivo}
-\label{sec:orgd4851fc}
+\label{sec:org4a7f50a}
 
 El alumno diseñará un conjunto de pruebas unitarias para verificar el comportamiento de un sistema a partir de su especificación, no únicamente a partir de lo que hace el código.
 
@@ -667,11 +682,16 @@ Al finalizar la práctica, el alumno deberá ser capaz de:
 \item ejecutar una suite de pruebas y analizar sus resultados;
 \item diferenciar entre “la prueba pasó” y “el programa es correcto”.
 \end{itemize}
-\section{Desarrollo de la práctica}
-\label{sec:orgdcb2f5e}
 
+
+\Needspace{7\baselineskip}
+\section{Desarrollo de la práctica}
+\label{sec:orgce26f84}
+
+
+\Needspace{6\baselineskip}
 \subsection{Durante la práctica}
-\label{sec:org05a9391}
+\label{sec:org6463ee9}
 
 \begin{enumerate}
 \item Lea primero el modelo.
@@ -690,27 +710,33 @@ Al finalizar la práctica, el alumno deberá ser capaz de:
 \end{center}
 
 \begin{enumerate}
-\item Determine si el problema esta en:
+\item Determine si el problema está en:
 \begin{enumerate}
 \item la implementación;
 \item la prueba;
 \item la interpretación del modelo.
 \end{enumerate}
 \end{enumerate}
-\subsection{Plantemaiento del Problema}
-\label{sec:orge387a45}
 
-Probar el sistema de Ticket de estacionamiento.
+
+\Needspace{6\baselineskip}
+\subsection{Planteamiento del Problema}
+\label{sec:org488096a}
+
+Probar el Sistema de Ticket de Estacionamiento.
 
 El sistema recibe:
 
 \begin{itemize}
 \item minutos de permanencia;
 \item tipo de cliente;
-\item si perdió el boleto;
+\item si perdió el boleto.
 \end{itemize}
-\subsubsection{Modelo del Sistema: Ticket de estacionamiento}
-\label{sec:orgf85885d}
+
+
+\Needspace{6\baselineskip}
+\subsubsection{Modelo del Sistema: Ticket de Estacionamiento}
+\label{sec:orge447743}
 
 Comportamiento esperado:
 
@@ -740,8 +766,11 @@ Comportamiento esperado:
 \textbf{R10.} Si los minutos son negativos, el sistema debe lanzar un error.
 
 \textbf{R11.} Si el tipo de cliente no es válido, el sistema debe lanzar un error.
-\subsubsection{Ejemplos del Sistema: Ticket de estacionamiento}
-\label{sec:orgdbf9ccc}
+
+
+\Needspace{6\baselineskip}
+\subsubsection{Ejemplos del Sistema: Ticket de Estacionamiento}
+\label{sec:org6510209}
 
 Ejemplos de interpretación:
 
@@ -752,16 +781,574 @@ Ejemplos de interpretación:
 \item 61 minutos, \textbf{cliente normal} → \$35.00
 \item 120 minutos, \textbf{cliente normal} → \$35.00
 \item 121 minutos, \textbf{cliente normal} → \$50.00
-\item 61 minutos, \textbf{cliente frecuente} → \$20.00
+\item 61 minutos, \textbf{cliente frecuente} → \$31.50
 \item \emph{boleto perdido} → \$300.00
 \end{itemize}
-\subsection{Planteamiento de Pruebas}
-\label{sec:orga091683}
 
+
+\Needspace{6\baselineskip}
+\subsection{Planteamiento de Pruebas}
+\label{sec:org5ea225b}
+
+
+\Needspace{8\baselineskip}
+\subsubsection{Caso 1:}
+\label{sec:orgd296a96}
+
+\textbf{Datos:}
+
+(10 minutos, "normal", con boleto)
+
+\textbf{Caso Normal:}
+
+Caso típico para un cliente "normal".
+
+\textbf{Resultado Esperado:}
+
+Entre 1 y 15 minutos, el costo para un cliente "normal" con boleto es de \$0.00
+
+
+\Needspace{8\baselineskip}
+\subsubsection{Caso 2:}
+\label{sec:org58560d5}
+
+\textbf{Datos:}
+
+(40 minutos, "normal", con boleto)
+
+\textbf{Caso Normal:}
+
+Caso típico para un cliente "normal".
+
+\textbf{Resultado Esperado:}
+
+Entre 16 y 60 minutos, el costo para un cliente "normal" con boleto es de \$20.00
+
+
+\Needspace{8\baselineskip}
+\subsubsection{Caso 3:}
+\label{sec:orgab2c8a7}
+
+\textbf{Datos:}
+
+(1250 minutos, "normal", con boleto)
+
+\textbf{Caso Normal:}
+
+Caso típico para un cliente "normal".
+
+\textbf{Resultado Esperado:}
+
+Para un cliente "normal" con boleto, el costo de 1250 minutos es:
+
+El costo de la primera hora es \$20.00;
+
+\[
+   1250 - 60 = 1190
+\]
+
+
+\Needspace{4\baselineskip}
+
+Costo Total:
+
+\[
+   \text{\$}20.00
+\]
+
+Las horas adicionales completas valen \$15.00 cada una;
+
+\[
+   1190 \div 60 = 19.83333333333
+\]
+
+\[
+   19 \cdot 15 = 285
+\]
+
+
+\Needspace{4\baselineskip}
+
+Costo Total:
+
+\[
+   \text{\$}20.00 + \text{\$}285.00 = \text{\$}305.00
+\]
+
+Las horas adicionales iniciadas valen \$15.00, dado que la división no fue exacta, se inició otra hora;
+
+
+\Needspace{4\baselineskip}
+
+Costo Total:
+
+\[
+   \text{\$}305.00 + \text{\$}15.00 = \text{\$}320.00
+\]
+
+
+\Needspace{8\baselineskip}
+\subsubsection{Caso 4:}
+\label{sec:orgaf6fe6d}
+
+\textbf{Datos:}
+
+(15 minutos, "normal", con boleto)
+
+\textbf{Caso Frontera:}
+
+Se presenta un cambio en el Costo Total entre 15 y 16 minutos.
+
+\textbf{Resultado Esperado:}
+
+Entre 1 y 15 minutos, el costo para un cliente "normal" con boleto es de \$0.00
+
+
+\Needspace{8\baselineskip}
+\subsubsection{Caso 5:}
+\label{sec:org7d7d56e}
+
+\textbf{Datos:}
+
+(16 minutos, "normal", con boleto)
+
+\textbf{Caso Frontera:}
+
+Se presenta un cambio en el Costo Total entre 15 y 16 minutos.
+
+\textbf{Resultado Esperado:}
+
+Entre 16 y 60 minutos, el costo para un cliente "normal" con boleto es de \$20.00
+
+
+\Needspace{8\baselineskip}
+\subsubsection{Caso 6:}
+\label{sec:orgb30bfde}
+
+\textbf{Datos:}
+
+(60 minutos, "normal", con boleto)
+
+\textbf{Caso Frontera:}
+
+Se presenta un cambio en el Costo Total entre 60 y 61 minutos.
+
+\textbf{Resultado Esperado:}
+
+Entre 16 y 60 minutos, el costo para un cliente "normal" con boleto es de \$20.00
+
+
+\Needspace{8\baselineskip}
+\subsubsection{Caso 7:}
+\label{sec:org4bf85d3}
+
+\textbf{Datos:}
+
+(61 minutos, "normal", con boleto)
+
+\textbf{Caso Frontera:}
+
+Se presenta un cambio en el Costo Total entre 60 y 61 minutos.
+
+\textbf{Resultado Esperado:}
+
+Para un cliente "normal" con boleto, el costo de 61 minutos es:
+
+El costo de la primera hora es \$20.00;
+
+\[
+   61 - 60 = 1
+\]
+
+
+\Needspace{4\baselineskip}
+
+Costo Total:
+
+\[
+   \text{\$}20.00
+\]
+
+Las horas adicionales completas valen \$15.00 cada una;
+
+\[
+   1 \div 60 = 0.0166666667
+\]
+
+\[
+   0 \cdot 15 = 0
+\]
+
+
+\Needspace{4\baselineskip}
+
+Costo Total:
+
+\[
+   \text{\$}20.00 + \text{\$}0.00 = \text{\$}20.00
+\]
+
+Las horas adicionales iniciadas valen \$15.00, dado que la división no fue exacta, se inició otra hora;
+
+
+\Needspace{4\baselineskip}
+
+Costo Total:
+
+\[
+   \text{\$}20.00 + \text{\$}15.00 = \text{\$}35.00
+\]
+
+
+\Needspace{8\baselineskip}
+\subsubsection{Caso 8:}
+\label{sec:orgf697a0f}
+
+\textbf{Datos:}
+
+(120 minutos, "normal", con boleto)
+
+\textbf{Caso Frontera:}
+
+Se presenta un cambio en el Costo Total entre 120 y 121 minutos.
+
+\textbf{Resultado Esperado:}
+
+Para un cliente "normal" con boleto, el costo de 120 minutos es:
+
+El costo de la primera hora es \$20.00;
+
+\[
+   120 - 60 = 60
+\]
+
+
+\Needspace{4\baselineskip}
+
+Costo Total:
+
+\[
+   \text{\$}20.00
+\]
+
+Las horas adicionales completas valen \$15.00 cada una;
+
+\[
+   60 \div 60 = 1
+\]
+
+\[
+   1 \cdot 15 = 15
+\]
+
+
+\Needspace{4\baselineskip}
+
+Costo Total:
+
+\[
+   \text{\$}20.00 + \text{\$}15.00 = \text{\$}35.00
+\]
+
+Las horas adicionales iniciadas valen \$15.00, dado que la división fue exacta, no se inició otra hora;
+
+
+\Needspace{4\baselineskip}
+
+Costo Total:
+
+\[
+   \text{\$}35.00 + \text{\$}0.00 = \text{\$}35.00
+\]
+
+
+\Needspace{8\baselineskip}
+\subsubsection{Caso 9:}
+\label{sec:org7eee12f}
+
+\textbf{Datos:}
+
+(121 minutos, "normal", con boleto)
+
+\textbf{Caso Frontera:}
+
+Se presenta un cambio en el Costo Total entre 120 y 121 minutos.
+
+\textbf{Resultado Esperado:}
+
+Para un cliente "normal" con boleto, el costo de 121 minutos es:
+
+El costo de la primera hora es \$20.00;
+
+\[
+   121 - 60 = 61
+\]
+
+
+\Needspace{4\baselineskip}
+
+Costo Total:
+
+\[
+   \text{\$}20.00
+\]
+
+Las horas adicionales completas valen \$15.00 cada una;
+
+\[
+   61 \div 60 = 1.01666666667
+\]
+
+\[
+   1 \cdot 15 = 15
+\]
+
+
+\Needspace{4\baselineskip}
+
+Costo Total:
+
+\[
+   \text{\$}20.00 + \text{\$}15.00 = \text{\$}35.00
+\]
+
+Las horas adicionales iniciadas valen \$15.00, dado que la división no fue exacta, se inició otra hora;
+
+
+\Needspace{4\baselineskip}
+
+Costo Total:
+
+\[
+   \text{\$}35.00 + \text{\$}15.00 = \text{\$}50.00
+\]
+
+
+\Needspace{8\baselineskip}
+\subsubsection{Caso 10:}
+\label{sec:orgc57213d}
+
+\textbf{Datos:}
+
+(-1 minuto, "normal", con boleto)
+
+\textbf{Caso Entrada inválida:}
+
+El modelo del sistema no permite ingresar minutos negativos.
+
+\textbf{Resultado Esperado:}
+
+Lanza Excepción: Minutos inválidos.
+
+
+\Needspace{8\baselineskip}
+\subsubsection{Caso 11:}
+\label{sec:org0241561}
+
+\textbf{Datos:}
+
+(5 minutos, "premium", con boleto)
+
+\textbf{Caso Entrada inválida:}
+
+El modelo del sistema no permite ingresar un tipo de cliente que no sea "normal" o "frecuente".
+
+\textbf{Resultado Esperado:}
+
+Lanza Excepción: Tipo de cliente inválido.
+
+
+\Needspace{8\baselineskip}
+\subsubsection{Caso 12:}
+\label{sec:org092fccf}
+
+\textbf{Datos:}
+
+(1250 minutos, "frecuente", con boleto)
+
+\textbf{Caso Interacción entre reglas:}
+
+Verificamos que al cliente "frecuente" con boleto se le aplique su correspondiente descuento dados los minutos que pasó en el estacionamiento.
+
+\textbf{Resultado Esperado:}
+
+Para un cliente "frecuente" con boleto, el costo de 1250 minutos es:
+
+El costo de la primera hora es \$20.00;
+
+\[
+   1250 - 60 = 1190
+\]
+
+
+\Needspace{4\baselineskip}
+
+Costo Total:
+
+\[
+   \text{\$}20.00
+\]
+
+Las horas adicionales completas valen \$15.00 cada una;
+
+\[
+   1190 \div 60 = 19.83333333333
+\]
+
+\[
+   19 \cdot 15 = 285
+\]
+
+
+\Needspace{4\baselineskip}
+
+Costo Total:
+
+\[
+   \text{\$}20.00 + \text{\$}285.00 = \text{\$}305.00
+\]
+
+Las horas adicionales iniciadas valen \$15.00, dado que la división no fue exacta, se inició otra hora;
+
+
+\Needspace{4\baselineskip}
+
+Costo Total:
+
+\[
+   \text{\$}305.00 + \text{\$}15.00 = \text{\$}320.00
+\]
+
+Al cliente "frecuente" se le aplica un 10\% de descuento al Costo Total.
+
+
+\Needspace{4\baselineskip}
+
+Costo Total:
+
+\[
+   \text{\$}320.00 - \text{\$}32.00 = \text{\$}288.00
+\]
+
+
+\Needspace{8\baselineskip}
+\subsubsection{Caso 13:}
+\label{sec:org1f8e001}
+
+\textbf{Datos:}
+
+(1250 minutos, "frecuente", sin boleto)
+
+\textbf{Caso Interacción entre reglas:}
+
+Aunque el cliente sea frecuente, si perdió el boleto no se aplica el descuento y el costo final es de \$300.00.
+
+\textbf{Resultado Esperado:}
+
+Si el boleto está perdido, el costo final es de \$300.00, sin importar los minutos ni el tipo de cliente.
+
+Costo Total: \$300.00
+
+
+\Needspace{8\baselineskip}
+\subsubsection{Caso 14:}
+\label{sec:orgffe5d93}
+
+\textbf{Datos:}
+
+(61 minutos, "frecuente", con boleto)
+
+\textbf{Caso Números decimales en el resultado:}
+
+Verificamos que el descuento con decimales se aplique adecuadamente al cliente "frecuente".
+
+\textbf{Resultado Esperado:}
+
+Para un cliente "frecuente" con boleto, el costo de 61 minutos es:
+
+El costo de la primera hora es \$20.00;
+
+\[
+   61 - 60 = 1
+\]
+
+
+\Needspace{4\baselineskip}
+
+Costo Total:
+
+\[
+   \text{\$}20.00
+\]
+
+Las horas adicionales completas valen \$15.00 cada una;
+
+\[
+   1 \div 60 = 0.01666666667
+\]
+
+\[
+   0 \cdot 15 = 0
+\]
+
+
+\Needspace{4\baselineskip}
+
+Costo Total:
+
+\[
+   \text{\$}20.00 + \text{\$}0.00 = \text{\$}20.00
+\]
+
+Las horas adicionales iniciadas valen \$15.00, dado que la división no fue exacta, se inició otra hora;
+
+
+\Needspace{4\baselineskip}
+
+Costo Total:
+
+\[
+   \text{\$}20.00 + \text{\$}15.00 = \text{\$}35.00
+\]
+
+Al cliente "frecuente" se le aplica un 10\% de descuento al Costo Total.
+
+
+\Needspace{4\baselineskip}
+
+Costo Total:
+
+\[
+   \text{\$}35.00 - \text{\$}3.50 = \text{\$}31.50
+\]
+
+
+\Needspace{8\baselineskip}
+\subsubsection{Caso 15:}
+\label{sec:org4f7c043}
+
+\textbf{Datos:}
+
+(15.5 minutos, "normal", con boleto)
+
+\textbf{Caso Entrada inválida:}
+
+El modelo del sistema no permite ingresar minutos con decimales.
+
+\textbf{Resultado Esperado:}
+
+Lanza Excepción: Minutos inválidos.
+
+
+\Needspace{6\baselineskip}
 \subsection{Implementación en Python}
-\label{sec:orga70e9c2}
+\label{sec:org7188820}
+
+
+
+\Needspace{7\baselineskip}
 \section{Checklist}
-\label{sec:org65f5aad}
+\label{sec:orgfabb0b0}
 
 Ejemplo:
 

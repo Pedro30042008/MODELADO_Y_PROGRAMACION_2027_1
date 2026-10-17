@@ -841,14 +841,14 @@ Las reglas del Sistema de Ticket de Estacionamiento son:
 
 ** Planteamiento de pruebas
 
-Planteamos para el Sistema de Ticket de etacionamiento:
+Planteamos para el Sistema de Ticket de Estacionamiento:
 
 - 3 casos normales;
 - 6 casos frontera;
 - 2 entradas inválidas;
 - 2 casos de interacción entre reglas;
 - 1 caso para números decimales en el resultado;
-- 1 caso adicional propuesto por el equipo (caso por verse).
+- 1 caso adicional propuesto por el equipo (entrada inválida).
 
 ** Tabla de casos
 
@@ -879,9 +879,11 @@ Planteamos para el Sistema de Ticket de etacionamiento:
 % Espacio horizontal entre el texto y las líneas verticales.
 \setlength{\tabcolsep}{8pt}
 
-% Espacio vertical dentro de cada fila.
-\setlength{\extrarowheight}{4pt}
-\renewcommand{\arraystretch}{1.35}
+% Espacio vertical simétrico dentro de todas las celdas.
+% makecell agrega la misma separación arriba y abajo del texto.
+\renewcommand{\arraystretch}{1.10}
+\setcellgapes{4pt}
+\makegapedcells
 
 % Centrar la tabla.
 \setlength\LTleft{\fill}
@@ -890,10 +892,10 @@ Planteamos para el Sistema de Ticket de etacionamiento:
 \begin{longtable}{
     |C{1.00cm}
     |L{1.95cm}
-    |L{3.00cm}
-    |L{2.25cm}
-    |L{1.60cm}
-    |L{3.35cm}|
+    |L{2.65cm}
+    |L{2.00cm}
+    |L{1.55cm}
+    |L{4.00cm}|
 }
 
 % ------------------------------------------------------------
@@ -949,136 +951,136 @@ Planteamos para el Sistema de Ticket de etacionamiento:
 
 1 &
 Normal &
-- &
-- &
-- &
--
+(10 minutos, "normal", con boleto) &
+\$0.00 &
+R5 &
+Verificamos que se calcule correctamente el cobro a una persona normal con boleto y 10 minutos.
 \\
 \hline
 
 2 &
 Normal &
-- &
-- &
-- &
--
+(40 minutos, "normal", con boleto) &
+\$20.00 &
+R6 &
+Verificamos que se calcule correctamente el cobro a una persona normal con boleto y 40 minutos.
 \\
 \hline
 
 3 &
 Normal &
-- &
-- &
-- &
--
+(1250 minutos, "normal", con boleto) &
+\$320.00 &
+R7 &
+Verificamos que se calcule correctamente el cobro a una persona normal con boleto y 1250 minutos.
 \\
 \hline
 
 4 &
 Frontera &
-- &
-- &
-- &
--
+(15, "normal", con boleto) &
+\$0.00 &
+R5 &
+Verificamos que haya un cambio en la frontera entre 15 y 16.
 \\
 \hline
 
 5 &
 Frontera &
-- &
-- &
-- &
--
+(16, "normal", con boleto) &
+\$20.00 &
+R6 &
+Verificamos que haya un cambio en la frontera entre 15 y 16.
 \\
 \hline
 
 6 &
 Frontera &
-- &
-- &
-- &
--
+(60, "normal", con boleto) &
+\$20.00 &
+R6 &
+Verificamos que haya un cambio en la frontera entre 60 y 61.
 \\
 \hline
 
 7 &
 Frontera &
-- &
-- &
-- &
--
+(61, "normal", con boleto) &
+\$35.00 &
+R7 &
+Verificamos que haya un cambio en la frontera entre 60 y 61.
 \\
 \hline
 
 8 &
 Frontera &
-- &
-- &
-- &
--
+(120, "normal", con boleto) &
+\$35.00 &
+R7 &
+Verificamos que haya un cambio en la frontera entre 120 y 121.
 \\
 \hline
 
 9 &
 Frontera &
-- &
-- &
-- &
--
+(121, "normal", con boleto) &
+\$50.00 &
+R7 &
+Verificamos que haya un cambio en la frontera entre 120 y 121.
 \\
 \hline
 
 10 &
 Entrada inválida &
-- &
-- &
-- &
--
+(-1, "normal", con boleto) &
+Lanza Excepción: Minutos inválidos. &
+R1 y R10 &
+Verificamos que el sistema no acepte minutos negativos.
 \\
 \hline
 
 11 &
 Entrada inválida &
-- &
-- &
-- &
--
+(5, "premium", con boleto) &
+Lanza Excepción: Tipo de cliente inválido. &
+R2 y R11 &
+Verificamos que sólo acepte los clientes válidos.
 \\
 \hline
 
 12 &
 Interacción entre reglas &
-- &
-- &
-- &
--
+(1250, "frecuente", con boleto) &
+\$288.00 &
+R7 y R8 &
+Verificamos que al cliente "frecuente" con boleto se le aplique su correspondiente descuento dados los minutos que pasó en el estacionamiento.
 \\
 \hline
 
 13 &
 Interacción entre reglas &
-- &
-- &
-- &
--
+(1250, "frecuente", sin boleto) &
+\$300.00 &
+R3 y R8 &
+Aunque el cliente sea "frecuente", si perdió el boleto no se aplica el descuento y el costo final es de \$300.00.
 \\
 \hline
 
 14 &
 Números decimales en el resultado &
-- &
-- &
-- &
--
+(61, "frecuente", con boleto) &
+\$31.50 &
+R7 y R8 &
+Verificamos que el descuento con decimales se aplique adecuadamente al cliente "frecuente".
 \\
 \hline
 
 15 &
-Por verse &
-- &
-- &
-- &
--
+Entrada inválida &
+(15.5, "normal", con boleto) &
+Lanza Excepción: Minutos inválidos. &
+R1 &
+El sistema solo permite minutos enteros; no acepta valores decimales.
 \\
 \hline
 
@@ -1087,10 +1089,12 @@ Por verse &
 % TÍTULO DE LA TABLA
 % ------------------------------------------------------------
 
-\caption{Casos establecidos para el Sistema: Ticket de estacionamiento.}
+\caption{Casos establecidos para el Sistema: Ticket de Estacionamiento.}
 \label{tab:casos-ticket}
 
 \end{longtable}
+
+\nomakegapedcells
 
 \endgroup
 
@@ -1100,30 +1104,24 @@ Por verse &
 
 ** Caso 1
 
-D1
-
 #+BEGIN_EXPORT latex
 
 \begin{lstlisting}[style=practica]
 # Arrange
-minutos = 16
+minutos = 10
 
 # Act
 resultado = sistema.calcular_total(minutos, "normal", False)
 
 # Assert
-assert resultado == 20.0
+assert resultado == 0.0
 \end{lstlisting}
 
 #+END_EXPORT
 
 ** Caso 2
 
-D2
-
 ** Caso 3
-
-D3
 
 ** Caso 4
 

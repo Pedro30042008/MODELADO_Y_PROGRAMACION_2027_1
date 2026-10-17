@@ -1,4 +1,4 @@
-% Created 2026-10-17 Sat 14:13
+% Created 2026-10-17 Sat 14:34
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt,letterpaper]{article}
 \usepackage[utf8]{inputenc}
@@ -583,7 +583,7 @@ at ([xshift=12.10cm,yshift=-24.78cm]current page.north west)
 
 \clearpage
 \section{Reglas del Sistema: Ticket de Estacionamiento}
-\label{sec:org3539ee4}
+\label{sec:org265d857}
 
 Las reglas del Sistema de Ticket de Estacionamiento son:
 
@@ -619,12 +619,12 @@ Las reglas del Sistema de Ticket de Estacionamiento son:
 
 \endgroup
 \section{Construcción de la Tabla de casos}
-\label{sec:org9bf02fe}
+\label{sec:org1e1ea75}
 
 \subsection{Planteamiento de pruebas}
-\label{sec:org4cfaea3}
+\label{sec:org8db9e15}
 
-Planteamos para el Sistema de Ticket de etacionamiento:
+Planteamos para el Sistema de Ticket de Estacionamiento:
 
 \begin{itemize}
 \item 3 casos normales;
@@ -632,10 +632,10 @@ Planteamos para el Sistema de Ticket de etacionamiento:
 \item 2 entradas inválidas;
 \item 2 casos de interacción entre reglas;
 \item 1 caso para números decimales en el resultado;
-\item 1 caso adicional propuesto por el equipo (caso por verse).
+\item 1 caso adicional propuesto por el equipo (entrada inválida).
 \end{itemize}
 \subsection{Tabla de casos}
-\label{sec:org4565041}
+\label{sec:org7eb980c}
 
 
 % ============================================================
@@ -663,9 +663,11 @@ Planteamos para el Sistema de Ticket de etacionamiento:
 % Espacio horizontal entre el texto y las líneas verticales.
 \setlength{\tabcolsep}{8pt}
 
-% Espacio vertical dentro de cada fila.
-\setlength{\extrarowheight}{4pt}
-\renewcommand{\arraystretch}{1.35}
+% Espacio vertical simétrico dentro de todas las celdas.
+% makecell agrega la misma separación arriba y abajo del texto.
+\renewcommand{\arraystretch}{1.10}
+\setcellgapes{4pt}
+\makegapedcells
 
 % Centrar la tabla.
 \setlength\LTleft{\fill}
@@ -674,10 +676,10 @@ Planteamos para el Sistema de Ticket de etacionamiento:
 \begin{longtable}{
     |C{1.00cm}
     |L{1.95cm}
-    |L{3.00cm}
-    |L{2.25cm}
-    |L{1.60cm}
-    |L{3.35cm}|
+    |L{2.65cm}
+    |L{2.00cm}
+    |L{1.55cm}
+    |L{4.00cm}|
 }
 
 % ------------------------------------------------------------
@@ -733,136 +735,136 @@ Planteamos para el Sistema de Ticket de etacionamiento:
 
 1 &
 Normal &
-- &
-- &
-- &
--
+(10 minutos, "normal", con boleto) &
+\$0.00 &
+R5 &
+Verificamos que se calcule correctamente el cobro a una persona normal con boleto y 10 minutos.
 \\
 \hline
 
 2 &
 Normal &
-- &
-- &
-- &
--
+(40 minutos, "normal", con boleto) &
+\$20.00 &
+R6 &
+Verificamos que se calcule correctamente el cobro a una persona normal con boleto y 40 minutos.
 \\
 \hline
 
 3 &
 Normal &
-- &
-- &
-- &
--
+(1250 minutos, "normal", con boleto) &
+\$320.00 &
+R7 &
+Verificamos que se calcule correctamente el cobro a una persona normal con boleto y 1250 minutos.
 \\
 \hline
 
 4 &
 Frontera &
-- &
-- &
-- &
--
+(15, "normal", con boleto) &
+\$0.00 &
+R5 &
+Verificamos que haya un cambio en la frontera entre 15 y 16.
 \\
 \hline
 
 5 &
 Frontera &
-- &
-- &
-- &
--
+(16, "normal", con boleto) &
+\$20.00 &
+R6 &
+Verificamos que haya un cambio en la frontera entre 15 y 16.
 \\
 \hline
 
 6 &
 Frontera &
-- &
-- &
-- &
--
+(60, "normal", con boleto) &
+\$20.00 &
+R6 &
+Verificamos que haya un cambio en la frontera entre 60 y 61.
 \\
 \hline
 
 7 &
 Frontera &
-- &
-- &
-- &
--
+(61, "normal", con boleto) &
+\$35.00 &
+R7 &
+Verificamos que haya un cambio en la frontera entre 60 y 61.
 \\
 \hline
 
 8 &
 Frontera &
-- &
-- &
-- &
--
+(120, "normal", con boleto) &
+\$35.00 &
+R7 &
+Verificamos que haya un cambio en la frontera entre 120 y 121.
 \\
 \hline
 
 9 &
 Frontera &
-- &
-- &
-- &
--
+(121, "normal", con boleto) &
+\$50.00 &
+R7 &
+Verificamos que haya un cambio en la frontera entre 120 y 121.
 \\
 \hline
 
 10 &
 Entrada inválida &
-- &
-- &
-- &
--
+(-1, "normal", con boleto) &
+Lanza Excepción: Minutos inválidos. &
+R1 y R10 &
+Verificamos que el sistema no acepte minutos negativos.
 \\
 \hline
 
 11 &
 Entrada inválida &
-- &
-- &
-- &
--
+(5, "premium", con boleto) &
+Lanza Excepción: Tipo de cliente inválido. &
+R2 y R11 &
+Verificamos que sólo acepte los clientes válidos.
 \\
 \hline
 
 12 &
 Interacción entre reglas &
-- &
-- &
-- &
--
+(1250, "frecuente", con boleto) &
+\$288.00 &
+R7 y R8 &
+Verificamos que al cliente "frecuente" con boleto se le aplique su correspondiente descuento dados los minutos que pasó en el estacionamiento.
 \\
 \hline
 
 13 &
 Interacción entre reglas &
-- &
-- &
-- &
--
+(1250, "frecuente", sin boleto) &
+\$300.00 &
+R3 y R8 &
+Aunque el cliente sea "frecuente", si perdió el boleto no se aplica el descuento y el costo final es de \$300.00.
 \\
 \hline
 
 14 &
 Números decimales en el resultado &
-- &
-- &
-- &
--
+(61, "frecuente", con boleto) &
+\$31.50 &
+R7 y R8 &
+Verificamos que el descuento con decimales se aplique adecuadamente al cliente "frecuente".
 \\
 \hline
 
 15 &
-Por verse &
-- &
-- &
-- &
--
+Entrada inválida &
+(15.5, "normal", con boleto) &
+Lanza Excepción: Minutos inválidos. &
+R1 &
+El sistema solo permite minutos enteros; no acepta valores decimales.
 \\
 \hline
 
@@ -871,89 +873,87 @@ Por verse &
 % TÍTULO DE LA TABLA
 % ------------------------------------------------------------
 
-\caption{Casos establecidos para el Sistema: Ticket de estacionamiento.}
+\caption{Casos establecidos para el Sistema: Ticket de Estacionamiento.}
 \label{tab:casos-ticket}
 
 \end{longtable}
 
+\nomakegapedcells
+
 \endgroup
 \section{Evidencia de Ejecución}
-\label{sec:org244df1a}
+\label{sec:org2c4ea80}
 
 \subsection{Caso 1}
-\label{sec:org20c0ecd}
-
-D1
+\label{sec:orga89d44f}
 
 
 \begin{lstlisting}[style=practica]
 # Arrange
-minutos = 16
+minutos = 10
 
 # Act
 resultado = sistema.calcular_total(minutos, "normal", False)
 
 # Assert
-assert resultado == 20.0
+assert resultado == 0.0
 \end{lstlisting}
 \subsection{Caso 2}
-\label{sec:org02f808d}
+\label{sec:org15bddcf}
 
-D2
 \subsection{Caso 3}
-\label{sec:org3d5d149}
+\label{sec:org28a0335}
 
-D3
 \subsection{Caso 4}
-\label{sec:orgeffe1a8}
+\label{sec:orgc96533d}
 
 D4
 \subsection{Caso 5}
-\label{sec:org016cf7b}
+\label{sec:orge07c465}
 
 D5
 \subsection{Caso 6}
-\label{sec:org4df86cc}
+\label{sec:org982eda1}
 
 D6
 \subsection{Caso 7}
-\label{sec:org11fde01}
+\label{sec:orgbeecf5d}
 
 D7
 \subsection{Caso 8}
-\label{sec:org3181afc}
+\label{sec:org3f709a4}
 
 D8
 \subsection{Caso 9}
-\label{sec:org3c5cde0}
+\label{sec:org6293bf8}
 
 D9
 \subsection{Caso 10}
-\label{sec:org7ed1cda}
+\label{sec:orgf1112a3}
 
 D10
 \subsection{Caso 11}
-\label{sec:orga0f43cf}
+\label{sec:org66b5f92}
 
 D11
 \subsection{Caso 12}
-\label{sec:org1af8fde}
+\label{sec:orgc8a6951}
 
 D12
 \subsection{Caso 13}
-\label{sec:orgb81bf06}
+\label{sec:org64407a0}
 
 D13
 \subsection{Caso 14}
-\label{sec:org0ea7c04}
+\label{sec:orgaae0367}
 
 D14
 \subsection{Caso 15}
-\label{sec:org16d1036}
+\label{sec:orge1fc845}
 
 D15
 \section{Preguntas de análisis}
-\label{sec:org81a10c4}
+\label{sec:orge1463a2}
 
 \textbf{1.} ¿Qué diferencia hay entre un caso normal y un caso frontera?
 
