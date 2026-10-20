@@ -62,7 +62,7 @@ source .venv/bin/activate
 En el entorno virtual instalar los requerimientos.txt:
 
 ```bash
-python -m pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 Salir del entorno virtual:
