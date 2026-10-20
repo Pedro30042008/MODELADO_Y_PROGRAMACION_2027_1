@@ -1155,7 +1155,9 @@ Excepción:
 Minutos
 
 inválidos. &
-R1 y R10 &
+R1, R9 y
+
+R10 &
 Analiza el comportamiento del sistema cuando recibe numeros negativos, donde debería rechazarlos.
 \\
 \hline
@@ -1677,24 +1679,38 @@ Al revisar el Código original y compararlo con el modelo del sistema, round fun
 
 *1.* ¿Qué diferencia hay entre un caso normal y un caso frontera?
 
-R
+Un caso normal toma valor que se encuentra dentro un rango sin llegar a los valores extremos, es decir, donde se mantiene un mismo comportamiento.
 
+En cambio, un caso frontera busca ver como se comportan los valores en los extremos de dos rangos, donde se puede apreciar hasta donde se mantiene un comportamiento y luego donde empieza otro comportamiento distinto.
+
+#+latex: \vspace{\baselineskip}
    
 *2.* ¿Cuál de sus pruebas considera más importante y por qué?
 
-R
+En general las pruebas sirven para comprobar el funcionamiento de un sistema alineado al modelo del mismo, por ello el conjunto de pruebas es crucial, pues cada una aporta a la dismunución de bugs en la implementación sistema y lo acerca más a la resolución del problema original con un modelo establecido.
 
+#+latex: \vspace{\baselineskip}
+
+Sin embargo, en caso de elegir, notemos que la prueba de interacción entre reglas es crucial, pues aparte de corroborar casos como el 12 o el 13, que son de interacción entre reglas, implicitamente sigue corroborando que siga funcionando el sistema con un caso normal, o incluso si modificamos los minutos, que el sistema siga funcionando con casos frontera.
+
+#+latex: \vspace{\baselineskip}
    
 *3.* ¿Encontró algún comportamiento de la implementación que no coincida con el modelo?
 
-R
+Bastantes, como el no cobrar correctamente las horas inciadas pasada la primera hora, el permitir decimales en los minutos, el no cobrar correctamente si un cliente pierde su boleto, el no lanzar excepciones especializadas para informar las entradas inválidas y no cobrar correctamente si un cliente pasaba 15 minutos en el estacionamiento.
 
-   
+#+latex: \vspace{\baselineskip}
+
 *4.* ¿Una suite con 100 % de pruebas aprobadas demuestra que el programa es correcto? Explique.
 
-R
+No necesariamente, por ejemplo, si las pruebas estan planteadas de acuerdo al código y no al modelo del sistema que desamos implementar, obtendremos una suite que solo prueba lo que ya esta hecho pero no el comportamiento que espereamos.
 
+Además, las pruebas sirven para contemplar los casos en general que podemos encontrar en un sistema, pero si no se tiene cuidado o se plantea mal el razonamiento del modelo, en futuro nos encontremos con un nuevo problema que no se tuvo en cuenta al momento de hacer el mismo modelo o las pruebas.
+
+#+latex: \vspace{\baselineskip}
    
 *5.* Si una IA generara automáticamente 50 pruebas, ¿qué tendría que revisar una persona antes de confiar en ellas?
 
-R
+Tendría que ver si las pruebas tienen sentido, es decir, que las pruebas esten fundamentadas en el modelo del sistema que deseamos implementar, y a priori el modelo este planteado para resolver correctamente el problema original.
+
+Además, la persona debe evitar pruebas innecesarias o repetidas, por ejemplo, no sirve mucho tener 50 pruebas que solo tomen en cuenta casos normales, o solo fronteras, etc.

@@ -1,4 +1,4 @@
-% Created 2026-10-16 Fri 13:23
+% Created 2026-10-16 Fri 14:26
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt,letterpaper]{article}
 \usepackage[utf8]{inputenc}
@@ -596,7 +596,7 @@ at ([xshift=12.10cm,yshift=-24.78cm]current page.north west)
 
 \clearpage
 \section{Implementación Original del Sistema}
-\label{sec:org984960d}
+\label{sec:orgac4ccff}
 
 Dado el modelo del sistema de estacionamiento, se plantearán las pruebas necesarias para verificar que el comportamiento de la implementación original del sistema sea el esperado por el modelo del mismo.
 
@@ -655,7 +655,7 @@ En caso de que la implementación original del sistema no pase las pruebas plant
     ...
 \end{lstlisting}
 \section{Reglas del Sistema: Ticket de Estacionamiento}
-\label{sec:org027dda5}
+\label{sec:org87e44b6}
 
 Las reglas del Sistema de Ticket de Estacionamiento son:
 
@@ -691,10 +691,10 @@ Las reglas del Sistema de Ticket de Estacionamiento son:
 
 \endgroup
 \section{Construcción de la Tabla de casos}
-\label{sec:org6eb7c2b}
+\label{sec:orge1bdbe2}
 
 \subsection{Planteamiento de pruebas}
-\label{sec:orga7aacca}
+\label{sec:org4491954}
 
 Planteamos para el Sistema de Ticket de Estacionamiento:
 
@@ -707,7 +707,7 @@ Planteamos para el Sistema de Ticket de Estacionamiento:
 \item 1 caso adicional propuesto por el equipo (entrada inválida).
 \end{itemize}
 \subsection{Tabla de casos}
-\label{sec:org87be2b3}
+\label{sec:orgb976c21}
 
 
 % ============================================================
@@ -936,7 +936,9 @@ Excepción:
 Minutos
 
 inválidos. &
-R1 y R10 &
+R1, R9 y
+
+R10 &
 Analiza el comportamiento del sistema cuando recibe numeros negativos, donde debería rechazarlos.
 \\
 \hline
@@ -1034,13 +1036,13 @@ Analiza el comportamiento del sistema cuando recibe minutos en decimales, donde 
 
 \endgroup
 \section{Evidencia de Ejecución}
-\label{sec:org9275fa5}
+\label{sec:org45bd9e6}
 
 \subsection{Casos Normales: 1, 2 y 3}
-\label{sec:orgd8fff6c}
+\label{sec:orgae4e4ec}
 
 \subsubsection{Implementación de la Prueba en Python}
-\label{sec:org08d0099}
+\label{sec:org53ca47f}
 
 Prueba encargada de verificar el comportamiento del sistema en los casos normales 1, 2 y 3.
 
@@ -1071,11 +1073,11 @@ Prueba encargada de verificar el comportamiento del sistema en los casos normale
         assert resultado == esperado
 \end{lstlisting}
 \subsubsection{Resultado de la Prueba}
-\label{sec:org53017db}
+\label{sec:org06628f4}
 
 Los casos 1 y 2 pasaron la prueba; sin embargo el caso 3 la falló. Dado que el planteamiento de las pruebas esta basado en una interpretación correcta del modelo, analizamos el Código original.
 \subsubsection{Código Original}
-\label{sec:org3432ce7}
+\label{sec:orgcd1ef65}
 
 
 \begin{lstlisting}[style=practica]
@@ -1088,7 +1090,7 @@ Los casos 1 y 2 pasaron la prueba; sin embargo el caso 3 la falló. Dado que el 
 
 Al revisar el Código original, notemos que el cálculo realizado para conocer el cobro del estacionamiento con horas adicionales es incorrecto, ya que se pierde información de las horas iniciadas si solo se toma la parte entera de la división entre 60 minutos, pues si la divisón es exacta, tenemos horas completas, de lo contrario, ya inicio otra hora y se debe añadir una hora más al conteo de horas adicionales.
 \subsubsection{Reparación del Código Original}
-\label{sec:orgc780a7c}
+\label{sec:orgc6dfd15}
 
 
 \begin{lstlisting}[style=practica]
@@ -1101,10 +1103,10 @@ Al revisar el Código original, notemos que el cálculo realizado para conocer e
 
 Para reparar el código correctamente conforme al modelo, debemos tomar el techo del resultado de la división para contemplar verdaderamente el número de horas adicionales.
 \subsection{Casos Frontera: 4, 5, 6, 7, 8 y 9}
-\label{sec:org7ac83df}
+\label{sec:org27cfb69}
 
 \subsubsection{Implementación de la Prueba en Python}
-\label{sec:orgaa38c0f}
+\label{sec:orgb1df975}
 
 Prueba encargada de verificar el comportamiento del sistema en los casos frontera 4, 5, 6, 7, 8 y 9.
 
@@ -1138,11 +1140,11 @@ Prueba encargada de verificar el comportamiento del sistema en los casos fronter
         assert resultado == esperado
 \end{lstlisting}
 \subsubsection{Resultado de la Prueba}
-\label{sec:org8e1659b}
+\label{sec:org966062e}
 
 Los casos 5, 6, 7, 8 y 9 pasaron la prueba; sin embargo el caso 4 la falló. Dado que el planteamiento de las pruebas esta basado en una interpretación correcta del modelo, analizamos el Código original.
 \subsubsection{Código Original}
-\label{sec:orga8a4ccb}
+\label{sec:orgf9357bc}
 
 
 \begin{lstlisting}[style=practica]
@@ -1154,7 +1156,7 @@ Los casos 5, 6, 7, 8 y 9 pasaron la prueba; sin embargo el caso 4 la falló. Dad
 
 Al revisar el Código original, notemos que el cálculo realizado para conocer el cobro del estacionamiento en 15 minutos es incorrecto, ya que no se toma en cuenta el minuto 15 para cobrar la cantidad correcta de \$0.00.
 \subsubsection{Reparación del Código Original}
-\label{sec:org5e2174e}
+\label{sec:org48660c4}
 
 
 \begin{lstlisting}[style=practica]
@@ -1166,10 +1168,10 @@ Al revisar el Código original, notemos que el cálculo realizado para conocer e
 
 Para reparar el código correctamente conforme al modelo, debemos tomar en cuenta al minuto 15 dentro del rango correspondiente y cobrar \$0.00.
 \subsection{Casos Entrada Inválida: 10, 11 y 15}
-\label{sec:orgcffe898}
+\label{sec:org134b5d6}
 
 \subsubsection{Implementación de la Prueba en Python}
-\label{sec:org2662b5c}
+\label{sec:orgb2e0d45}
 
 Prueba encargada de verificar el comportamiento del sistema en los casos de entrada inválida 10, 11 y 15, este último propuesto por el equipo.
 
@@ -1233,11 +1235,11 @@ Con ello, definimos las pruebas con las nuevas excepciones que esperamos ver.
     ...
 \end{lstlisting}
 \subsubsection{Resultado de la Prueba}
-\label{sec:orgca6e7ad}
+\label{sec:org9f1ba7c}
 
 Los casos 10, 11 y 15 fallaron la prueba; dado que el planteamiento de las pruebas esta basado en una interpretación correcta del modelo, analizamos el Código original.
 \subsubsection{Código Original}
-\label{sec:org0240896}
+\label{sec:orgcf9c649}
 
 
 \begin{lstlisting}[style=practica]
@@ -1254,7 +1256,7 @@ Los casos 10, 11 y 15 fallaron la prueba; dado que el planteamiento de las prueb
 
 Al revisar el Código original, notamos que para el caso 10 y 11 no se lanzan las excepciones que esperabamos porque la implementación original reporta las entradas inválidas con la excepción ValueError, pero como mencionamos anteriormente, esta es una mala práctica de programación. Por otro lado, en el caso 15, la implementación original no considera a los decimales como valor de entrada inválida para los minutos, cuando debería hacerlo por el modelo establecido.
 \subsubsection{Reparación del Código Original}
-\label{sec:org3556288}
+\label{sec:org2face2b}
 
 
 \begin{lstlisting}[style=practica]
@@ -1272,10 +1274,10 @@ Al revisar el Código original, notamos que para el caso 10 y 11 no se lanzan la
 
 Para reparar el código correctamente conforme al modelo, modificamos las excepciones que se lanzan cuando hay valores de entrada inválidos, para los minutos la excepción MinutosInvalidos y para los tipos de cliente ClienteInvalido, además, agregamos el caso donde consideramos a los decimales como valor inválido para los minutos.
 \subsection{Casos Interacción entre reglas: 12 y 13}
-\label{sec:orgc8b4d11}
+\label{sec:org9b170e1}
 
 \subsubsection{Implementación de la Prueba en Python}
-\label{sec:orgfa065e8}
+\label{sec:org6d6b56f}
 
 Prueba que verifica el comportamiento del sistema en los casos de interacción entre reglas 12 y 13.
 
@@ -1309,11 +1311,11 @@ Prueba que verifica el comportamiento del sistema en los casos de interacción e
     ...
 \end{lstlisting}
 \subsubsection{Resultado de la Prueba}
-\label{sec:orgd113ab8}
+\label{sec:org8627415}
 
 El caso 12 pasó la prueba, pero el 13 la falló; dado que el planteamiento de las pruebas esta basado en una interpretación correcta del modelo, analizamos el Código original.
 \subsubsection{Código Original}
-\label{sec:orge0e1e0f}
+\label{sec:org5f45d3c}
 
 
 \begin{lstlisting}[style=practica]
@@ -1334,7 +1336,7 @@ El caso 12 pasó la prueba, pero el 13 la falló; dado que el planteamiento de l
 
 Al revisar el Código original, notamos que el flujo para asignarle el costo a un cliente que perdió su boleto está incorrecto, pues si bien asigna la tarifa de \$300.00, no termina el cálculo y prosigue a continuar evaluando casos, como el tipo de cliente, cuando en realidad la R3 prevalece sobre la R8.
 \subsubsection{Reparación del Código Original}
-\label{sec:org292c3f5}
+\label{sec:org7df81e5}
 
 
 \begin{lstlisting}[style=practica]
@@ -1355,10 +1357,10 @@ Al revisar el Código original, notamos que el flujo para asignarle el costo a u
 
 Para reparar el código correctamente conforme al modelo, modificamos el flujo; si el cliente perdió su boleto, simplemente retornamos el costo del estacionamiento de \$300.00 sin pasar por los otros casos.
 \subsection{Caso Números decimales en el resultado: 14}
-\label{sec:orgbce9df4}
+\label{sec:org2cd77d2}
 
 \subsubsection{Implementación de la Prueba en Python}
-\label{sec:org772b4d9}
+\label{sec:orgfed482d}
 
 Prueba que verifica el comportamiento del sistema en el caso 14 de números decimales en el resultado.
 
@@ -1390,11 +1392,11 @@ Prueba que verifica el comportamiento del sistema en el caso 14 de números deci
 
 En este caso, podemos ver que el resultado proviene de operaciones con float, y estas pueden aparecer con pequeñas diferencias de precisión por el manejo de este tipo de dato en el lenguaje, por ello, ocupamos pytest.approx para comparar valores con cierta tolerancia que definimos como correctos. En los anteriores casos no es necesario porque obtenemos resultados enteros que si pueden compararse exactamente con el operador "==" sin utilizar pytest.approx.
 \subsubsection{Resultado de la Prueba}
-\label{sec:org610855a}
+\label{sec:orgebb703b}
 
 El caso 14 pasó la prueba; dado que el planteamiento de las pruebas esta basado en una interpretación correcta del modelo, determinamos que el Código original está bien planteado para este caso.
 \subsubsection{Código Original}
-\label{sec:orgf420f59}
+\label{sec:org693c062}
 
 
 \begin{lstlisting}[style=practica]
@@ -1418,29 +1420,43 @@ El caso 14 pasó la prueba; dado que el planteamiento de las pruebas esta basado
 
 Al revisar el Código original y compararlo con el modelo del sistema, round funciona bien para determinar el costo de la tarifa en centavos. Pero en este caso, se vuelve un poco redundante al trabajar con tarifas que solo tengan como decimal a 0.0 o 0.5 y estos representarse de forma exacta en binario; sin embargo, en caso de que llegasen a cambiar los precios posteriormente, entonces sería de más utilidad dependiendo de como se establezca el redondeo de tarifas en el nuevo modelo.
 \section{Preguntas de análisis}
-\label{sec:org4cd9fc3}
+\label{sec:org2056374}
 
 \textbf{1.} ¿Qué diferencia hay entre un caso normal y un caso frontera?
 
-R
+Un caso normal toma valor que se encuentra dentro un rango sin llegar a los valores extremos, es decir, donde se mantiene un mismo comportamiento.
 
+En cambio, un caso frontera busca ver como se comportan los valores en los extremos de dos rangos, donde se puede apreciar hasta donde se mantiene un comportamiento y luego donde empieza otro comportamiento distinto.
+
+\vspace{\baselineskip}
 
 \textbf{2.} ¿Cuál de sus pruebas considera más importante y por qué?
 
-R
+En general las pruebas sirven para comprobar el funcionamiento de un sistema alineado al modelo del mismo, por ello el conjunto de pruebas es crucial, pues cada una aporta a la dismunución de bugs en la implementación sistema y lo acerca más a la resolución del problema original con un modelo establecido.
 
+\vspace{\baselineskip}
+
+Sin embargo, en caso de elegir, notemos que la prueba de interacción entre reglas es crucial, pues aparte de corroborar casos como el 12 o el 13, que son de interacción entre reglas, implicitamente sigue corroborando que siga funcionando el sistema con un caso normal, o incluso si modificamos los minutos, que el sistema siga funcionando con casos frontera.
+
+\vspace{\baselineskip}
 
 \textbf{3.} ¿Encontró algún comportamiento de la implementación que no coincida con el modelo?
 
-R
+Bastantes, como el no cobrar correctamente las horas inciadas pasada la primera hora, el permitir decimales en los minutos, el no cobrar correctamente si un cliente pierde su boleto, el no lanzar excepciones especializadas para informar las entradas inválidas y no cobrar correctamente si un cliente pasaba 15 minutos en el estacionamiento.
 
+\vspace{\baselineskip}
 
 \textbf{4.} ¿Una suite con 100 \% de pruebas aprobadas demuestra que el programa es correcto? Explique.
 
-R
+No necesariamente, por ejemplo, si las pruebas estan planteadas de acuerdo al código y no al modelo del sistema que desamos implementar, obtendremos una suite que solo prueba lo que ya esta hecho pero no el comportamiento que espereamos.
 
+Además, las pruebas sirven para contemplar los casos en general que podemos encontrar en un sistema, pero si no se tiene cuidado o se plantea mal el razonamiento del modelo, en futuro nos encontremos con un nuevo problema que no se tuvo en cuenta al momento de hacer el mismo modelo o las pruebas.
+
+\vspace{\baselineskip}
 
 \textbf{5.} Si una IA generara automáticamente 50 pruebas, ¿qué tendría que revisar una persona antes de confiar en ellas?
 
-R
+Tendría que ver si las pruebas tienen sentido, es decir, que las pruebas esten fundamentadas en el modelo del sistema que deseamos implementar, y a priori el modelo este planteado para resolver correctamente el problema original.
+
+Además, la persona debe evitar pruebas innecesarias o repetidas, por ejemplo, no sirve mucho tener 50 pruebas que solo tomen en cuenta casos normales, o solo fronteras, etc.
 \end{document}

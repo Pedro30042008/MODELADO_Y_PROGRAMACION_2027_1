@@ -1698,6 +1698,6 @@ Registro de Actividades:
 - [X] Planteamiento de Pruebas.
 - [X] Implementación de Pruebas.
 - [X] Evidencia de Ejecución.
-- [ ] Preguntas de Análisis.
-- [-] Organización de Archivos.
-- [ ] README.md.
+- [X] Preguntas de Análisis.
+- [X] Organización de Archivos.
+- [X] README.md.
