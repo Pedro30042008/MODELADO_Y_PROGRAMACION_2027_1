@@ -1,4 +1,4 @@
-% Created 2026-10-17 Sat 15:17
+% Created 2026-10-16 Fri 13:23
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt,letterpaper]{article}
 \usepackage[utf8]{inputenc}
@@ -9,12 +9,15 @@
 \usepackage{amssymb}
 \usepackage{hyperref}
 \newcommand{\materia}{MODELADO Y PROGRAMACIÓN}
-\newcommand{\tipoPractica}{CASOS PRUEBA}
+\newcommand{\tipoPractica}{DOCUMENTACIÓN}
 \newcommand{\practicaTitulo}{PRÁCTICA 4:\\PRUEBAS UNITARIAS}
 \newcommand{\practicaSubtitulo}{DISEÑO DE PRUEBAS PARA UN SISTEMA}
 \newcommand{\autorUno}{Alan Gael Alvarez Hernández}
+\newcommand{\cuentaUno}{323113340}
 \newcommand{\autorDos}{María Fernanda Miranda Sánchez}
+\newcommand{\cuentaDos}{420102320}
 \newcommand{\autorTres}{Pedro Pablo Ruiz Hernández}
+\newcommand{\cuentaTres}{323198507}
 \newcommand{\nombreProfesora}{Karla Adriana Esquivel Guzmán}
 \newcommand{\ayudanteTeoria}{Ossiel Aguilar Espíndola}
 \newcommand{\ayudanteLaboratorio}{Enoc Pineda Aguirre}
@@ -23,7 +26,7 @@
 \newcommand{\leyendaEscudoLineaUno}{FACULTAD DE CIENCIAS}
 \newcommand{\leyendaEscudoLineaDos}{UNAM}
 \newcommand{\encabezadoIzquierdo}{Modelado y Programación}
-\newcommand{\encabezadoDerecho}{Práctica 4: Pruebas Unitarias}
+\newcommand{\encabezadoDerecho}{Práctica 4: Pruebas unitarias}
 \newif\ifportada
 \portadatrue
 \newif\ifbibliografia
@@ -336,12 +339,12 @@ at ([xshift=12.10cm,yshift=-14.42cm]current page.north west)
 % Mismo tamaño y altura tipográfica que PROFESORA:
 \node[
     anchor=north,
-    align=center,
+    inner sep=0pt,
     font=\fuentePortada\mdseries\fontsize{10.8}{12.8}\selectfont
 ]
 at ([xshift=12.025cm,yshift=-16.25cm]current page.north west)
 {
-    INTEGRANTES DEL EQUIPO:
+    \makebox[10.05cm][s]{INTEGRANTE DEL EQUIPO:\hfill NÚM. DE CUENTA:}
 };
 
 
@@ -350,40 +353,50 @@ at ([xshift=12.025cm,yshift=-16.25cm]current page.north west)
 % que PROFESORA -> nombre de profesora.
 \node[
     anchor=north,
-    align=center,
-    text width=12.2cm,
+    inner sep=0pt,
     font=\fuentePortada\mdseries\fontsize{9.8}{11.6}\selectfont
 ]
 at ([xshift=12.025cm,yshift=-16.9cm]current page.north west)
 {
-    \autorUno
+    \makebox[10.05cm][s]{%
+        \autorUno
+        \leaders\hbox{\kern0.10em.\kern0.10em}\hfill
+        \cuentaUno
+    }
 };
 
 
 % Integrante 2
 \node[
     anchor=north,
-    align=center,
-    text width=12.2cm,
+    inner sep=0pt,
     font=\fuentePortada\mdseries\fontsize{9.8}{11.6}\selectfont
 ]
 at ([xshift=12.025cm,yshift=-17.34cm]current page.north west)
 {
-    \autorDos
+    \makebox[10.05cm][s]{%
+        \autorDos
+        \leaders\hbox{\kern0.10em.\kern0.10em}\hfill
+        \cuentaDos
+    }
 };
 
 
 % Integrante 3
 \node[
     anchor=north,
-    align=center,
-    text width=12.2cm,
+    inner sep=0pt,
     font=\fuentePortada\mdseries\fontsize{9.8}{11.6}\selectfont
 ]
 at ([xshift=12.025cm,yshift=-17.78cm]current page.north west)
 {
-    \autorTres
+    \makebox[10.05cm][s]{%
+        \autorTres
+        \leaders\hbox{\kern0.10em.\kern0.10em}\hfill
+        \cuentaTres
+    }
 };
+
 
 % ============================================================
 % PROFESORA
@@ -583,7 +596,7 @@ at ([xshift=12.10cm,yshift=-24.78cm]current page.north west)
 
 \clearpage
 \section{Implementación Original del Sistema}
-\label{sec:org7446df0}
+\label{sec:org984960d}
 
 Dado el modelo del sistema de estacionamiento, se plantearán las pruebas necesarias para verificar que el comportamiento de la implementación original del sistema sea el esperado por el modelo del mismo.
 
@@ -642,7 +655,7 @@ En caso de que la implementación original del sistema no pase las pruebas plant
     ...
 \end{lstlisting}
 \section{Reglas del Sistema: Ticket de Estacionamiento}
-\label{sec:org3898fad}
+\label{sec:org027dda5}
 
 Las reglas del Sistema de Ticket de Estacionamiento son:
 
@@ -678,10 +691,10 @@ Las reglas del Sistema de Ticket de Estacionamiento son:
 
 \endgroup
 \section{Construcción de la Tabla de casos}
-\label{sec:org110c42d}
+\label{sec:org6eb7c2b}
 
 \subsection{Planteamiento de pruebas}
-\label{sec:org55535fb}
+\label{sec:orga7aacca}
 
 Planteamos para el Sistema de Ticket de Estacionamiento:
 
@@ -694,7 +707,7 @@ Planteamos para el Sistema de Ticket de Estacionamiento:
 \item 1 caso adicional propuesto por el equipo (entrada inválida).
 \end{itemize}
 \subsection{Tabla de casos}
-\label{sec:orgd22fc4f}
+\label{sec:org87be2b3}
 
 
 % ============================================================
@@ -984,7 +997,7 @@ Números decimales en el resultado &
 con boleto &
 \$31.50 &
 R7 y R8 &
-Analiza el comportamiento del sistema cuando se le cobra al cliente "frecuente" con boleto por los minutos transcurridos, en cuyo caso debe cobrar lo justo, que es \$31.50.
+Analiza el comportamiento del sistema cuando se le cobra al cliente "frecuente" con boleto por 61 minutos transcurridos, en cuyo caso debe cobrar lo justo, que es \$31.50.
 \\
 \hline
 
@@ -1021,13 +1034,13 @@ Analiza el comportamiento del sistema cuando recibe minutos en decimales, donde 
 
 \endgroup
 \section{Evidencia de Ejecución}
-\label{sec:orgd3541f6}
+\label{sec:org9275fa5}
 
 \subsection{Casos Normales: 1, 2 y 3}
-\label{sec:org6d8177f}
+\label{sec:orgd8fff6c}
 
 \subsubsection{Implementación de la Prueba en Python}
-\label{sec:org2a381c4}
+\label{sec:org08d0099}
 
 Prueba encargada de verificar el comportamiento del sistema en los casos normales 1, 2 y 3.
 
@@ -1055,14 +1068,14 @@ Prueba encargada de verificar el comportamiento del sistema en los casos normale
         resultado = sistema.calcular_total(minutos, "normal", False)
 
         # Assert
-        assert resultado == pytest.approx(esperado)
+        assert resultado == esperado
 \end{lstlisting}
 \subsubsection{Resultado de la Prueba}
-\label{sec:orgd3791ab}
+\label{sec:org53017db}
 
 Los casos 1 y 2 pasaron la prueba; sin embargo el caso 3 la falló. Dado que el planteamiento de las pruebas esta basado en una interpretación correcta del modelo, analizamos el Código original.
 \subsubsection{Código Original}
-\label{sec:org429ba02}
+\label{sec:org3432ce7}
 
 
 \begin{lstlisting}[style=practica]
@@ -1075,7 +1088,7 @@ Los casos 1 y 2 pasaron la prueba; sin embargo el caso 3 la falló. Dado que el 
 
 Al revisar el Código original, notemos que el cálculo realizado para conocer el cobro del estacionamiento con horas adicionales es incorrecto, ya que se pierde información de las horas iniciadas si solo se toma la parte entera de la división entre 60 minutos, pues si la divisón es exacta, tenemos horas completas, de lo contrario, ya inicio otra hora y se debe añadir una hora más al conteo de horas adicionales.
 \subsubsection{Reparación del Código Original}
-\label{sec:orgee24b3c}
+\label{sec:orgc780a7c}
 
 
 \begin{lstlisting}[style=practica]
@@ -1088,10 +1101,10 @@ Al revisar el Código original, notemos que el cálculo realizado para conocer e
 
 Para reparar el código correctamente conforme al modelo, debemos tomar el techo del resultado de la división para contemplar verdaderamente el número de horas adicionales.
 \subsection{Casos Frontera: 4, 5, 6, 7, 8 y 9}
-\label{sec:orgf879ea9}
+\label{sec:org7ac83df}
 
 \subsubsection{Implementación de la Prueba en Python}
-\label{sec:orgdefb9f1}
+\label{sec:orgaa38c0f}
 
 Prueba encargada de verificar el comportamiento del sistema en los casos frontera 4, 5, 6, 7, 8 y 9.
 
@@ -1122,14 +1135,14 @@ Prueba encargada de verificar el comportamiento del sistema en los casos fronter
         resultado = sistema.calcular_total(minutos, "normal", False)
     
         # Assert
-        assert resultado == pytest.approx(esperado)
+        assert resultado == esperado
 \end{lstlisting}
 \subsubsection{Resultado de la Prueba}
-\label{sec:orgd361b48}
+\label{sec:org8e1659b}
 
 Los casos 5, 6, 7, 8 y 9 pasaron la prueba; sin embargo el caso 4 la falló. Dado que el planteamiento de las pruebas esta basado en una interpretación correcta del modelo, analizamos el Código original.
 \subsubsection{Código Original}
-\label{sec:org1de987f}
+\label{sec:orga8a4ccb}
 
 
 \begin{lstlisting}[style=practica]
@@ -1141,7 +1154,7 @@ Los casos 5, 6, 7, 8 y 9 pasaron la prueba; sin embargo el caso 4 la falló. Dad
 
 Al revisar el Código original, notemos que el cálculo realizado para conocer el cobro del estacionamiento en 15 minutos es incorrecto, ya que no se toma en cuenta el minuto 15 para cobrar la cantidad correcta de \$0.00.
 \subsubsection{Reparación del Código Original}
-\label{sec:org6f07939}
+\label{sec:org5e2174e}
 
 
 \begin{lstlisting}[style=practica]
@@ -1153,10 +1166,10 @@ Al revisar el Código original, notemos que el cálculo realizado para conocer e
 
 Para reparar el código correctamente conforme al modelo, debemos tomar en cuenta al minuto 15 dentro del rango correspondiente y cobrar \$0.00.
 \subsection{Casos Entrada Inválida: 10, 11 y 15}
-\label{sec:org819b85d}
+\label{sec:orgcffe898}
 
 \subsubsection{Implementación de la Prueba en Python}
-\label{sec:org666baae}
+\label{sec:org2662b5c}
 
 Prueba encargada de verificar el comportamiento del sistema en los casos de entrada inválida 10, 11 y 15, este último propuesto por el equipo.
 
@@ -1206,40 +1219,25 @@ Con ello, definimos las pruebas con las nuevas excepciones que esperamos ver.
         with pytest.raises(MinutosInvalidos):
             sistema.calcular_total(minutos, "normal", False)
 
-    # Arrange
-    @pytest.mark.parametrize(
-        "cliente",
-	[
-                         # | Caso | Descripción                           |
-            "premium",   # | 11   | Cliente "premium" no está definido.   |
-        ],
-    )
-    def test_Cliente_Invalido(sistema, cliente):
+    def test_Cliente_Invalido(sistema):
         """
 	Verifica que el programa rechaze los clientes que no están
 	definidos en la R2. Siguiendo el procedimiento de R11.
 	"""
-
-	# Act and Assert
+	# | Caso | Descripción                                |
+        # | 10   | Cliente "premium" no está bien definido.   |
+	
+	# Arrange, Act and Assert
 	with pytest.raises(ClienteInvalido):
-            sistema.calcular_total(5, cliente, False)
+            sistema.calcular_total(5, "premium", False)
     ...
 \end{lstlisting}
 \subsubsection{Resultado de la Prueba}
-\label{sec:org9d781c9}
+\label{sec:orgca6e7ad}
 
 Los casos 10, 11 y 15 fallaron la prueba; dado que el planteamiento de las pruebas esta basado en una interpretación correcta del modelo, analizamos el Código original.
-
-
-\vspace{\baselineskip}
-
-\vspace{\baselineskip}
-
-\vspace{\baselineskip}
-
-\vspace{\baselineskip}
 \subsubsection{Código Original}
-\label{sec:org6752a01}
+\label{sec:org0240896}
 
 
 \begin{lstlisting}[style=practica]
@@ -1252,9 +1250,11 @@ Los casos 10, 11 y 15 fallaron la prueba; dado que el planteamiento de las prueb
     ...
 \end{lstlisting}
 
+\vspace{\baselineskip}
+
 Al revisar el Código original, notamos que para el caso 10 y 11 no se lanzan las excepciones que esperabamos porque la implementación original reporta las entradas inválidas con la excepción ValueError, pero como mencionamos anteriormente, esta es una mala práctica de programación. Por otro lado, en el caso 15, la implementación original no considera a los decimales como valor de entrada inválida para los minutos, cuando debería hacerlo por el modelo establecido.
 \subsubsection{Reparación del Código Original}
-\label{sec:org1010ee3}
+\label{sec:org3556288}
 
 
 \begin{lstlisting}[style=practica]
@@ -1272,10 +1272,10 @@ Al revisar el Código original, notamos que para el caso 10 y 11 no se lanzan la
 
 Para reparar el código correctamente conforme al modelo, modificamos las excepciones que se lanzan cuando hay valores de entrada inválidos, para los minutos la excepción MinutosInvalidos y para los tipos de cliente ClienteInvalido, además, agregamos el caso donde consideramos a los decimales como valor inválido para los minutos.
 \subsection{Casos Interacción entre reglas: 12 y 13}
-\label{sec:org7c98790}
+\label{sec:orgc8b4d11}
 
 \subsubsection{Implementación de la Prueba en Python}
-\label{sec:orgad75b24}
+\label{sec:orgfa065e8}
 
 Prueba que verifica el comportamiento del sistema en los casos de interacción entre reglas 12 y 13.
 
@@ -1301,17 +1301,19 @@ Prueba que verifica el comportamiento del sistema en los casos de interacción e
         """
         # Act
         resultado = sistema.calcular_total(1250, "frecuente", boleto)
-    
+
+
+	
         # Assert
-        assert resultado == pytest.approx(esperado)
+        assert resultado == esperado
     ...
 \end{lstlisting}
 \subsubsection{Resultado de la Prueba}
-\label{sec:orgd942d6e}
+\label{sec:orgd113ab8}
 
 El caso 12 pasó la prueba, pero el 13 la falló; dado que el planteamiento de las pruebas esta basado en una interpretación correcta del modelo, analizamos el Código original.
 \subsubsection{Código Original}
-\label{sec:orgd25c748}
+\label{sec:orge0e1e0f}
 
 
 \begin{lstlisting}[style=practica]
@@ -1332,7 +1334,7 @@ El caso 12 pasó la prueba, pero el 13 la falló; dado que el planteamiento de l
 
 Al revisar el Código original, notamos que el flujo para asignarle el costo a un cliente que perdió su boleto está incorrecto, pues si bien asigna la tarifa de \$300.00, no termina el cálculo y prosigue a continuar evaluando casos, como el tipo de cliente, cuando en realidad la R3 prevalece sobre la R8.
 \subsubsection{Reparación del Código Original}
-\label{sec:org852ac0b}
+\label{sec:org292c3f5}
 
 
 \begin{lstlisting}[style=practica]
@@ -1353,11 +1355,70 @@ Al revisar el Código original, notamos que el flujo para asignarle el costo a u
 
 Para reparar el código correctamente conforme al modelo, modificamos el flujo; si el cliente perdió su boleto, simplemente retornamos el costo del estacionamiento de \$300.00 sin pasar por los otros casos.
 \subsection{Caso Números decimales en el resultado: 14}
-\label{sec:orga91c3ed}
+\label{sec:orgbce9df4}
 
-D14
+\subsubsection{Implementación de la Prueba en Python}
+\label{sec:org772b4d9}
+
+Prueba que verifica el comportamiento del sistema en el caso 14 de números decimales en el resultado.
+
+\vspace{\baselineskip}
+
+
+\begin{lstlisting}[style=practica]
+    ...
+    # Arrange
+    @pytest.mark.parametrize(
+        "minutos, esperado",
+        [
+                          # | Caso | Descripción                                      |
+            (61, 31.50),  # | 14   | Cliente "frecuente" con boleto paso 61 minutos.  |
+        ],
+    )
+    def test_cliente_Frecuente_Casos_Interaccion_entre_reglas(sistema, minutos, esperado):
+        """
+        Verifica que el programa calcule correctamente el costo del estacionamiento
+        dado que el cliente es frecuente y tenga boleto.
+        """
+        # Act
+        resultado = sistema.calcular_total(minutos, "frecuente", False)
+    
+        # Assert
+        assert resultado == pytest.approx(esperado)
+	...
+\end{lstlisting}
+
+En este caso, podemos ver que el resultado proviene de operaciones con float, y estas pueden aparecer con pequeñas diferencias de precisión por el manejo de este tipo de dato en el lenguaje, por ello, ocupamos pytest.approx para comparar valores con cierta tolerancia que definimos como correctos. En los anteriores casos no es necesario porque obtenemos resultados enteros que si pueden compararse exactamente con el operador "==" sin utilizar pytest.approx.
+\subsubsection{Resultado de la Prueba}
+\label{sec:org610855a}
+
+El caso 14 pasó la prueba; dado que el planteamiento de las pruebas esta basado en una interpretación correcta del modelo, determinamos que el Código original está bien planteado para este caso.
+\subsubsection{Código Original}
+\label{sec:orgf420f59}
+
+
+\begin{lstlisting}[style=practica]
+    ...
+    def calcular_total(self, minutos: int, tipo_cliente: str = "normal",
+                       boleto_perdido: bool = False) -> float:
+        ...
+        if boleto_perdido:
+            return self.TARIFA_BOLETO_PERDIDO
+	...
+        else:
+            horas_adicionales = math.ceil((minutos - 60) / 60)
+            total = 20.0 + (horas_adicionales * 15.0)
+	    
+        if tipo_cliente == "frecuente":
+            total *= 0.90
+
+        return round(total, 2)
+    ...
+\end{lstlisting}
+
+Al revisar el Código original y compararlo con el modelo del sistema, round funciona bien para determinar el costo de la tarifa en centavos. Pero en este caso, se vuelve un poco redundante al trabajar con tarifas que solo tengan como decimal a 0.0 o 0.5 y estos representarse de forma exacta en binario; sin embargo, en caso de que llegasen a cambiar los precios posteriormente, entonces sería de más utilidad dependiendo de como se establezca el redondeo de tarifas en el nuevo modelo.
 \section{Preguntas de análisis}
-\label{sec:org05779dd}
+\label{sec:org4cd9fc3}
 
 \textbf{1.} ¿Qué diferencia hay entre un caso normal y un caso frontera?
 

@@ -24,10 +24,13 @@
 # Equipo
 # Cambia únicamente el contenido entre llaves.
 #+LATEX_HEADER: \newcommand{\autorUno}{Alan Gael Alvarez Hernández}
+#+LATEX_HEADER: \newcommand{\cuentaUno}{323113340}
 
 #+LATEX_HEADER: \newcommand{\autorDos}{María Fernanda Miranda Sánchez}
+#+LATEX_HEADER: \newcommand{\cuentaDos}{420102320}
 
 #+LATEX_HEADER: \newcommand{\autorTres}{Pedro Pablo Ruiz Hernández}
+#+LATEX_HEADER: \newcommand{\cuentaTres}{323198507}
 
 
 # Profesora
@@ -545,12 +548,12 @@ at ([xshift=12.10cm,yshift=-14.42cm]current page.north west)
 % Mismo tamaño y altura tipográfica que PROFESORA:
 \node[
     anchor=north,
-    align=center,
+    inner sep=0pt,
     font=\fuentePortada\mdseries\fontsize{10.8}{12.8}\selectfont
 ]
 at ([xshift=12.025cm,yshift=-16.25cm]current page.north west)
 {
-    INTEGRANTES DEL EQUIPO:
+    \makebox[10.05cm][s]{INTEGRANTE DEL EQUIPO:\hfill NÚM. DE CUENTA:}
 };
 
 
@@ -559,39 +562,48 @@ at ([xshift=12.025cm,yshift=-16.25cm]current page.north west)
 % que PROFESORA -> nombre de profesora.
 \node[
     anchor=north,
-    align=center,
-    text width=12.2cm,
+    inner sep=0pt,
     font=\fuentePortada\mdseries\fontsize{9.8}{11.6}\selectfont
 ]
 at ([xshift=12.025cm,yshift=-16.9cm]current page.north west)
 {
-    \autorUno
+    \makebox[10.05cm][s]{%
+        \autorUno
+        \leaders\hbox{\kern0.10em.\kern0.10em}\hfill
+        \cuentaUno
+    }
 };
 
 
 % Integrante 2
 \node[
     anchor=north,
-    align=center,
-    text width=12.2cm,
+    inner sep=0pt,
     font=\fuentePortada\mdseries\fontsize{9.8}{11.6}\selectfont
 ]
 at ([xshift=12.025cm,yshift=-17.34cm]current page.north west)
 {
-    \autorDos
+    \makebox[10.05cm][s]{%
+        \autorDos
+        \leaders\hbox{\kern0.10em.\kern0.10em}\hfill
+        \cuentaDos
+    }
 };
 
 
 % Integrante 3
 \node[
     anchor=north,
-    align=center,
-    text width=12.2cm,
+    inner sep=0pt,
     font=\fuentePortada\mdseries\fontsize{9.8}{11.6}\selectfont
 ]
 at ([xshift=12.025cm,yshift=-17.78cm]current page.north west)
 {
-    \autorTres
+    \makebox[10.05cm][s]{%
+        \autorTres
+        \leaders\hbox{\kern0.10em.\kern0.10em}\hfill
+        \cuentaTres
+    }
 };
 
 
@@ -765,7 +777,7 @@ at ([xshift=12.10cm,yshift=-24.78cm]current page.north west)
 % REINICIO DE NUMERACIÓN
 % ============================================================
 
-\setcounter{page}{1}
+\setcounter{page}{2}
 
 \hypersetup{pageanchor=true}
 
@@ -804,6 +816,8 @@ at ([xshift=12.10cm,yshift=-24.78cm]current page.north west)
 #
 # ============================================================
 # ============================================================
+
+
 
 
 #+BEGIN_EXPORT latex
@@ -1680,10 +1694,10 @@ Estado de las Actividades:
 
 Registro de Actividades:
 
-- [-] Documentación.
+- [X] Documentación.
 - [X] Planteamiento de Pruebas.
-- [-] Implementación de Pruebas.
-- [-] Evidencia de Ejecución.
+- [X] Implementación de Pruebas.
+- [X] Evidencia de Ejecución.
 - [ ] Preguntas de Análisis.
 - [-] Organización de Archivos.
 - [ ] README.md.

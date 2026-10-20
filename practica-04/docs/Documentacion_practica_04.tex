@@ -1,4 +1,4 @@
-% Created 2026-10-17 Sat 15:18
+% Created 2026-10-16 Fri 13:25
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt,letterpaper]{article}
 \usepackage[utf8]{inputenc}
@@ -13,8 +13,11 @@
 \newcommand{\practicaTitulo}{PRÁCTICA 4:\\PRUEBAS UNITARIAS}
 \newcommand{\practicaSubtitulo}{DISEÑO DE PRUEBAS PARA UN SISTEMA}
 \newcommand{\autorUno}{Alan Gael Alvarez Hernández}
+\newcommand{\cuentaUno}{323113340}
 \newcommand{\autorDos}{María Fernanda Miranda Sánchez}
+\newcommand{\cuentaDos}{420102320}
 \newcommand{\autorTres}{Pedro Pablo Ruiz Hernández}
+\newcommand{\cuentaTres}{323198507}
 \newcommand{\nombreProfesora}{Karla Adriana Esquivel Guzmán}
 \newcommand{\ayudanteTeoria}{Ossiel Aguilar Espíndola}
 \newcommand{\ayudanteLaboratorio}{Enoc Pineda Aguirre}
@@ -337,12 +340,12 @@ at ([xshift=12.10cm,yshift=-14.42cm]current page.north west)
 % Mismo tamaño y altura tipográfica que PROFESORA:
 \node[
     anchor=north,
-    align=center,
+    inner sep=0pt,
     font=\fuentePortada\mdseries\fontsize{10.8}{12.8}\selectfont
 ]
 at ([xshift=12.025cm,yshift=-16.25cm]current page.north west)
 {
-    INTEGRANTES DEL EQUIPO:
+    \makebox[10.05cm][s]{INTEGRANTE DEL EQUIPO:\hfill NÚM. DE CUENTA:}
 };
 
 
@@ -351,39 +354,48 @@ at ([xshift=12.025cm,yshift=-16.25cm]current page.north west)
 % que PROFESORA -> nombre de profesora.
 \node[
     anchor=north,
-    align=center,
-    text width=12.2cm,
+    inner sep=0pt,
     font=\fuentePortada\mdseries\fontsize{9.8}{11.6}\selectfont
 ]
 at ([xshift=12.025cm,yshift=-16.9cm]current page.north west)
 {
-    \autorUno
+    \makebox[10.05cm][s]{%
+        \autorUno
+        \leaders\hbox{\kern0.10em.\kern0.10em}\hfill
+        \cuentaUno
+    }
 };
 
 
 % Integrante 2
 \node[
     anchor=north,
-    align=center,
-    text width=12.2cm,
+    inner sep=0pt,
     font=\fuentePortada\mdseries\fontsize{9.8}{11.6}\selectfont
 ]
 at ([xshift=12.025cm,yshift=-17.34cm]current page.north west)
 {
-    \autorDos
+    \makebox[10.05cm][s]{%
+        \autorDos
+        \leaders\hbox{\kern0.10em.\kern0.10em}\hfill
+        \cuentaDos
+    }
 };
 
 
 % Integrante 3
 \node[
     anchor=north,
-    align=center,
-    text width=12.2cm,
+    inner sep=0pt,
     font=\fuentePortada\mdseries\fontsize{9.8}{11.6}\selectfont
 ]
 at ([xshift=12.025cm,yshift=-17.78cm]current page.north west)
 {
-    \autorTres
+    \makebox[10.05cm][s]{%
+        \autorTres
+        \leaders\hbox{\kern0.10em.\kern0.10em}\hfill
+        \cuentaTres
+    }
 };
 
 
@@ -557,7 +569,7 @@ at ([xshift=12.10cm,yshift=-24.78cm]current page.north west)
 % REINICIO DE NUMERACIÓN
 % ============================================================
 
-\setcounter{page}{1}
+\setcounter{page}{2}
 
 \hypersetup{pageanchor=true}
 
@@ -587,14 +599,15 @@ at ([xshift=12.10cm,yshift=-24.78cm]current page.north west)
 
 
 
+
 \Needspace{7\baselineskip}
 \section{Introducción}
-\label{sec:orgc96f7fd}
+\label{sec:orgac4383c}
 
 
 \Needspace{6\baselineskip}
 \subsection{Pruebas Unitarias}
-\label{sec:org1e2c74a}
+\label{sec:org086f88e}
 
 Una \textbf{Prueba Unitaria} verifica un comportamiento pequeño del sistema: una función, un método o una regla concreta. Para el desarrollo de las mismas se recomienda seguir el siguiente flujo:
 
@@ -638,7 +651,7 @@ Si hasta 15 minutos es gratis, y desde 16 se cobra, probar 14, 15, 16 y 17.
 
 \Needspace{6\baselineskip}
 \subsection{Estructura de una prueba Arrange - Act - Assert}
-\label{sec:org215f43d}
+\label{sec:orgbca6119}
 
 \begin{itemize}
 \item \textbf{Arrange:} Preparación de los datos, objetos, o estado inicial.
@@ -665,7 +678,7 @@ assert resultado == 20.0
 
 \Needspace{7\baselineskip}
 \section{Objetivo}
-\label{sec:org4ef1ec1}
+\label{sec:orge3e2cc8}
 
 El alumno diseñará un conjunto de pruebas unitarias para verificar el comportamiento de un sistema a partir de su especificación, no únicamente a partir de lo que hace el código.
 
@@ -685,12 +698,12 @@ Al finalizar la práctica, el alumno deberá ser capaz de:
 
 \Needspace{7\baselineskip}
 \section{Desarrollo de la práctica}
-\label{sec:org04bb547}
+\label{sec:org36bfc14}
 
 
 \Needspace{6\baselineskip}
 \subsection{Durante la práctica}
-\label{sec:orgabaa15f}
+\label{sec:orgfc46ccb}
 
 \begin{enumerate}
 \item Lea primero el modelo.
@@ -720,7 +733,7 @@ Al finalizar la práctica, el alumno deberá ser capaz de:
 
 \Needspace{6\baselineskip}
 \subsection{Planteamiento del Problema}
-\label{sec:org96758bb}
+\label{sec:org76037a7}
 
 Probar el Sistema de Ticket de Estacionamiento.
 
@@ -735,7 +748,7 @@ El sistema recibe:
 
 \Needspace{6\baselineskip}
 \subsubsection{Modelo del Sistema: Ticket de Estacionamiento}
-\label{sec:org486017b}
+\label{sec:org444aac6}
 
 Comportamiento esperado:
 
@@ -774,7 +787,7 @@ Comportamiento esperado:
 
 \Needspace{6\baselineskip}
 \subsubsection{Ejemplos del Sistema: Ticket de Estacionamiento}
-\label{sec:org62be67c}
+\label{sec:org7582e1d}
 
 Ejemplos de interpretación:
 
@@ -792,12 +805,12 @@ Ejemplos de interpretación:
 
 \Needspace{6\baselineskip}
 \subsection{Planteamiento de Pruebas}
-\label{sec:orgd5530ac}
+\label{sec:org62aee03}
 
 
 \Needspace{8\baselineskip}
 \subsubsection{Caso 1:}
-\label{sec:orge1f327b}
+\label{sec:org59c0ab8}
 
 \textbf{Datos:}
 
@@ -814,7 +827,7 @@ Entre 1 y 15 minutos, el costo para un cliente "normal" con boleto es de \$0.00
 
 \Needspace{8\baselineskip}
 \subsubsection{Caso 2:}
-\label{sec:orgbbd9c3d}
+\label{sec:org0e27cfb}
 
 \textbf{Datos:}
 
@@ -831,7 +844,7 @@ Entre 16 y 60 minutos, el costo para un cliente "normal" con boleto es de \$20.0
 
 \Needspace{8\baselineskip}
 \subsubsection{Caso 3:}
-\label{sec:org4b8206d}
+\label{sec:orgfbd63e8}
 
 \textbf{Datos:}
 
@@ -893,7 +906,7 @@ Costo Total:
 
 \Needspace{8\baselineskip}
 \subsubsection{Caso 4:}
-\label{sec:org874aa8a}
+\label{sec:org9824126}
 
 \textbf{Datos:}
 
@@ -910,7 +923,7 @@ Entre 1 y 15 minutos, el costo para un cliente "normal" con boleto es de \$0.00
 
 \Needspace{8\baselineskip}
 \subsubsection{Caso 5:}
-\label{sec:org0376aa0}
+\label{sec:org84aa6e3}
 
 \textbf{Datos:}
 
@@ -927,7 +940,7 @@ Entre 16 y 60 minutos, el costo para un cliente "normal" con boleto es de \$20.0
 
 \Needspace{8\baselineskip}
 \subsubsection{Caso 6:}
-\label{sec:org8722578}
+\label{sec:org6ec8831}
 
 \textbf{Datos:}
 
@@ -944,7 +957,7 @@ Entre 16 y 60 minutos, el costo para un cliente "normal" con boleto es de \$20.0
 
 \Needspace{8\baselineskip}
 \subsubsection{Caso 7:}
-\label{sec:orgb0bf815}
+\label{sec:org95faaa0}
 
 \textbf{Datos:}
 
@@ -1012,7 +1025,7 @@ Costo Total:
 
 \Needspace{8\baselineskip}
 \subsubsection{Caso 8:}
-\label{sec:org2afe1a6}
+\label{sec:orgedd7bcf}
 
 \textbf{Datos:}
 
@@ -1074,7 +1087,7 @@ Costo Total:
 
 \Needspace{8\baselineskip}
 \subsubsection{Caso 9:}
-\label{sec:org0d25895}
+\label{sec:orgce182e3}
 
 \textbf{Datos:}
 
@@ -1136,7 +1149,7 @@ Costo Total:
 
 \Needspace{8\baselineskip}
 \subsubsection{Caso 10:}
-\label{sec:orgd64bf5f}
+\label{sec:orgcccbc04}
 
 \textbf{Datos:}
 
@@ -1153,7 +1166,7 @@ Lanza Excepción: Minutos inválidos.
 
 \Needspace{8\baselineskip}
 \subsubsection{Caso 11:}
-\label{sec:orgc07309e}
+\label{sec:org2db43d2}
 
 \textbf{Datos:}
 
@@ -1170,7 +1183,7 @@ Lanza Excepción: Tipo de cliente inválido.
 
 \Needspace{8\baselineskip}
 \subsubsection{Caso 12:}
-\label{sec:orgf2663ca}
+\label{sec:org4296ec7}
 
 \textbf{Datos:}
 
@@ -1248,7 +1261,7 @@ Costo Total:
 
 \Needspace{8\baselineskip}
 \subsubsection{Caso 13:}
-\label{sec:org70b382a}
+\label{sec:orgcfb1bbc}
 
 \textbf{Datos:}
 
@@ -1267,7 +1280,7 @@ Costo Total: \$300.00
 
 \Needspace{8\baselineskip}
 \subsubsection{Caso 14:}
-\label{sec:orgce7dc36}
+\label{sec:org1dd7a14}
 
 \textbf{Datos:}
 
@@ -1342,7 +1355,7 @@ Costo Total:
 
 \Needspace{8\baselineskip}
 \subsubsection{Caso 15:}
-\label{sec:org64c4748}
+\label{sec:org19da029}
 
 \textbf{Datos:}
 
@@ -1359,7 +1372,7 @@ Lanza Excepción: Minutos inválidos.
 
 \Needspace{6\baselineskip}
 \subsection{Implementación en Python}
-\label{sec:orgb5adb03}
+\label{sec:org273a295}
 
 En estacionamiento.py se encuentra el Código original a evaluar con una suit de pruebas, de ser necesario, se modifica para que pase las pruebas establecidas en base al modelo del Sistema.
 
@@ -1369,7 +1382,7 @@ El análisis de la implementación de las pruebas se encuentra en casos-prueba.p
 
 \Needspace{7\baselineskip}
 \section{Checklist}
-\label{sec:org7011a2d}
+\label{sec:org09ce608}
 
 Estado de las Actividades:
 
@@ -1382,10 +1395,10 @@ Estado de las Actividades:
 Registro de Actividades:
 
 \begin{itemize}
-\item[{$\boxminus$}] Documentación.
+\item[{$\boxtimes$}] Documentación.
 \item[{$\boxtimes$}] Planteamiento de Pruebas.
-\item[{$\boxminus$}] Implementación de Pruebas.
-\item[{$\boxminus$}] Evidencia de Ejecución.
+\item[{$\boxtimes$}] Implementación de Pruebas.
+\item[{$\boxtimes$}] Evidencia de Ejecución.
 \item[{$\square$}] Preguntas de Análisis.
 \item[{$\boxminus$}] Organización de Archivos.
 \item[{$\square$}] README.md.

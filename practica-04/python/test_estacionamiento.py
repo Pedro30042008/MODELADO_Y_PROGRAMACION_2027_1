@@ -9,6 +9,8 @@ def sistema():
     """Preparación reutilizable para las pruebas."""
     return Estacionamiento()
 
+# Test de Casos Normales
+
 # Arrange
 @pytest.mark.parametrize(
     "minutos, esperado",
@@ -28,7 +30,9 @@ def test_cliente_Normal_con_Boleto_Casos_Normal(sistema, minutos, esperado):
     resultado = sistema.calcular_total(minutos, "normal", False)
     
     # Assert
-    assert resultado == pytest.approx(esperado)
+    assert resultado == esperado
+
+# Test de Casos Frontera
 
 # Arrange
 @pytest.mark.parametrize(
@@ -53,9 +57,9 @@ def test_cliente_Normal_con_Boleto_Casos_Frontera(sistema, minutos, esperado):
     resultado = sistema.calcular_total(minutos, "normal", False)
     
     # Assert
-    assert resultado == pytest.approx(esperado)
+    assert resultado == esperado
 
-# Test de Entradas inválidas.
+# Test de Entradas inválidas
 
 # Arrange
 @pytest.mark.parametrize(
@@ -76,24 +80,20 @@ def test_Minutos_Invalidos(sistema, minutos):
     with pytest.raises(MinutosInvalidos):
         sistema.calcular_total(minutos, "normal", False)
 
-# Arrange
-@pytest.mark.parametrize(
-    "cliente",
-    [
-                     # | Núm. |       Caso       | Regla(s) | Descripción                                                      |
-        "premium",   # | 11   | Entrada inválida | R2 y R11 | Cliente "premium" con boleto pasó 5 min no está bien definido.   |
-    ],
-)
-def test_Cliente_Invalido(sistema, cliente):
+def test_Cliente_Invalido(sistema):
     """
     Verifica que el programa rechaze los clientes que no están
     definidos en la R2. Siguiendo el procedimiento de R11.
     """
-
-    # Act and Assert
+    # | Caso | Descripción                                                      |
+    # | 10   | Cliente "premium" con boleto pasó 5 min no está bien definido.   |
+    
+    # Arrage, Act and Assert
     with pytest.raises(ClienteInvalido):
-        sistema.calcular_total(5, cliente, False)
-        
+        sistema.calcular_total(5, "premium", False)
+
+# Test de Casos interacción entre reglas
+
 # Arrange
 @pytest.mark.parametrize(
     "boleto, esperado",
@@ -112,6 +112,27 @@ def test_cliente_Frecuente_Casos_Interaccion_entre_reglas(sistema, boleto, esper
     resultado = sistema.calcular_total(1250, "frecuente", boleto)
     
     # Assert
+    assert resultado == esperado
+
+# Test Numeros decimales entre resultados
+
+# Arrange
+@pytest.mark.parametrize(
+    "minutos, esperado",
+    [
+                      # | Núm. |           Caso            | Regla(s) | Descripción                                                           |
+        (61, 31.50),  # | 14   | Decimales en el resultado | R7 y R8  | Cliente "frecuente" con boleto paso 61 minutos en el estacionamiento. |
+    ],
+)
+def test_cliente_Frecuente_Casos_Resultado_con_decimales(sistema, minutos, esperado):
+    """
+    Verifica que el programa calcule correctamente el costo del estacionamiento
+    dado que el cliente es frecuente y tenga boleto.
+    """
+    # Act
+    resultado = sistema.calcular_total(minutos, "frecuente", False)
+    
+    # Assert
     assert resultado == pytest.approx(esperado)
     
 # TODO:
@@ -119,5 +140,5 @@ def test_cliente_Frecuente_Casos_Interaccion_entre_reglas(sistema, boleto, esper
 # 2. Agregue casos frontera. *
 # 3. Agregue entradas inválidas con pytest.raises. *
 # 4. Agregue casos parametrizados con @pytest.mark.parametrize. *
-# 5. Use pytest.approx cuando el resultado esperado tenga decimales.
+# 5. Use pytest.approx cuando el resultado esperado tenga decimales. *
 # 6. Pruebe interacciones entre reglas. *

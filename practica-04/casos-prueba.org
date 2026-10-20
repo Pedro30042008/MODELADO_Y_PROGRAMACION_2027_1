@@ -14,7 +14,7 @@
 # Materia y práctica
 #+LATEX_HEADER: \newcommand{\materia}{MODELADO Y PROGRAMACIÓN}
 
-#+LATEX_HEADER: \newcommand{\tipoPractica}{CASOS PRUEBA}
+#+LATEX_HEADER: \newcommand{\tipoPractica}{DOCUMENTACIÓN}
 
 #+LATEX_HEADER: \newcommand{\practicaTitulo}{PRÁCTICA 4:\\PRUEBAS UNITARIAS}
 
@@ -24,10 +24,13 @@
 # Equipo
 # Cambia únicamente el contenido entre llaves.
 #+LATEX_HEADER: \newcommand{\autorUno}{Alan Gael Alvarez Hernández}
+#+LATEX_HEADER: \newcommand{\cuentaUno}{323113340}
 
 #+LATEX_HEADER: \newcommand{\autorDos}{María Fernanda Miranda Sánchez}
+#+LATEX_HEADER: \newcommand{\cuentaDos}{420102320}
 
 #+LATEX_HEADER: \newcommand{\autorTres}{Pedro Pablo Ruiz Hernández}
+#+LATEX_HEADER: \newcommand{\cuentaTres}{323198507}
 
 
 # Profesora
@@ -58,7 +61,7 @@
 
 #+LATEX_HEADER: \newcommand{\encabezadoIzquierdo}{Modelado y Programación}
 
-#+LATEX_HEADER: \newcommand{\encabezadoDerecho}{Práctica 4: Pruebas Unitarias}
+#+LATEX_HEADER: \newcommand{\encabezadoDerecho}{Práctica 4: Pruebas unitarias}
 
 
 # ============================================================
@@ -539,12 +542,12 @@ at ([xshift=12.10cm,yshift=-14.42cm]current page.north west)
 % Mismo tamaño y altura tipográfica que PROFESORA:
 \node[
     anchor=north,
-    align=center,
+    inner sep=0pt,
     font=\fuentePortada\mdseries\fontsize{10.8}{12.8}\selectfont
 ]
 at ([xshift=12.025cm,yshift=-16.25cm]current page.north west)
 {
-    INTEGRANTES DEL EQUIPO:
+    \makebox[10.05cm][s]{INTEGRANTE DEL EQUIPO:\hfill NÚM. DE CUENTA:}
 };
 
 
@@ -553,40 +556,50 @@ at ([xshift=12.025cm,yshift=-16.25cm]current page.north west)
 % que PROFESORA -> nombre de profesora.
 \node[
     anchor=north,
-    align=center,
-    text width=12.2cm,
+    inner sep=0pt,
     font=\fuentePortada\mdseries\fontsize{9.8}{11.6}\selectfont
 ]
 at ([xshift=12.025cm,yshift=-16.9cm]current page.north west)
 {
-    \autorUno
+    \makebox[10.05cm][s]{%
+        \autorUno
+        \leaders\hbox{\kern0.10em.\kern0.10em}\hfill
+        \cuentaUno
+    }
 };
 
 
 % Integrante 2
 \node[
     anchor=north,
-    align=center,
-    text width=12.2cm,
+    inner sep=0pt,
     font=\fuentePortada\mdseries\fontsize{9.8}{11.6}\selectfont
 ]
 at ([xshift=12.025cm,yshift=-17.34cm]current page.north west)
 {
-    \autorDos
+    \makebox[10.05cm][s]{%
+        \autorDos
+        \leaders\hbox{\kern0.10em.\kern0.10em}\hfill
+        \cuentaDos
+    }
 };
 
 
 % Integrante 3
 \node[
     anchor=north,
-    align=center,
-    text width=12.2cm,
+    inner sep=0pt,
     font=\fuentePortada\mdseries\fontsize{9.8}{11.6}\selectfont
 ]
 at ([xshift=12.025cm,yshift=-17.78cm]current page.north west)
 {
-    \autorTres
+    \makebox[10.05cm][s]{%
+        \autorTres
+        \leaders\hbox{\kern0.10em.\kern0.10em}\hfill
+        \cuentaTres
+    }
 };
+
 
 % ============================================================
 % PROFESORA
@@ -1203,7 +1216,7 @@ Números decimales en el resultado &
 con boleto &
 \$31.50 &
 R7 y R8 &
-Analiza el comportamiento del sistema cuando se le cobra al cliente "frecuente" con boleto por los minutos transcurridos, en cuyo caso debe cobrar lo justo, que es \$31.50.
+Analiza el comportamiento del sistema cuando se le cobra al cliente "frecuente" con boleto por 61 minutos transcurridos, en cuyo caso debe cobrar lo justo, que es \$31.50.
 \\
 \hline
 
@@ -1275,7 +1288,7 @@ Prueba encargada de verificar el comportamiento del sistema en los casos normale
         resultado = sistema.calcular_total(minutos, "normal", False)
 
         # Assert
-        assert resultado == pytest.approx(esperado)
+        assert resultado == esperado
 \end{lstlisting}
 
 #+END_EXPORT
@@ -1350,7 +1363,7 @@ Prueba encargada de verificar el comportamiento del sistema en los casos fronter
         resultado = sistema.calcular_total(minutos, "normal", False)
     
         # Assert
-        assert resultado == pytest.approx(esperado)
+        assert resultado == esperado
 \end{lstlisting}
 
 #+END_EXPORT
@@ -1440,23 +1453,17 @@ Con ello, definimos las pruebas con las nuevas excepciones que esperamos ver.
         with pytest.raises(MinutosInvalidos):
             sistema.calcular_total(minutos, "normal", False)
 
-    # Arrange
-    @pytest.mark.parametrize(
-        "cliente",
-	[
-                         # | Caso | Descripción                           |
-            "premium",   # | 11   | Cliente "premium" no está definido.   |
-        ],
-    )
-    def test_Cliente_Invalido(sistema, cliente):
+    def test_Cliente_Invalido(sistema):
         """
 	Verifica que el programa rechaze los clientes que no están
 	definidos en la R2. Siguiendo el procedimiento de R11.
 	"""
-
-	# Act and Assert
+	# | Caso | Descripción                                |
+        # | 10   | Cliente "premium" no está bien definido.   |
+	
+	# Arrange, Act and Assert
 	with pytest.raises(ClienteInvalido):
-            sistema.calcular_total(5, cliente, False)
+            sistema.calcular_total(5, "premium", False)
     ...
 \end{lstlisting}
 
@@ -1465,15 +1472,6 @@ Con ello, definimos las pruebas con las nuevas excepciones que esperamos ver.
 *** Resultado de la Prueba
 
 Los casos 10, 11 y 15 fallaron la prueba; dado que el planteamiento de las pruebas esta basado en una interpretación correcta del modelo, analizamos el Código original.
-
-
-#+latex: \vspace{\baselineskip}
-
-#+latex: \vspace{\baselineskip}
-
-#+latex: \vspace{\baselineskip}
-
-#+latex: \vspace{\baselineskip}
 
 *** Código Original
 
@@ -1490,6 +1488,8 @@ Los casos 10, 11 y 15 fallaron la prueba; dado que el planteamiento de las prueb
 \end{lstlisting}
 
 #+END_EXPORT
+
+#+latex: \vspace{\baselineskip}
 
 Al revisar el Código original, notamos que para el caso 10 y 11 no se lanzan las excepciones que esperabamos porque la implementación original reporta las entradas inválidas con la excepción ValueError, pero como mencionamos anteriormente, esta es una mala práctica de programación. Por otro lado, en el caso 15, la implementación original no considera a los decimales como valor de entrada inválida para los minutos, cuando debería hacerlo por el modelo establecido.
 
@@ -1543,9 +1543,11 @@ Prueba que verifica el comportamiento del sistema en los casos de interacción e
         """
         # Act
         resultado = sistema.calcular_total(1250, "frecuente", boleto)
-    
+
+
+	
         # Assert
-        assert resultado == pytest.approx(esperado)
+        assert resultado == esperado
     ...
 \end{lstlisting}
 
@@ -1605,7 +1607,71 @@ Para reparar el código correctamente conforme al modelo, modificamos el flujo; 
 
 ** Caso Números decimales en el resultado: 14
 
-D14
+*** Implementación de la Prueba en Python
+
+Prueba que verifica el comportamiento del sistema en el caso 14 de números decimales en el resultado.
+
+#+latex: \vspace{\baselineskip}
+
+#+BEGIN_EXPORT latex
+
+\begin{lstlisting}[style=practica]
+    ...
+    # Arrange
+    @pytest.mark.parametrize(
+        "minutos, esperado",
+        [
+                          # | Caso | Descripción                                      |
+            (61, 31.50),  # | 14   | Cliente "frecuente" con boleto paso 61 minutos.  |
+        ],
+    )
+    def test_cliente_Frecuente_Casos_Interaccion_entre_reglas(sistema, minutos, esperado):
+        """
+        Verifica que el programa calcule correctamente el costo del estacionamiento
+        dado que el cliente es frecuente y tenga boleto.
+        """
+        # Act
+        resultado = sistema.calcular_total(minutos, "frecuente", False)
+    
+        # Assert
+        assert resultado == pytest.approx(esperado)
+	...
+\end{lstlisting}
+
+#+END_EXPORT
+
+En este caso, podemos ver que el resultado proviene de operaciones con float, y estas pueden aparecer con pequeñas diferencias de precisión por el manejo de este tipo de dato en el lenguaje, por ello, ocupamos pytest.approx para comparar valores con cierta tolerancia que definimos como correctos. En los anteriores casos no es necesario porque obtenemos resultados enteros que si pueden compararse exactamente con el operador "==" sin utilizar pytest.approx.
+
+*** Resultado de la Prueba
+
+El caso 14 pasó la prueba; dado que el planteamiento de las pruebas esta basado en una interpretación correcta del modelo, determinamos que el Código original está bien planteado para este caso.
+
+*** Código Original
+
+#+BEGIN_EXPORT latex
+
+\begin{lstlisting}[style=practica]
+    ...
+    def calcular_total(self, minutos: int, tipo_cliente: str = "normal",
+                       boleto_perdido: bool = False) -> float:
+        ...
+        if boleto_perdido:
+            return self.TARIFA_BOLETO_PERDIDO
+	...
+        else:
+            horas_adicionales = math.ceil((minutos - 60) / 60)
+            total = 20.0 + (horas_adicionales * 15.0)
+	    
+        if tipo_cliente == "frecuente":
+            total *= 0.90
+
+        return round(total, 2)
+    ...
+\end{lstlisting}
+
+#+END_EXPORT
+
+Al revisar el Código original y compararlo con el modelo del sistema, round funciona bien para determinar el costo de la tarifa en centavos. Pero en este caso, se vuelve un poco redundante al trabajar con tarifas que solo tengan como decimal a 0.0 o 0.5 y estos representarse de forma exacta en binario; sin embargo, en caso de que llegasen a cambiar los precios posteriormente, entonces sería de más utilidad dependiendo de como se establezca el redondeo de tarifas en el nuevo modelo.
 
 * Preguntas de análisis
 
