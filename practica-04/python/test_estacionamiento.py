@@ -1,6 +1,8 @@
 import pytest
 
 from estacionamiento import Estacionamiento
+from MinutosInvalidos import MinutosInvalidos
+from ClienteInvalido import ClienteInvalido
 
 @pytest.fixture
 def sistema():
@@ -52,11 +54,50 @@ def test_cliente_Normal_con_Boleto_Casos_Frontera(sistema, minutos, esperado):
     
     # Assert
     assert resultado == pytest.approx(esperado)
+
+# Test de Entradas inválidas.
+
+# Arrange
+@pytest.mark.parametrize(
+    "minutos",
+    [
+                # | Caso | Descripción                                                      |
+        -1,     # | 10   | Cliente "normal" con boleto pasó -1 min no está bien definido.   |
+        15.5,   # | 15   | Cliente "normal" con boleto pasó 15.5 min no está bien definido. |
+    ],
+)
+def test_Minutos_Invalidos(sistema, minutos):
+    """
+    Verifica que el programa rechaze los Minutos Inválidos establecidos
+    en la R1.
+    """
+    # Siguiendo la R10, verifcamos que rechaze los minutos negativos.
+    # Act and Assert
+    with pytest.raises(MinutosInvalidos):
+        sistema.calcular_total(minutos, "normal", False)
+
+# Arrange
+@pytest.mark.parametrize(
+    "cliente",
+    [
+                     # | Núm. |       Caso       | Regla(s) | Descripción                                                      |
+        "premium",   # | 11   | Entrada inválida | R2 y R11 | Cliente "premium" con boleto pasó 5 min no está bien definido.   |
+    ],
+)
+def test_Cliente_Invalido(sistema, cliente):
+    """
+    Verifica que el programa rechaze los clientes que no están
+    definidos en la R2. Siguiendo el procedimiento de R11.
+    """
+
+    # Act and Assert
+    with pytest.raises(ClienteInvalido):
+        sistema.calcular_total(5, cliente, False)
     
 # TODO:
 # 1. Agregue casos normales. *
-# 2. Agregue casos frontera.
-# 3. Agregue entradas inválidas con pytest.raises.
+# 2. Agregue casos frontera. *
+# 3. Agregue entradas inválidas con pytest.raises. *
 # 4. Agregue casos parametrizados con @pytest.mark.parametrize.
 # 5. Use pytest.approx cuando el resultado esperado tenga decimales.
 # 6. Pruebe interacciones entre reglas.

@@ -1,5 +1,8 @@
 import math
 
+from MinutosInvalidos import MinutosInvalidos
+from ClienteInvalido import ClienteInvalido
+
 class Estacionamiento:
 
     # Tarifa del boleto perdido.
@@ -16,11 +19,15 @@ class Estacionamiento:
         """
         # Entrada Invalida: Minutos Negativos.
         if minutos < 0:
-            raise ValueError("Los minutos no pueden ser negativos")
+            raise MinutosInvalidos("Los minutos no pueden ser negativos")
 
+        # Entrada Invalida: Minutos Decimales.
+        if isinstance(minutos, float):
+            raise MinutosInvalidos("Los minutos no pueden ser en decimal")
+        
         # Entrada Inválida: Tipo de cliente no reconocido.
         if tipo_cliente not in ("normal", "frecuente"):
-            raise ValueError("Tipo de cliente no válido")
+            raise ClienteInvalido("Tipo de cliente no válido")
 
         # Si el boleto está perdido -> $300.00
         if boleto_perdido:

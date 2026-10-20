@@ -14,7 +14,7 @@
 # Materia y práctica
 #+LATEX_HEADER: \newcommand{\materia}{MODELADO Y PROGRAMACIÓN}
 
-#+LATEX_HEADER: \newcommand{\tipoPractica}{CASOS PRUEBA}
+#+LATEX_HEADER: \newcommand{\tipoPractica}{DOCUMENTACIÓN}
 
 #+LATEX_HEADER: \newcommand{\practicaTitulo}{PRÁCTICA 4:\\PRUEBAS UNITARIAS}
 

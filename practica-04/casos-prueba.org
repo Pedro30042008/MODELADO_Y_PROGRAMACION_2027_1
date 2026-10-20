@@ -1209,8 +1209,6 @@ Al ejecutar las pruebas sin modificar el código original, falla el Caso 3 estab
 
 #+END_EXPORT
 
-#+latex: \vspace{\baselineskip}
-
 Al observar el código original, debemos modificar el cálculo si el cliente permanece mas de 60 minutos, pues al dividir las horas adicionales, solo se toman en cuenta las horas completas que ya pasaron, pero falta contemplar las horas iniciadas, para compensar, debemos tomar el techo del resultado de la división:
 
 #+latex: \vspace{\baselineskip}
@@ -1258,6 +1256,7 @@ Hacemos las pruebas con clientes de tipo "normal" y con boleto.
 
 
 
+
 def test_cliente_Normal_con_Boleto_Casos_Frontera(sistema, minutos, esperado):
     """
     Verifica el cobro calculado para un cliente "normal" con boleto dado un cierto tiempo,
@@ -1289,8 +1288,6 @@ Al ejecutar las pruebas sin modificar el código original, falla el Caso 4 estab
 
 #+END_EXPORT
 
-#+latex: \vspace{\baselineskip}
-
 Al observar el código original, notamos que debemos modificar el cálculo en la frontera de 15 minutos, pues no toma en cuenta los 15 minutos para asignar el costo correcto, para solucionarlo, debemos agregar el valor de 15 minutos en la frontera:
 
 #+latex: \vspace{\baselineskip}
@@ -1307,32 +1304,125 @@ Al observar el código original, notamos que debemos modificar el cálculo en la
 
 #+END_EXPORT
 
-Con este cambio, solucionamos un problema del código original y pasan las pruebas de los casos 4, 5, 6, 7, 8 y 9.
+Con este cambio, solucionamos otro problema del código original y pasan las pruebas de los casos 4, 5, 6, 7, 8 y 9.
 
-** Caso 10
+** Casos Entrada Inválida: 10, 11 y 15
 
-D10
+Hacemos las pruebas con un cliente de tipo "normal" y con boleto para el caso 10 y 15; para el caso 11 un cliente con boleto y 5 minutos en el estacionamiento.
 
-** Caso 11
+Dado que no tenemos excepciones personalizadas en el Código orginal, nosotros definimos las Excepciones que se deben lanzar al detectar una Entrada inválida:
 
-D11
+- *MinutosInvalidos:* Lanzada cuando no se cumple *R1* y *R10*.
+- *ClienteInvalido:* Lanzada cuando no se cumple *R2*.
 
-** Caso 12
+#+latex: \vspace{\baselineskip}
 
-D12
+Recordemos que definir una misma Excepción (como ValueError) para los "errores" que lanze el programa es una mala práctica de programación, pues dificulta el mantenimiento del programa a largo plazo; por ejemplo, cuando se incremente la cantidad de código es dificil localizar en que parte del Código se encuentra la Excepción que debemos mejorar o arreglar.
 
-** Caso 13
+#+latex: \vspace{\baselineskip}
 
-D13
+#+BEGIN_EXPORT latex
 
-** Caso 14
+\begin{lstlisting}[style=practica]
+...
+from MinutosInvalidos import MinutosInvalidos
+from ClienteInvalido import ClienteInvalido
+...
+# Test de Entradas inválidas.
+
+# Arrange
+@pytest.mark.parametrize(
+    "minutos",
+    [
+                # | Caso | Descripción                     |
+        -1,     # | 10   | -1 min no está bien definido.   |
+        15.5,   # | 15   | 15.5 min no está bien definido. |
+    ],
+)
+def test_Minutos_Invalidos(sistema, minutos):
+    """
+    Verifica que el programa rechaze los Minutos Inválidos establecidos
+    en la R1.
+    """
+    # Siguiendo la R10, verifcamos que rechaze los minutos negativos.
+    # Act and Assert
+    with pytest.raises(MinutosInvalidos):
+        sistema.calcular_total(minutos, "normal", False)
+
+# Arrange
+@pytest.mark.parametrize(
+    "cliente",
+    [
+                     # | Caso | Descripción                                |
+        "premium",   # | 11   | Cliente "premium" no está bien definido.   |
+    ],
+)
+def test_Cliente_Invalido(sistema, cliente):
+    """
+    Verifica que el programa rechaze los clientes que no están
+    definidos en la R2. Siguiendo el procedimiento de R11.
+    """
+
+    # Act and Assert
+    with pytest.raises(ClienteInvalido):
+        sistema.calcular_total(5, cliente, False)
+\end{lstlisting}
+
+#+END_EXPORT
+
+Al correr las pruebas, en el caso 10 y 11 no se detecta la excepción que esperabamos, esto debido a que el Código original tiene las Excepciones marcadas con la misma "etiqueta" de ValueError, por otro lado, en el caso 15 el código no lanzó la Excepción que esperabamos, y dado que hemos planteado bien los ressultados esperados por las pruebas, debemos mejorar el Código Original.
+
+#+latex: \vspace{\baselineskip}
+
+#+BEGIN_EXPORT latex
+
+\begin{lstlisting}[style=practica]
+...
+    # Entrada Invalida: Minutos Negativos.
+    if minutos < 0:
+        raise ValueError("Los minutos no pueden ser negativos")
+
+    # Entrada Inválida: Tipo de cliente no reconocido.
+    if tipo_cliente not in ("normal", "frecuente"):
+       raise ValueError("Tipo de cliente no válido")
+...
+\end{lstlisting}
+
+#+END_EXPORT
+
+Notemos que en los casos 10 y 11, debemos ocupar las Excepciones que personalizamos para "etiquetar" de una mejor manera los casos de entradas inválidas, mientras que para el caso 15, el definido por el equipo, debemos agregar una Excepcion de MinutosInvalidos para que rechace minutos que no sean numeros enteros positivos o el cero, en este caso, decimales.
+
+#+latex: \vspace{\baselineskip}
+
+#+BEGIN_EXPORT latex
+
+\begin{lstlisting}[style=practica]
+...
+    # Entrada Invalida: Minutos Negativos.
+    if minutos < 0:
+        raise MinutosInvalidos("Los minutos no pueden ser negativos") # Modificacion
+
+    # Entrada Invalida: Minutos Decimales. # Modificacion
+    if isinstance(minutos, float):
+        raise MinutosInvalidos("Los minutos no pueden ser en decimal")
+        
+    # Entrada Inválida: Tipo de cliente no reconocido.
+    if tipo_cliente not in ("normal", "frecuente"):
+        raise ClienteInvalido("Tipo de cliente no válido") # Modificacion
+...
+\end{lstlisting}
+
+#+END_EXPORT
+
+Con ello, hemos corregido errores del Código original y las pruebas 10, 11 y 15 pasan.
+
+** Casos Interacción entre reglas: 12 y 13
+
+D12 y D13
+
+** Caso Números decimales en el resultado: 14
 
 D14
-
-** Caso 15
-
-D15
-
 
 * Preguntas de análisis
 
