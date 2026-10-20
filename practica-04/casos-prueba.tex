@@ -1,4 +1,4 @@
-% Created 2026-10-17 Sat 14:55
+% Created 2026-10-17 Sat 15:07
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt,letterpaper]{article}
 \usepackage[utf8]{inputenc}
@@ -583,7 +583,7 @@ at ([xshift=12.10cm,yshift=-24.78cm]current page.north west)
 
 \clearpage
 \section{Código original}
-\label{sec:org023dea0}
+\label{sec:org8ae6329}
 
 Código original a evaluar con una suit de pruebas, estas últimas deben sacarse del modelo del Sistema de Ticket estacionamiento, no del Código original.
 
@@ -638,7 +638,7 @@ def calcular_total(self, minutos: int, tipo_cliente: str = "normal",
     return round(total, 2)
 \end{lstlisting}
 \section{Reglas del Sistema: Ticket de Estacionamiento}
-\label{sec:orgbac516b}
+\label{sec:org5ef8475}
 
 Las reglas del Sistema de Ticket de Estacionamiento son:
 
@@ -674,10 +674,10 @@ Las reglas del Sistema de Ticket de Estacionamiento son:
 
 \endgroup
 \section{Construcción de la Tabla de casos}
-\label{sec:org1aa5f29}
+\label{sec:orgce6d42c}
 
 \subsection{Planteamiento de pruebas}
-\label{sec:org649f32e}
+\label{sec:org44aa71f}
 
 Planteamos para el Sistema de Ticket de Estacionamiento:
 
@@ -690,7 +690,7 @@ Planteamos para el Sistema de Ticket de Estacionamiento:
 \item 1 caso adicional propuesto por el equipo (entrada inválida).
 \end{itemize}
 \subsection{Tabla de casos}
-\label{sec:orga360454}
+\label{sec:org7a0f072}
 
 
 % ============================================================
@@ -937,10 +937,10 @@ El sistema solo permite minutos enteros; no acepta valores decimales.
 
 \endgroup
 \section{Evidencia de Ejecución}
-\label{sec:orgdae6ba4}
+\label{sec:org43bac3e}
 
-\subsection{Caso 1, Caso 2 y Caso 3}
-\label{sec:org0af32f7}
+\subsection{Casos Normales: 1, 2 y 3}
+\label{sec:orgffcc672}
 
 
 \begin{lstlisting}[style=practica]
@@ -985,7 +985,7 @@ Al ejecutar las pruebas sin modificar el código original, falla el Caso 3 estab
 
 \vspace{\baselineskip}
 
-Al observar el código original, debemos modificar el cálculo si el cliente permanece mas de 60 minutos, pues al dividir las horass adicionales, solo se toman en cuenta las horas completas que ya pasaron, pero falta contemplar las horas iniciadas, para compensar, debemos tomar el techo del resultado de la división:
+Al observar el código original, debemos modificar el cálculo si el cliente permanece mas de 60 minutos, pues al dividir las horas adicionales, solo se toman en cuenta las horas completas que ya pasaron, pero falta contemplar las horas iniciadas, para compensar, debemos tomar el techo del resultado de la división:
 
 \vspace{\baselineskip}
 
@@ -996,68 +996,106 @@ Al observar el código original, debemos modificar el cálculo si el cliente per
     # -> $20.00 la primera hora.
     # -> $15.00 cada hora iniciada.
     else:
-        horas_adicionales = math.ceil((minutos - 60) / 60)
+        horas_adicionales = math.ceil((minutos - 60) / 60) # Modificación
         total = 20.0 + (horas_adicionales * 15.0)
 ...
 \end{lstlisting}
 
 Con este cambio, solucionamos un problema del código original y pasan las primeras tres pruebas de los primeros tres casos.
-\subsection{Caso 2}
-\label{sec:org0ef3192}
+\subsection{Casos Frontera: 4, 5, 6, 7, 8 y 9}
+\label{sec:orgb2ba21b}
 
-\subsection{Caso 3}
-\label{sec:org12e2305}
+Hacemos las pruebas con clientes de tipo "normal" y con boleto.
 
-\subsection{Caso 4}
-\label{sec:org2ffd83e}
+\vspace{\baselineskip}
 
-D4
-\subsection{Caso 5}
-\label{sec:orgd047fc1}
 
-D5
-\subsection{Caso 6}
-\label{sec:org22ee61c}
+\begin{lstlisting}[style=practica]
+# Arrange
+@pytest.mark.parametrize(
+    "minutos, esperado",
+    [
+                      # | Caso | Descripción                                         |
+        (15, 0.00),   # |  4   | Último valor entre el rango de 1-15.                |
+        (16, 20.00),  # |  5   | Primer valor entre el rango de 16-60.               |
+        (60, 20.00),  # |  6   | Último valor entre el rango de 16-60.               |
+        (61, 35.00),  # |  7   | Una hora completa y una hora adicional iniciada.    |
+        (120, 35.00), # |  8   | Dos horas completas sin hora adicional iniciada.    |
+        (121, 50.00), # |  9   | Dos horas completas y una hora adicional iniciada.  |
+    ],
+)
 
-D6
-\subsection{Caso 7}
-\label{sec:orgd1d1ea9}
 
-D7
-\subsection{Caso 8}
-\label{sec:orgad6a1ee}
 
-D8
-\subsection{Caso 9}
-\label{sec:orgadd560a}
 
-D9
+def test_cliente_Normal_con_Boleto_Casos_Frontera(sistema, minutos, esperado):
+    """
+    Verifica el cobro calculado para un cliente "normal" con boleto dado un cierto tiempo,
+    en escencia cuando hay un cambio entre los límites de rangos de tiempo.
+    """
+    
+    # Act
+    resultado = sistema.calcular_total(minutos, "normal", False)
+    
+    # Assert
+    assert resultado == pytest.approx(esperado)
+\end{lstlisting}
+
+Al ejecutar las pruebas sin modificar el código original, falla el Caso 4 establecido en las pruebas; pero como comprobamos el resultado a obtener antes de ejecutar la prueba, concluimos que el código original falló la prueba y debemos corregirlo.
+
+\vspace{\baselineskip}
+
+
+\begin{lstlisting}[style=practica]
+...
+    # Si permanece 15 minutos o menos -> $0.00
+    elif minutos < 15:
+        total = 0.0
+...
+\end{lstlisting}
+
+\vspace{\baselineskip}
+
+Al observar el código original, notamos que debemos modificar el cálculo en la frontera de 15 minutos, pues no toma en cuenta los 15 minutos para asignar el costo correcto, para solucionarlo, debemos agregar el valor de 15 minutos en la frontera:
+
+\vspace{\baselineskip}
+
+
+\begin{lstlisting}[style=practica]
+...
+    # Si permanece 15 minutos o menos -> $0.00
+    elif minutos <= 15: # Modificación
+        total = 0.0
+...
+\end{lstlisting}
+
+Con este cambio, solucionamos un problema del código original y pasan las pruebas de los casos 4, 5, 6, 7, 8 y 9.
 \subsection{Caso 10}
-\label{sec:org7cd28d5}
+\label{sec:org8aeac37}
 
 D10
 \subsection{Caso 11}
-\label{sec:org2d478c1}
+\label{sec:org3b49026}
 
 D11
 \subsection{Caso 12}
-\label{sec:org9c480ac}
+\label{sec:orgd7df326}
 
 D12
 \subsection{Caso 13}
-\label{sec:orgc3a1269}
+\label{sec:org30d79c8}
 
 D13
 \subsection{Caso 14}
-\label{sec:orgead1591}
+\label{sec:org7733dc8}
 
 D14
 \subsection{Caso 15}
-\label{sec:org105a687}
+\label{sec:org573692a}
 
 D15
 \section{Preguntas de análisis}
-\label{sec:org461bce8}
+\label{sec:org3f73183}
 
 \textbf{1.} ¿Qué diferencia hay entre un caso normal y un caso frontera?
 

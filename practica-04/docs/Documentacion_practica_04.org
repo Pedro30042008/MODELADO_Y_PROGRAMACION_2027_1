@@ -806,7 +806,6 @@ at ([xshift=12.10cm,yshift=-24.78cm]current page.north west)
 # ============================================================
 
 
-
 #+BEGIN_EXPORT latex
 \Needspace{7\baselineskip}
 #+END_EXPORT

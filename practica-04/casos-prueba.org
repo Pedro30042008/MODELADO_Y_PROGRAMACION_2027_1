@@ -1160,7 +1160,7 @@ El sistema solo permite minutos enteros; no acepta valores decimales.
 
 * Evidencia de Ejecución
 
-** Caso 1, Caso 2 y Caso 3
+** Casos Normales: 1, 2 y 3
 
 #+BEGIN_EXPORT latex
 
@@ -1211,7 +1211,7 @@ Al ejecutar las pruebas sin modificar el código original, falla el Caso 3 estab
 
 #+latex: \vspace{\baselineskip}
 
-Al observar el código original, debemos modificar el cálculo si el cliente permanece mas de 60 minutos, pues al dividir las horass adicionales, solo se toman en cuenta las horas completas que ya pasaron, pero falta contemplar las horas iniciadas, para compensar, debemos tomar el techo del resultado de la división:
+Al observar el código original, debemos modificar el cálculo si el cliente permanece mas de 60 minutos, pues al dividir las horas adicionales, solo se toman en cuenta las horas completas que ya pasaron, pero falta contemplar las horas iniciadas, para compensar, debemos tomar el techo del resultado de la división:
 
 #+latex: \vspace{\baselineskip}
 
@@ -1223,7 +1223,7 @@ Al observar el código original, debemos modificar el cálculo si el cliente per
     # -> $20.00 la primera hora.
     # -> $15.00 cada hora iniciada.
     else:
-        horas_adicionales = math.ceil((minutos - 60) / 60)
+        horas_adicionales = math.ceil((minutos - 60) / 60) # Modificación
         total = 20.0 + (horas_adicionales * 15.0)
 ...
 \end{lstlisting}
@@ -1232,33 +1232,82 @@ Al observar el código original, debemos modificar el cálculo si el cliente per
 
 Con este cambio, solucionamos un problema del código original y pasan las primeras tres pruebas de los primeros tres casos.
 
-** Caso 2
+** Casos Frontera: 4, 5, 6, 7, 8 y 9
 
-** Caso 3
+Hacemos las pruebas con clientes de tipo "normal" y con boleto.
 
-** Caso 4
+#+latex: \vspace{\baselineskip}
 
-D4
+#+BEGIN_EXPORT latex
 
-** Caso 5
+\begin{lstlisting}[style=practica]
+# Arrange
+@pytest.mark.parametrize(
+    "minutos, esperado",
+    [
+                      # | Caso | Descripción                                         |
+        (15, 0.00),   # |  4   | Último valor entre el rango de 1-15.                |
+        (16, 20.00),  # |  5   | Primer valor entre el rango de 16-60.               |
+        (60, 20.00),  # |  6   | Último valor entre el rango de 16-60.               |
+        (61, 35.00),  # |  7   | Una hora completa y una hora adicional iniciada.    |
+        (120, 35.00), # |  8   | Dos horas completas sin hora adicional iniciada.    |
+        (121, 50.00), # |  9   | Dos horas completas y una hora adicional iniciada.  |
+    ],
+)
 
-D5
 
-** Caso 6
 
-D6
 
-** Caso 7
+def test_cliente_Normal_con_Boleto_Casos_Frontera(sistema, minutos, esperado):
+    """
+    Verifica el cobro calculado para un cliente "normal" con boleto dado un cierto tiempo,
+    en escencia cuando hay un cambio entre los límites de rangos de tiempo.
+    """
+    
+    # Act
+    resultado = sistema.calcular_total(minutos, "normal", False)
+    
+    # Assert
+    assert resultado == pytest.approx(esperado)
+\end{lstlisting}
 
-D7
+#+END_EXPORT
 
-** Caso 8
+Al ejecutar las pruebas sin modificar el código original, falla el Caso 4 establecido en las pruebas; pero como comprobamos el resultado a obtener antes de ejecutar la prueba, concluimos que el código original falló la prueba y debemos corregirlo.
 
-D8
+#+latex: \vspace{\baselineskip}
 
-** Caso 9
+#+BEGIN_EXPORT latex
 
-D9
+\begin{lstlisting}[style=practica]
+...
+    # Si permanece 15 minutos o menos -> $0.00
+    elif minutos < 15:
+        total = 0.0
+...
+\end{lstlisting}
+
+#+END_EXPORT
+
+#+latex: \vspace{\baselineskip}
+
+Al observar el código original, notamos que debemos modificar el cálculo en la frontera de 15 minutos, pues no toma en cuenta los 15 minutos para asignar el costo correcto, para solucionarlo, debemos agregar el valor de 15 minutos en la frontera:
+
+#+latex: \vspace{\baselineskip}
+
+#+BEGIN_EXPORT latex
+
+\begin{lstlisting}[style=practica]
+...
+    # Si permanece 15 minutos o menos -> $0.00
+    elif minutos <= 15: # Modificación
+        total = 0.0
+...
+\end{lstlisting}
+
+#+END_EXPORT
+
+Con este cambio, solucionamos un problema del código original y pasan las pruebas de los casos 4, 5, 6, 7, 8 y 9.
 
 ** Caso 10
 

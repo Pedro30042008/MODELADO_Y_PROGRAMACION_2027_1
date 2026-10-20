@@ -1,6 +1,5 @@
 import math
 
-
 class Estacionamiento:
 
     # Tarifa del boleto perdido.
@@ -28,7 +27,7 @@ class Estacionamiento:
             total = self.TARIFA_BOLETO_PERDIDO
             
         # Si permanece 15 minutos o menos -> $0.00
-        elif minutos < 15:
+        elif minutos <= 15:
             total = 0.0
             
         # Si permanece 60 minutos o menos -> $20.00
