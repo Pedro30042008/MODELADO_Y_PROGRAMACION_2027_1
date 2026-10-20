@@ -93,11 +93,31 @@ def test_Cliente_Invalido(sistema, cliente):
     # Act and Assert
     with pytest.raises(ClienteInvalido):
         sistema.calcular_total(5, cliente, False)
+        
+# Arrange
+@pytest.mark.parametrize(
+    "boleto, esperado",
+    [
+                          # | Núm. |         Caso         | Regla(s) | Descripción                                                             |
+        (False, 288.00),  # | 12   | Interacción entre R  | R7 y R8  | Cliente "frecuente" con boleto paso 1250 minutos en el estacionamiento. |
+        (True, 300.00),   # | 13   | Interacción entre R  | R7 y R8  | Cliente "frecuente" sin boleto paso 1250 minutos en el estacionamiento. |
+    ],
+)
+def test_cliente_Frecuente_Casos_Interaccion_entre_reglas(sistema, boleto, esperado):
+    """
+    Verifica que el programa calcule correctamente el costo del estacionamiento
+    dado que el cliente es frecuente, pase 1250 minutos y tenga o no boleto.
+    """
+    # Act
+    resultado = sistema.calcular_total(1250, "frecuente", boleto)
+    
+    # Assert
+    assert resultado == pytest.approx(esperado)
     
 # TODO:
 # 1. Agregue casos normales. *
 # 2. Agregue casos frontera. *
 # 3. Agregue entradas inválidas con pytest.raises. *
-# 4. Agregue casos parametrizados con @pytest.mark.parametrize.
+# 4. Agregue casos parametrizados con @pytest.mark.parametrize. *
 # 5. Use pytest.approx cuando el resultado esperado tenga decimales.
-# 6. Pruebe interacciones entre reglas.
+# 6. Pruebe interacciones entre reglas. *

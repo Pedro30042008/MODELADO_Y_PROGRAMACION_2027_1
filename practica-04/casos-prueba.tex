@@ -1,4 +1,4 @@
-% Created 2026-10-17 Sat 15:11
+% Created 2026-10-17 Sat 15:17
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt,letterpaper]{article}
 \usepackage[utf8]{inputenc}
@@ -582,63 +582,67 @@ at ([xshift=12.10cm,yshift=-24.78cm]current page.north west)
 \tableofcontents
 
 \clearpage
-\section{Código original}
-\label{sec:org49bf8c5}
+\section{Implementación Original del Sistema}
+\label{sec:org7446df0}
 
-Código original a evaluar con una suit de pruebas, estas últimas deben sacarse del modelo del Sistema de Ticket estacionamiento, no del Código original.
+Dado el modelo del sistema de estacionamiento, se plantearán las pruebas necesarias para verificar que el comportamiento de la implementación original del sistema sea el esperado por el modelo del mismo.
+
+\vspace{\baselineskip}
+
+En caso de que la implementación original del sistema no pase las pruebas planteadas, modificaremos el código para que este último tenga el comportamiento esperado por el modelo del sistema.
 
 \vspace{\baselineskip}
 
 
 \begin{lstlisting}[style=practica]
-# Tarifa del boleto perdido.
-TARIFA_BOLETO_PERDIDO = 300.0
+    ...
 
-def calcular_total(self, minutos: int, tipo_cliente: str = "normal",
-                   boleto_perdido: bool = False) -> float:
-    """
-    Calcula el total a pagar de acuerdo con el modelo de la práctica.
+    TARIFA_BOLETO_PERDIDO = 300.0
 
-    Nota para el alumno:
-    trate esta implementación como un sistema que debe verificarse.
-    No asuma que todo lo que hace el código es correcto.
-    """
-    # Entrada Invalida: Minutos Negativos.
-    if minutos < 0:
-        raise ValueError("Los minutos no pueden ser negativos")
+    def calcular_total(self, minutos: int, tipo_cliente: str = "normal",
+                       boleto_perdido: bool = False) -> float:
+        """
+        Calcula el total a pagar de acuerdo con el modelo de la práctica.
 
-    # Entrada Inválida: Tipo de cliente no reconocido.
-    if tipo_cliente not in ("normal", "frecuente"):
-        raise ValueError("Tipo de cliente no válido")
+        Nota para el alumno:
+	trate esta implementación como un sistema que debe verificarse.
+	No asuma que todo lo que hace el código es correcto.
+	"""
+    
+        if minutos < 0:
+            raise ValueError("Los minutos no pueden ser negativos")
 
-    # Si el boleto está perdido -> $300.00
-    if boleto_perdido:
-        total = self.TARIFA_BOLETO_PERDIDO
+
+        if tipo_cliente not in ("normal", "frecuente"):
+            raise ValueError("Tipo de cliente no válido")
+
+
+        if boleto_perdido:
+            total = self.TARIFA_BOLETO_PERDIDO
             
-    # Si permanece 15 minutos o menos -> $0.00
-    elif minutos < 15:
-        total = 0.0
-            
-    # Si permanece 60 minutos o menos -> $20.00
-    elif minutos <= 60:
-        total = 20.0
-            
-    # Si permanece mas de 60 minutos:
-    # -> $20.00 la primera hora.
-    # -> $15.00 cada hora iniciada.
-    else:
-        horas_adicionales = (minutos - 60) // 60
-        total = 20.0 + (horas_adicionales * 15.0)
 
-    # Si el cliente es "frecuente" aplicar el 10% de descuento.
-    if tipo_cliente == "frecuente":
-        total *= 0.90
+        elif minutos < 15:
+            total = 0.0
+            
 
-    # Devolver el total redondeado con dos decimales.
-    return round(total, 2)
+        elif minutos <= 60:
+            total = 20.0
+
+	
+        else:
+            horas_adicionales = (minutos - 60) // 60
+            total = 20.0 + (horas_adicionales * 15.0)
+
+	
+        if tipo_cliente == "frecuente":
+            total *= 0.90
+
+        return round(total, 2)
+
+    ...
 \end{lstlisting}
 \section{Reglas del Sistema: Ticket de Estacionamiento}
-\label{sec:org03755fc}
+\label{sec:org3898fad}
 
 Las reglas del Sistema de Ticket de Estacionamiento son:
 
@@ -674,10 +678,10 @@ Las reglas del Sistema de Ticket de Estacionamiento son:
 
 \endgroup
 \section{Construcción de la Tabla de casos}
-\label{sec:org506abda}
+\label{sec:org110c42d}
 
 \subsection{Planteamiento de pruebas}
-\label{sec:org36740bc}
+\label{sec:org55535fb}
 
 Planteamos para el Sistema de Ticket de Estacionamiento:
 
@@ -690,7 +694,7 @@ Planteamos para el Sistema de Ticket de Estacionamiento:
 \item 1 caso adicional propuesto por el equipo (entrada inválida).
 \end{itemize}
 \subsection{Tabla de casos}
-\label{sec:org9066fbd}
+\label{sec:orgd22fc4f}
 
 
 % ============================================================
@@ -731,10 +735,10 @@ Planteamos para el Sistema de Ticket de Estacionamiento:
 \begin{longtable}{
     |C{1.00cm}
     |L{1.95cm}
-    |L{2.65cm}
+    |L{2.30cm}
     |L{2.00cm}
     |L{1.55cm}
-    |L{4.00cm}|
+    |L{4.35cm}|
 }
 
 % ------------------------------------------------------------
@@ -790,136 +794,216 @@ Planteamos para el Sistema de Ticket de Estacionamiento:
 
 1 &
 Normal &
-(10 minutos, "normal", con boleto) &
+10 minutos
+
+"normal"
+
+con boleto &
 \$0.00 &
 R5 &
-Verificamos que se calcule correctamente el cobro a una persona normal con boleto y 10 minutos.
+Analiza el comportamiento del sistema entre 0 a 15 minutos.
 \\
 \hline
 
 2 &
 Normal &
-(40 minutos, "normal", con boleto) &
+40 minutos
+
+"normal"
+
+con boleto &
 \$20.00 &
 R6 &
-Verificamos que se calcule correctamente el cobro a una persona normal con boleto y 40 minutos.
+Analiza el comportamiento del sistema entre 16 a 60 minutos.
 \\
 \hline
 
 3 &
 Normal &
-(1250 minutos, "normal", con boleto) &
+1250 minutos
+
+"normal"
+
+con boleto &
 \$320.00 &
 R7 &
-Verificamos que se calcule correctamente el cobro a una persona normal con boleto y 1250 minutos.
+Analiza el comportamiento del sistema entre horas completas e inciadas.
 \\
 \hline
 
 4 &
 Frontera &
-(15, "normal", con boleto) &
+15 minutos
+
+"normal"
+
+con boleto &
 \$0.00 &
 R5 &
-Verificamos que haya un cambio en la frontera entre 15 y 16.
+Analiza el comportamiento del sistema en el minuto 15, donde el costo permanece en \$0.00 antes de cambiar en el minuto 16 a \$20.00
 \\
 \hline
 
 5 &
 Frontera &
-(16, "normal", con boleto) &
+16 minutos
+
+"normal"
+
+con boleto &
 \$20.00 &
 R6 &
-Verificamos que haya un cambio en la frontera entre 15 y 16.
+Analiza el comportamiento del sistema en el minuto 16, donde el costo cambia a \$20.00 después del minuto 15, donde estaba a \$0.00
 \\
 \hline
 
 6 &
 Frontera &
-(60, "normal", con boleto) &
+60 minutos
+
+"normal"
+
+con boleto &
 \$20.00 &
 R6 &
-Verificamos que haya un cambio en la frontera entre 60 y 61.
+Analiza el comportamiento del sistema en el minuto 60, donde el costo permanece en \$20.00 antes de cambiar en el minuto 61 a \$35.00 por las horas iniciadas.
 \\
 \hline
 
 7 &
 Frontera &
-(61, "normal", con boleto) &
+61 minutos
+
+"normal"
+
+con boleto &
 \$35.00 &
 R7 &
-Verificamos que haya un cambio en la frontera entre 60 y 61.
+Analiza el comportamiento del sistema en el minuto 61, donde el costo cambia a \$35.00 por las horas inciadas después del minuto 60, donde estaba a \$20.00
 \\
 \hline
 
 8 &
 Frontera &
-(120, "normal", con boleto) &
+120 minutos
+
+"normal"
+
+con boleto &
 \$35.00 &
 R7 &
-Verificamos que haya un cambio en la frontera entre 120 y 121.
+Analiza el comportamiento del sistema en el minuto 120, donde el costo permanece en \$35.00 por las horas completas antes de cambiar en el minuto 121 a \$50.00 por las horas inciadas.
 \\
 \hline
 
 9 &
 Frontera &
-(121, "normal", con boleto) &
+121 minutos
+
+"normal"
+
+con boleto &
 \$50.00 &
 R7 &
-Verificamos que haya un cambio en la frontera entre 120 y 121.
+Analiza el comportamiento del sistema en el minuto 121, donde el costo cambia a \$50.00 por las horas iniciadas después del minuto 120, donde estaba a \$35.00 por las horas completas.
 \\
 \hline
 
 10 &
 Entrada inválida &
-(-1, "normal", con boleto) &
-Lanza Excepción: Minutos inválidos. &
+-1 minuto
+
+"normal"
+
+con boleto &
+Lanza
+
+Excepción:
+
+Minutos
+
+inválidos. &
 R1 y R10 &
-Verificamos que el sistema no acepte minutos negativos.
+Analiza el comportamiento del sistema cuando recibe numeros negativos, donde debería rechazarlos.
 \\
 \hline
 
 11 &
 Entrada inválida &
-(5, "premium", con boleto) &
-Lanza Excepción: Tipo de cliente inválido. &
+5 minutos
+
+"premium"
+
+con boleto &
+Lanza
+
+Excepción:
+
+Tipo de
+
+cliente
+
+inválido. &
 R2 y R11 &
-Verificamos que sólo acepte los clientes válidos.
+Analiza el comportamiento del sistema cuando recibe tipos de clientes inexistentes, donde debería rechazarlos.
 \\
 \hline
 
 12 &
 Interacción entre reglas &
-(1250, "frecuente", con boleto) &
+1250 minutos
+
+"frecuente"
+
+con boleto &
 \$288.00 &
 R7 y R8 &
-Verificamos que al cliente "frecuente" con boleto se le aplique su correspondiente descuento dados los minutos que pasó en el estacionamiento.
+Analiza el comportamiento del sistema cuando un cliente "frecuente" con boleto aplica su descuento del 10\% dados los minutos transcurridos.
 \\
 \hline
 
 13 &
 Interacción entre reglas &
-(1250, "frecuente", sin boleto) &
+1250 minutos
+
+"frecuente"
+
+sin boleto &
 \$300.00 &
 R3 y R8 &
-Aunque el cliente sea "frecuente", si perdió el boleto no se aplica el descuento y el costo final es de \$300.00.
+Analiza el comportamiento del sistema cuando un cliente "frecuente" no tiene boleto, en cuyo no aplica su decuento del 10\% y se le cobra \$300.00.
 \\
 \hline
 
 14 &
 Números decimales en el resultado &
-(61, "frecuente", con boleto) &
+61 minutos
+
+"frecuente"
+
+con boleto &
 \$31.50 &
 R7 y R8 &
-Verificamos que el descuento con decimales se aplique adecuadamente al cliente "frecuente".
+Analiza el comportamiento del sistema cuando se le cobra al cliente "frecuente" con boleto por los minutos transcurridos, en cuyo caso debe cobrar lo justo, que es \$31.50.
 \\
 \hline
 
 15 &
 Entrada inválida &
-(15.5, "normal", con boleto) &
-Lanza Excepción: Minutos inválidos. &
+15.5 minutos
+
+"normal"
+
+con boleto &
+Lanza
+
+Excepción:
+
+Minutos
+
+inválidos. &
 R1 &
-El sistema solo permite minutos enteros; no acepta valores decimales.
+Analiza el comportamiento del sistema cuando recibe minutos en decimales, donde debería rechazarlos.
 \\
 \hline
 
@@ -928,7 +1012,7 @@ El sistema solo permite minutos enteros; no acepta valores decimales.
 % TÍTULO DE LA TABLA
 % ------------------------------------------------------------
 
-\caption{Casos establecidos para el Sistema: Ticket de Estacionamiento.}
+\caption{Casos establecidos para el Sistema Ticket de Estacionamiento.}
 \label{tab:casos-ticket}
 
 \end{longtable}
@@ -937,249 +1021,343 @@ El sistema solo permite minutos enteros; no acepta valores decimales.
 
 \endgroup
 \section{Evidencia de Ejecución}
-\label{sec:org36c5de7}
+\label{sec:orgd3541f6}
 
 \subsection{Casos Normales: 1, 2 y 3}
-\label{sec:org3b66546}
+\label{sec:org6d8177f}
 
+\subsubsection{Implementación de la Prueba en Python}
+\label{sec:org2a381c4}
 
-\begin{lstlisting}[style=practica]
-# Arrange
-@pytest.mark.parametrize(
-    "minutos, esperado",
-    [
-                        # | Caso | Descripción                                |
-        (10, 0.00),     # |  1   | Cliente "normal" con boleto pasó 10 min.   |
-        (40, 20.00),    # |  2   | Cliente "normal" con boleto pasó 40 min.   |
-        (1250, 320.00), # |  3   | Cliente "normal" con boleto pasó 1250 min. |
-    ],
-)
-def test_cliente_Normal_con_Boleto(sistema, minutos, esperado):
-    """
-    Verifica el cobro calculado para un cliente "normal" con boleto
-    dado un cierto tiempo en minutos.
-    """
-
-    # Act
-    resultado = sistema.calcular_total(minutos, "normal", False)
-
-    # Assert
-    assert resultado == pytest.approx(esperado)
-\end{lstlisting}
-
-Al ejecutar las pruebas sin modificar el código original, falla el Caso 3 establecido en las pruebas; pero como comprobamos el resultado a obtener antes de ejecutar la prueba, concluimos que el código original falló la prueba y debemos corregirlo.
+Prueba encargada de verificar el comportamiento del sistema en los casos normales 1, 2 y 3.
 
 \vspace{\baselineskip}
 
 
 \begin{lstlisting}[style=practica]
-...
-    # Si permanece mas de 60 minutos:
-    # -> $20.00 la primera hora.
-    # -> $15.00 cada hora iniciada.
+    # Arrange
+    @pytest.mark.parametrize(
+        "minutos, esperado",
+        [
+                            # | Caso | Descripción                                |
+            (10, 0.00),     # |  1   | Cliente "normal" con boleto pasó 10 min.   |
+            (40, 20.00),    # |  2   | Cliente "normal" con boleto pasó 40 min.   |
+            (1250, 320.00), # |  3   | Cliente "normal" con boleto pasó 1250 min. |
+        ],
+    )
+    def test_cliente_Normal_con_Boleto(sistema, minutos, esperado):
+        """
+        Verifica el cobro calculado para un cliente "normal" con boleto
+        dado un cierto tiempo en minutos.
+        """
+
+        # Act
+        resultado = sistema.calcular_total(minutos, "normal", False)
+
+        # Assert
+        assert resultado == pytest.approx(esperado)
+\end{lstlisting}
+\subsubsection{Resultado de la Prueba}
+\label{sec:orgd3791ab}
+
+Los casos 1 y 2 pasaron la prueba; sin embargo el caso 3 la falló. Dado que el planteamiento de las pruebas esta basado en una interpretación correcta del modelo, analizamos el Código original.
+\subsubsection{Código Original}
+\label{sec:org429ba02}
+
+
+\begin{lstlisting}[style=practica]
+    ...
     else:
         horas_adicionales = (minutos - 60) // 60
         total = 20.0 + (horas_adicionales * 15.0)
-...
+    ...
 \end{lstlisting}
 
-Al observar el código original, debemos modificar el cálculo si el cliente permanece mas de 60 minutos, pues al dividir las horas adicionales, solo se toman en cuenta las horas completas que ya pasaron, pero falta contemplar las horas iniciadas, para compensar, debemos tomar el techo del resultado de la división:
-
-\vspace{\baselineskip}
+Al revisar el Código original, notemos que el cálculo realizado para conocer el cobro del estacionamiento con horas adicionales es incorrecto, ya que se pierde información de las horas iniciadas si solo se toma la parte entera de la división entre 60 minutos, pues si la divisón es exacta, tenemos horas completas, de lo contrario, ya inicio otra hora y se debe añadir una hora más al conteo de horas adicionales.
+\subsubsection{Reparación del Código Original}
+\label{sec:orgee24b3c}
 
 
 \begin{lstlisting}[style=practica]
-...
-    # Si permanece mas de 60 minutos:
-    # -> $20.00 la primera hora.
-    # -> $15.00 cada hora iniciada.
+    ...
     else:
         horas_adicionales = math.ceil((minutos - 60) / 60) # Modificación
         total = 20.0 + (horas_adicionales * 15.0)
-...
+    ...
 \end{lstlisting}
 
-Con este cambio, solucionamos un problema del código original y pasan las primeras tres pruebas de los primeros tres casos.
+Para reparar el código correctamente conforme al modelo, debemos tomar el techo del resultado de la división para contemplar verdaderamente el número de horas adicionales.
 \subsection{Casos Frontera: 4, 5, 6, 7, 8 y 9}
-\label{sec:orgb1eae96}
+\label{sec:orgf879ea9}
 
-Hacemos las pruebas con clientes de tipo "normal" y con boleto.
+\subsubsection{Implementación de la Prueba en Python}
+\label{sec:orgdefb9f1}
+
+Prueba encargada de verificar el comportamiento del sistema en los casos frontera 4, 5, 6, 7, 8 y 9.
 
 \vspace{\baselineskip}
 
 
 \begin{lstlisting}[style=practica]
-# Arrange
-@pytest.mark.parametrize(
-    "minutos, esperado",
-    [
-                      # | Caso | Descripción                                         |
-        (15, 0.00),   # |  4   | Último valor entre el rango de 1-15.                |
-        (16, 20.00),  # |  5   | Primer valor entre el rango de 16-60.               |
-        (60, 20.00),  # |  6   | Último valor entre el rango de 16-60.               |
-        (61, 35.00),  # |  7   | Una hora completa y una hora adicional iniciada.    |
-        (120, 35.00), # |  8   | Dos horas completas sin hora adicional iniciada.    |
-        (121, 50.00), # |  9   | Dos horas completas y una hora adicional iniciada.  |
-    ],
-)
-
-
-
-
-
-def test_cliente_Normal_con_Boleto_Casos_Frontera(sistema, minutos, esperado):
-    """
-    Verifica el cobro calculado para un cliente "normal" con boleto dado un cierto tiempo,
-    en escencia cuando hay un cambio entre los límites de rangos de tiempo.
-    """
+    # Arrange
+    @pytest.mark.parametrize(
+        "minutos, esperado",
+        [
+                          # | Caso | Descripción                              |
+            (15, 0.00),   # |  4   | Último valor entre el rango de 1-15.     |
+            (16, 20.00),  # |  5   | Primer valor entre el rango de 16-60.    |
+            (60, 20.00),  # |  6   | Último valor entre el rango de 16-60.    |
+            (61, 35.00),  # |  7   | Una hora completa y una hora iniciada.   |
+            (120, 35.00), # |  8   | Dos horas completas sin hora iniciada.   |
+            (121, 50.00), # |  9   | Dos horas completas y una hora iniciada. |
+        ],
+    )
+    def test_cliente_Normal_con_Boleto_Casos_Frontera(sistema, minutos, esperado):
+        """
+        Verifica el cobro calculado para un cliente "normal" con boleto dado un cierto tiempo,
+        en escencia cuando hay un cambio entre los límites de rangos de tiempo.
+        """
     
-    # Act
-    resultado = sistema.calcular_total(minutos, "normal", False)
+        # Act
+        resultado = sistema.calcular_total(minutos, "normal", False)
     
-    # Assert
-    assert resultado == pytest.approx(esperado)
+        # Assert
+        assert resultado == pytest.approx(esperado)
 \end{lstlisting}
+\subsubsection{Resultado de la Prueba}
+\label{sec:orgd361b48}
 
-Al ejecutar las pruebas sin modificar el código original, falla el Caso 4 establecido en las pruebas; pero como comprobamos el resultado a obtener antes de ejecutar la prueba, concluimos que el código original falló la prueba y debemos corregirlo.
-
-\vspace{\baselineskip}
+Los casos 5, 6, 7, 8 y 9 pasaron la prueba; sin embargo el caso 4 la falló. Dado que el planteamiento de las pruebas esta basado en una interpretación correcta del modelo, analizamos el Código original.
+\subsubsection{Código Original}
+\label{sec:org1de987f}
 
 
 \begin{lstlisting}[style=practica]
-...
-    # Si permanece 15 minutos o menos -> $0.00
+    ...
     elif minutos < 15:
         total = 0.0
-...
+    ...
 \end{lstlisting}
 
-Al observar el código original, notamos que debemos modificar el cálculo en la frontera de 15 minutos, pues no toma en cuenta los 15 minutos para asignar el costo correcto, para solucionarlo, debemos agregar el valor de 15 minutos en la frontera:
-
-\vspace{\baselineskip}
+Al revisar el Código original, notemos que el cálculo realizado para conocer el cobro del estacionamiento en 15 minutos es incorrecto, ya que no se toma en cuenta el minuto 15 para cobrar la cantidad correcta de \$0.00.
+\subsubsection{Reparación del Código Original}
+\label{sec:org6f07939}
 
 
 \begin{lstlisting}[style=practica]
-...
-    # Si permanece 15 minutos o menos -> $0.00
+    ...
     elif minutos <= 15: # Modificación
         total = 0.0
-...
+    ...
 \end{lstlisting}
 
-Con este cambio, solucionamos otro problema del código original y pasan las pruebas de los casos 4, 5, 6, 7, 8 y 9.
+Para reparar el código correctamente conforme al modelo, debemos tomar en cuenta al minuto 15 dentro del rango correspondiente y cobrar \$0.00.
 \subsection{Casos Entrada Inválida: 10, 11 y 15}
-\label{sec:orgf29c130}
+\label{sec:org819b85d}
 
-Hacemos las pruebas con un cliente de tipo "normal" y con boleto para el caso 10 y 15; para el caso 11 un cliente con boleto y 5 minutos en el estacionamiento.
+\subsubsection{Implementación de la Prueba en Python}
+\label{sec:org666baae}
 
-Dado que no tenemos excepciones personalizadas en el Código orginal, nosotros definimos las Excepciones que se deben lanzar al detectar una Entrada inválida:
+Prueba encargada de verificar el comportamiento del sistema en los casos de entrada inválida 10, 11 y 15, este último propuesto por el equipo.
+
+\vspace{\baselineskip}
+
+Antes de escribir la prueba, recordemos que tener excepciones muy generales para los "errores" que maneje el programa, indican una mala práctica de programación, ya que dificulta la documentación y posterior mantenimiento del programa.
+
+\vspace{\baselineskip}
+
+Por lo anterior, buscamos las excepciones correspondientes que debería lanzar el programa dados los casos  de entradas inválidas que hemos establecido, pero dado que no las encontramos, procedemos a definir excepciones personalizadas que documenten el caso correpondiente:
 
 \begin{itemize}
 \item \textbf{MinutosInvalidos:} Lanzada cuando no se cumple \textbf{R1} y \textbf{R10}.
 \item \textbf{ClienteInvalido:} Lanzada cuando no se cumple \textbf{R2}.
 \end{itemize}
 
-\vspace{\baselineskip}
-
-Recordemos que definir una misma Excepción (como ValueError) para los "errores" que lanze el programa es una mala práctica de programación, pues dificulta el mantenimiento del programa a largo plazo; por ejemplo, cuando se incremente la cantidad de código es dificil localizar en que parte del Código se encuentra la Excepción que debemos mejorar o arreglar.
+Con ello, definimos las pruebas con las nuevas excepciones que esperamos ver.
 
 \vspace{\baselineskip}
 
 
 \begin{lstlisting}[style=practica]
-...
-from MinutosInvalidos import MinutosInvalidos
-from ClienteInvalido import ClienteInvalido
-...
-# Test de Entradas inválidas.
+    ...    
+    from MinutosInvalidos import MinutosInvalidos
+    from ClienteInvalido import ClienteInvalido
+    ...
 
-# Arrange
-@pytest.mark.parametrize(
-    "minutos",
-    [
-                # | Caso | Descripción                     |
-        -1,     # | 10   | -1 min no está bien definido.   |
-        15.5,   # | 15   | 15.5 min no está bien definido. |
-    ],
-)
-def test_Minutos_Invalidos(sistema, minutos):
-    """
-    Verifica que el programa rechaze los Minutos Inválidos establecidos
-    en la R1.
-    """
-    # Siguiendo la R10, verifcamos que rechaze los minutos negativos.
-    # Act and Assert
-    with pytest.raises(MinutosInvalidos):
-        sistema.calcular_total(minutos, "normal", False)
+    
+    # Test de Entradas inválidas.
 
-# Arrange
-@pytest.mark.parametrize(
-    "cliente",
-    [
-                     # | Caso | Descripción                                |
-        "premium",   # | 11   | Cliente "premium" no está bien definido.   |
-    ],
-)
-def test_Cliente_Invalido(sistema, cliente):
-    """
-    Verifica que el programa rechaze los clientes que no están
-    definidos en la R2. Siguiendo el procedimiento de R11.
-    """
+    # Arrange
+    @pytest.mark.parametrize(
+        "minutos",
+	[
+                    # | Caso | Descripción                   |
+            -1,     # | 10   | -1 min no están definidos.    |
+            15.5,   # | 15   | 15.5 min no están definidos.  |
+	],
+    )
+    def test_Minutos_Invalidos(sistema, minutos):
+        """
+	Verifica que el programa rechaze los Minutos Inválidos establecidos
+	en la R1.
+	"""
+	# Siguiendo la R10, verifcamos que rechaze los minutos negativos.
+	# Act and Assert
+        with pytest.raises(MinutosInvalidos):
+            sistema.calcular_total(minutos, "normal", False)
 
-    # Act and Assert
-    with pytest.raises(ClienteInvalido):
-        sistema.calcular_total(5, cliente, False)
+    # Arrange
+    @pytest.mark.parametrize(
+        "cliente",
+	[
+                         # | Caso | Descripción                           |
+            "premium",   # | 11   | Cliente "premium" no está definido.   |
+        ],
+    )
+    def test_Cliente_Invalido(sistema, cliente):
+        """
+	Verifica que el programa rechaze los clientes que no están
+	definidos en la R2. Siguiendo el procedimiento de R11.
+	"""
+
+	# Act and Assert
+	with pytest.raises(ClienteInvalido):
+            sistema.calcular_total(5, cliente, False)
+    ...
 \end{lstlisting}
+\subsubsection{Resultado de la Prueba}
+\label{sec:org9d781c9}
 
-Al correr las pruebas, en el caso 10 y 11 no se detecta la excepción que esperabamos, esto debido a que el Código original tiene las Excepciones marcadas con la misma "etiqueta" de ValueError, por otro lado, en el caso 15 el código no lanzó la Excepción que esperabamos, y dado que hemos planteado bien los ressultados esperados por las pruebas, debemos mejorar el Código Original.
+Los casos 10, 11 y 15 fallaron la prueba; dado que el planteamiento de las pruebas esta basado en una interpretación correcta del modelo, analizamos el Código original.
+
 
 \vspace{\baselineskip}
 
+\vspace{\baselineskip}
+
+\vspace{\baselineskip}
+
+\vspace{\baselineskip}
+\subsubsection{Código Original}
+\label{sec:org6752a01}
+
 
 \begin{lstlisting}[style=practica]
-...
-    # Entrada Invalida: Minutos Negativos.
+    ...
     if minutos < 0:
         raise ValueError("Los minutos no pueden ser negativos")
 
-    # Entrada Inválida: Tipo de cliente no reconocido.
     if tipo_cliente not in ("normal", "frecuente"):
        raise ValueError("Tipo de cliente no válido")
-...
+    ...
 \end{lstlisting}
 
-Notemos que en los casos 10 y 11, debemos ocupar las Excepciones que personalizamos para "etiquetar" de una mejor manera los casos de entradas inválidas, mientras que para el caso 15, el definido por el equipo, debemos agregar una Excepcion de MinutosInvalidos para que rechace minutos que no sean numeros enteros positivos o el cero, en este caso, decimales.
+Al revisar el Código original, notamos que para el caso 10 y 11 no se lanzan las excepciones que esperabamos porque la implementación original reporta las entradas inválidas con la excepción ValueError, pero como mencionamos anteriormente, esta es una mala práctica de programación. Por otro lado, en el caso 15, la implementación original no considera a los decimales como valor de entrada inválida para los minutos, cuando debería hacerlo por el modelo establecido.
+\subsubsection{Reparación del Código Original}
+\label{sec:org1010ee3}
+
+
+\begin{lstlisting}[style=practica]
+    ...
+    if minutos < 0:
+        raise MinutosInvalidos("Los minutos no pueden ser negativos") # Modificacion
+
+    if isinstance(minutos, float): # Modificación
+        raise MinutosInvalidos("Los minutos no pueden ser en decimal")
+        
+    if tipo_cliente not in ("normal", "frecuente"):
+        raise ClienteInvalido("Tipo de cliente no válido") # Modificacion
+    ...
+\end{lstlisting}
+
+Para reparar el código correctamente conforme al modelo, modificamos las excepciones que se lanzan cuando hay valores de entrada inválidos, para los minutos la excepción MinutosInvalidos y para los tipos de cliente ClienteInvalido, además, agregamos el caso donde consideramos a los decimales como valor inválido para los minutos.
+\subsection{Casos Interacción entre reglas: 12 y 13}
+\label{sec:org7c98790}
+
+\subsubsection{Implementación de la Prueba en Python}
+\label{sec:orgad75b24}
+
+Prueba que verifica el comportamiento del sistema en los casos de interacción entre reglas 12 y 13.
 
 \vspace{\baselineskip}
 
 
 \begin{lstlisting}[style=practica]
-...
-    # Entrada Invalida: Minutos Negativos.
-    if minutos < 0:
-        raise MinutosInvalidos("Los minutos no pueden ser negativos") # Modificacion
+    ...
+    # Arrange
+    @pytest.mark.parametrize(
+        "boleto, esperado",
+        [
+                              # | Caso | Descripción                                  |
+            (False, 288.00),  # | 12   | Cliente "frecuente" con boleto con 1250 min. |
+            (True, 300.00),   # | 13   | Cliente "frecuente" sin boleto con 1250 min. |
+        ],
+    )
 
-    # Entrada Invalida: Minutos Decimales. # Modificacion
-    if isinstance(minutos, float):
-        raise MinutosInvalidos("Los minutos no pueden ser en decimal")
-        
-    # Entrada Inválida: Tipo de cliente no reconocido.
-    if tipo_cliente not in ("normal", "frecuente"):
-        raise ClienteInvalido("Tipo de cliente no válido") # Modificacion
-...
+    def test_cliente_Frecuente_Casos_Interaccion_entre_reglas(sistema, boleto, esperado):
+        """
+        Verifica que el programa calcule correctamente el costo del estacionamiento
+        dado que el cliente es frecuente, pase 1250 minutos y tenga o no boleto.
+        """
+        # Act
+        resultado = sistema.calcular_total(1250, "frecuente", boleto)
+    
+        # Assert
+        assert resultado == pytest.approx(esperado)
+    ...
+\end{lstlisting}
+\subsubsection{Resultado de la Prueba}
+\label{sec:orgd942d6e}
+
+El caso 12 pasó la prueba, pero el 13 la falló; dado que el planteamiento de las pruebas esta basado en una interpretación correcta del modelo, analizamos el Código original.
+\subsubsection{Código Original}
+\label{sec:orgd25c748}
+
+
+\begin{lstlisting}[style=practica]
+    ...
+    if boleto_perdido:
+        total = self.TARIFA_BOLETO_PERDIDO     
+    ...
+    else:
+        horas_adicionales = math.ceil((minutos - 60) / 60)
+        total = 20.0 + (horas_adicionales * 15.0)
+
+    if tipo_cliente == "frecuente":
+        total *= 0.90
+	
+    return round(total, 2)
+    ...
 \end{lstlisting}
 
-Con ello, hemos corregido errores del Código original y las pruebas 10, 11 y 15 pasan.
-\subsection{Casos Interacción entre reglas: 12 y 13}
-\label{sec:org7b38924}
+Al revisar el Código original, notamos que el flujo para asignarle el costo a un cliente que perdió su boleto está incorrecto, pues si bien asigna la tarifa de \$300.00, no termina el cálculo y prosigue a continuar evaluando casos, como el tipo de cliente, cuando en realidad la R3 prevalece sobre la R8.
+\subsubsection{Reparación del Código Original}
+\label{sec:org852ac0b}
 
-D12 y D13
+
+\begin{lstlisting}[style=practica]
+    ...
+    if boleto_perdido:
+        return self.TARIFA_BOLETO_PERDIDO # Modificación.        
+    ...
+    else:
+        horas_adicionales = math.ceil((minutos - 60) / 60)
+        total = 20.0 + (horas_adicionales * 15.0)
+	
+    if tipo_cliente == "frecuente":
+        total *= 0.90
+
+    return round(total, 2)
+    ...
+\end{lstlisting}
+
+Para reparar el código correctamente conforme al modelo, modificamos el flujo; si el cliente perdió su boleto, simplemente retornamos el costo del estacionamiento de \$300.00 sin pasar por los otros casos.
 \subsection{Caso Números decimales en el resultado: 14}
-\label{sec:orgaa110c1}
+\label{sec:orga91c3ed}
 
 D14
 \section{Preguntas de análisis}
-\label{sec:org5e75a11}
+\label{sec:org05779dd}
 
 \textbf{1.} ¿Qué diferencia hay entre un caso normal y un caso frontera?
 

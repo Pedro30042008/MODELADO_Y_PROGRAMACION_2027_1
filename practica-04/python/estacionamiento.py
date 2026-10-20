@@ -31,7 +31,7 @@ class Estacionamiento:
 
         # Si el boleto está perdido -> $300.00
         if boleto_perdido:
-            total = self.TARIFA_BOLETO_PERDIDO
+            return self.TARIFA_BOLETO_PERDIDO
             
         # Si permanece 15 minutos o menos -> $0.00
         elif minutos <= 15:
