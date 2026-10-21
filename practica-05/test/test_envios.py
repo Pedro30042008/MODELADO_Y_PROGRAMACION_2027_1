@@ -15,3 +15,11 @@ def test_calcular_envio_liviano_express():
 def test_calcular_envio_pesado_express():
     assert calcular_envio(7, "express") == 140
     assert calcular_envio(10, "express") == 200
+
+def test_calcular_envio_validacion_peso():
+
+    with pytest.raises(ValueError):
+        calcular_envio(0, "estandar")
+
+    with pytest.raises(ValueError):
+        calcular_envio(-2, "express")
