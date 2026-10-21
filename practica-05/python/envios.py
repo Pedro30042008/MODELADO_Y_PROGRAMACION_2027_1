@@ -1,4 +1,3 @@
-
 class envios:
 
     def __init__(self,peso,tipoDeEnvio):
@@ -20,4 +19,3 @@ def calcular_envio(peso, tipoDeEnvio):
     precio += 50
 
     return precio
-
