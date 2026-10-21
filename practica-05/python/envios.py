@@ -5,8 +5,11 @@ class envios:
         self.tipoDeEnvio = tipoDeEnvio
 
 def calcular_envio(peso, tipoDeEnvio):
-    precio = 0
 
+    if peso <= 0:
+        raise ValueError("Peso Invalido")
+
+    precio = 0
     if peso <= 5:
         precio+= 50
     else: 
