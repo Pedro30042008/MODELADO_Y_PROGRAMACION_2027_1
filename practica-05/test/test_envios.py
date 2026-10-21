@@ -30,3 +30,6 @@ def test_calcular_envio_validacion_envio():
 
     with pytest.raises(ValueError):
         calcular_envio(5, "a la brevedad PAPS")
+
+def test_calcular_envio_peso_limite():
+    assert calcular_envio(5, "estandar") == 50
