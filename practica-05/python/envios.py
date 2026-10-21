@@ -15,7 +15,9 @@ def calcular_envio(peso, tipoDeEnvio):
         precio += (50) + 10 * pesoExtra
     
 
-    if tipoDeEnvio != "estandar":
-        raise ValueError("Envio no estandar")
+    if tipoDeEnvio == "estandar":
+        precio+= 0
+    elif tipoDeEnvio == "express":
+        precio = 2*precio
     
     return precio
