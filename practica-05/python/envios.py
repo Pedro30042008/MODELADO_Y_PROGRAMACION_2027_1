@@ -9,6 +9,9 @@ def calcular_envio(peso, tipoDeEnvio: "estandar"):
     if peso <= 0:
         raise ValueError("Peso Invalido")
 
+    if tipoDeEnvio != "estandar" and tipoDeEnvio != "express":
+        raise ValueError("Envio invalido")
+        
     precio = 0
     if peso <= 5:
         precio+= 50
