@@ -8,14 +8,14 @@ def calcular_envio(peso, tipoDeEnvio):
 
     precio = 0
 
-    if peso > 5:
-        raise ValueError("Peso mayor a 5")
+    if peso <= 5:
+        precio+= 50
+    else: 
+        pesoExtra = peso - 5
+        precio += (50) + 10 * pesoExtra
     
-    precio +=0
 
     if tipoDeEnvio != "estandar":
         raise ValueError("Envio no estandar")
     
-    precio += 50
-
     return precio
