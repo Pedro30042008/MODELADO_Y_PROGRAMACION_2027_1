@@ -23,3 +23,10 @@ def test_calcular_envio_validacion_peso():
 
     with pytest.raises(ValueError):
         calcular_envio(-2, "express")
+
+def test_calcular_envio_validacion_envio():
+    with pytest.raises(ValueError):
+        calcular_envio(3, "urgente")
+
+    with pytest.raises(ValueError):
+        calcular_envio(5, "a la brevedad PAPS")

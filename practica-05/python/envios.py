@@ -4,7 +4,7 @@ class envios:
         self.peso = peso
         self.tipoDeEnvio = tipoDeEnvio
 
-def calcular_envio(peso, tipoDeEnvio):
+def calcular_envio(peso, tipoDeEnvio: "estandar"):
 
     if peso <= 0:
         raise ValueError("Peso Invalido")
