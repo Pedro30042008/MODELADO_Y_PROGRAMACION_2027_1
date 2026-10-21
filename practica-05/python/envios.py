@@ -4,24 +4,20 @@ class envios:
         self.peso = peso
         self.tipoDeEnvio = tipoDeEnvio
 
-def calcular_envio(peso, tipoDeEnvio: "estandar"):
+def calcular_envio(peso, tipoDeEnvio="estandar"):
 
     if peso <= 0:
         raise ValueError("Peso Invalido")
 
-    if tipoDeEnvio != "estandar" and tipoDeEnvio != "express":
+    if tipoDeEnvio not in ("estandar", "express"):
         raise ValueError("Envio invalido")
-        
-    precio = 0
+
     if peso <= 5:
-        precio+= 50
-    else: 
-        pesoExtra = peso - 5
-        precio += (50) + 10 * pesoExtra
-    
-    if tipoDeEnvio == "estandar":
-        precio+= 0
-    elif tipoDeEnvio == "express":
-        precio = 2*precio
-    
+        precio = 50
+    else:
+        precio = 50 + 10 * (peso - 5)
+
+    if tipoDeEnvio == "express":
+        precio *= 2
+
     return precio
